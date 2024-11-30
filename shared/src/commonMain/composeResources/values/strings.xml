@@ -1,0 +1,5 @@
+<resources>
+    <string name="prayers_screen_title">Orationes Latinae</string>
+    <string name="prayer_details_screen_title">Precatio</string>
+    <string name="settings_screen_title">Conlocatio</string>
+</resources>
