@@ -58,6 +58,7 @@ fun Main() {
             defConfig = dsConfig
             defConfig.dataStore = getDataStore { keyValueStorePath() }
             println("Loaded config from datastore ${defConfig.prayerLang}")
+            println("Loading prayers from assets...")
             println("Loading prayers...")
             prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
                 prayer.langs[defConfig.prayerLang]?.title
