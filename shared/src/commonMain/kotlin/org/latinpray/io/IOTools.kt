@@ -1,5 +1,6 @@
 package org.latinpray.io
 
+import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import kotlinx.serialization.decodeFromString
 import okio.buffer
@@ -9,7 +10,11 @@ import org.latinpray.data.Prayer
 
 fun readPrayerFromAssets(assetsFile: String): BasicPrayer {
     val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
-    return Yaml.default.decodeFromString<BasicPrayer>(yamlContent)
+    val yaml = Yaml(configuration = Yaml.default.configuration.copy(
+        strictMode = false,
+        polymorphismStyle = PolymorphismStyle.Property
+    ))
+    return yaml.decodeFromString<BasicPrayer>(yamlContent)
 }
 
 fun readConfigFromAssets(assetsFile: String): Config {
