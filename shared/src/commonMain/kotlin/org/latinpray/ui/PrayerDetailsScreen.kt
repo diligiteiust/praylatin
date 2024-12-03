@@ -60,6 +60,7 @@ fun PrayerDetailsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.background)
+                .padding(bottom = 30.dp)
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()

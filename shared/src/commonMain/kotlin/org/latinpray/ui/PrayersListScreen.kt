@@ -51,6 +51,7 @@ fun PrayersListScreen(
         modifier = Modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colorScheme.onBackground)
+        .padding(bottom = 30.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
