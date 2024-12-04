@@ -19,12 +19,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -45,7 +51,8 @@ fun PrayersListScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
-    val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
+    val (fraction, setFraction) = remember { mutableStateOf(0.50f) }
+    var expanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -67,14 +74,48 @@ fun PrayersListScreen(
                     color = MaterialTheme.colorScheme.onBackground,
                     shape = RoundedCornerShape(50)
                 ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                    onSettingsClick(config)
+                    expanded = true
+                    //onSettingsClick(config)
                 }
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Settings,
+                    imageVector = Icons.Outlined.Menu,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier.size(30.dp)
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.align(Alignment.CenterEnd)
+                    .padding(end = 2.dp)
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                    },
+                    text = { Text(text = "About") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = null
+                        )
+                    }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        onSettingsClick(config)
+                    },
+                    text = { Text(text = "Settings") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = null
+                        )
+                    }
                 )
             }
 

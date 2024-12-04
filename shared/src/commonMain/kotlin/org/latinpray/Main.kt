@@ -24,10 +24,12 @@ import org.latinpray.io.keyValueStorePath
 import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
 import org.latinpray.shared.Res
+import org.latinpray.shared.about_screen_title
 import org.latinpray.shared.prayer_details_screen_title
 import org.latinpray.shared.prayers_screen_title
 import org.latinpray.shared.settings_screen_title
 import org.latinpray.theme.AppTheme
+import org.latinpray.ui.AboutScreen
 import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
@@ -35,7 +37,8 @@ import org.latinpray.ui.SettingsScreen
 enum class MainScreens(val title: StringResource) {
     PrayersScreen(title = Res.string.prayers_screen_title),
     PrayerDetailsScreen(title = Res.string.prayer_details_screen_title),
-    SettingsScreen(title = Res.string.settings_screen_title)
+    SettingsScreen(title = Res.string.settings_screen_title),
+    AboutScreen(title = Res.string.about_screen_title)
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -104,6 +107,14 @@ fun Main() {
                         animatedContentScope = this,
                         sharedTransitionScope = sharedTransitionScope,
                         config = defConfig,
+                        goBack = { navController.popBackStack() }
+                    )
+                }
+                composable(route = MainScreens.AboutScreen.name) {
+                    AboutScreen(
+                        title = stringResource(Res.string.about_screen_title),
+                        animatedContentScope = this,
+                        sharedTransitionScope = sharedTransitionScope,
                         goBack = { navController.popBackStack() }
                     )
                 }
