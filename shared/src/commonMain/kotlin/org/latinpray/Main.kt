@@ -24,6 +24,7 @@ import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
 import org.latinpray.shared.Res
 import org.latinpray.shared.about_screen_title
+import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.prayers_screen_title
 import org.latinpray.shared.settings_screen_title
 import org.latinpray.theme.AppTheme
@@ -111,7 +112,7 @@ fun Main() {
                 }
                 composable(route = MainScreens.HelpScreen.name) {
                     HelpScreen(
-                        title = stringResource(Res.string.about_screen_title),
+                        title = stringResource(Res.string.help_screen_title),
                         //animatedContentScope = this,
                         sharedTransitionScope = sharedTransitionScope,
                         goBack = { navController.popBackStack() }
