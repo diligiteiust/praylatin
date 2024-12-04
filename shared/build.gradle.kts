@@ -26,9 +26,9 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "LatinPray"
+            baseName = "shared"
             isStatic = true
-            binaryOption("bundleId", "org.latinpray.LatinPray")
+            binaryOption("bundleId", "org.latinpray.shared")
         }
     }
 
