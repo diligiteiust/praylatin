@@ -14,7 +14,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.sampleConfig
@@ -25,21 +24,15 @@ import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
 import org.latinpray.shared.Res
 import org.latinpray.shared.about_screen_title
-import org.latinpray.shared.prayer_details_screen_title
 import org.latinpray.shared.prayers_screen_title
 import org.latinpray.shared.settings_screen_title
 import org.latinpray.theme.AppTheme
 import org.latinpray.ui.AboutScreen
+import org.latinpray.ui.HelpScreen
+import org.latinpray.ui.MainScreens
 import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
-
-enum class MainScreens(val title: StringResource) {
-    PrayersScreen(title = Res.string.prayers_screen_title),
-    PrayerDetailsScreen(title = Res.string.prayer_details_screen_title),
-    SettingsScreen(title = Res.string.settings_screen_title),
-    AboutScreen(title = Res.string.about_screen_title)
-}
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -87,10 +80,8 @@ fun Main() {
                             currentPrayer = prayer
                             navController.navigate(MainScreens.PrayerDetailsScreen.name)
                         },
-                        onSettingsClick = { config ->
-                            defConfig = config
-                            navController.navigate(MainScreens.SettingsScreen.name)
-                        })
+                        navController = navController,
+                    )
                 }
                 composable(route = MainScreens.PrayerDetailsScreen.name) {
                     PrayerDetailsScreen(
@@ -114,6 +105,14 @@ fun Main() {
                     AboutScreen(
                         title = stringResource(Res.string.about_screen_title),
                         animatedContentScope = this,
+                        sharedTransitionScope = sharedTransitionScope,
+                        goBack = { navController.popBackStack() }
+                    )
+                }
+                composable(route = MainScreens.HelpScreen.name) {
+                    HelpScreen(
+                        title = stringResource(Res.string.about_screen_title),
+                        //animatedContentScope = this,
                         sharedTransitionScope = sharedTransitionScope,
                         goBack = { navController.popBackStack() }
                     )

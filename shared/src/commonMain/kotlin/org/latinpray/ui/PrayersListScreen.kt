@@ -19,23 +19,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 
@@ -46,13 +42,12 @@ fun PrayersListScreen(
     prayers: List<Prayer>,
     config: Config,
     onClick: (prayer: Prayer) -> Unit,
-    onSettingsClick: (config: Config) -> Unit,
-    isLarge: Boolean = false,
+    navController: NavController,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
-    val (fraction, setFraction) = remember { mutableStateOf(0.50f) }
-    var expanded by remember { mutableStateOf(false) }
+    val (fraction) = remember { mutableStateOf(0.50f) }
+    val expanded : MutableState<Boolean> = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -63,19 +58,16 @@ fun PrayersListScreen(
         Box(
             modifier = Modifier.fillMaxWidth()
                 .windowInsetsPadding(WindowInsets.systemBars),
-            //verticalAlignment = Alignment.CenterVertically
         ) {
             Box(modifier = Modifier.size(50.dp)
                 .align(Alignment.CenterStart)
                 .padding(10.dp)
                 .alpha(fraction)
-                //.alpha(alpha = if (fraction <= 0) 1f else 0f)
                 .background(
                     color = MaterialTheme.colorScheme.onBackground,
                     shape = RoundedCornerShape(50)
                 ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                    expanded = true
-                    //onSettingsClick(config)
+                    expanded.value = true
                 }
             ) {
                 Icon(
@@ -85,39 +77,10 @@ fun PrayersListScreen(
                     modifier = Modifier.size(30.dp)
                 )
             }
-
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.align(Alignment.CenterEnd)
-                    .padding(end = 2.dp)
-            ) {
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                    },
-                    text = { Text(text = "About") },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Info,
-                            contentDescription = null
-                        )
-                    }
-                )
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                        onSettingsClick(config)
-                    },
-                    text = { Text(text = "Settings") },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Settings,
-                            contentDescription = null
-                        )
-                    }
-                )
-            }
+            MainMenu(
+                navController = navController,
+                isExpanded = expanded
+            )
 
             Box(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),

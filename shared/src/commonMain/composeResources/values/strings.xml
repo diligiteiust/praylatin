@@ -3,4 +3,5 @@
     <string name="prayer_details_screen_title">Prayer</string>
     <string name="settings_screen_title">Settings</string>
     <string name="about_screen_title">About</string>
+    <string name="help_screen_title">Help/Contribute</string>
 </resources>
