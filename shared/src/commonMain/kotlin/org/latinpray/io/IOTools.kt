@@ -51,8 +51,10 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
                 prayer = Prayer(i++, name, mutableMapOf(basicPrayer.lang to basicPrayer))
                 prayers[name] = prayer
             }
-            prayer.langs[lang] = basicPrayer
-            config.allPrayerLangs[basicPrayer.lang] = basicPrayer.language
+            if (lang == basicPrayer.lang) {
+                prayer.langs[lang] = basicPrayer
+                config.allPrayerLangs[basicPrayer.lang] = basicPrayer.language
+            }
         }
     }
 
