@@ -34,19 +34,6 @@ fun MainMenu(
         DropdownMenuItem(
             onClick = {
                 isExpanded.value = false
-                navController.navigate(MainScreens.AboutScreen.name)
-            },
-            text = { Text(text = stringResource(Res.string.about_screen_title)) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    contentDescription = null
-                )
-            }
-        )
-        DropdownMenuItem(
-            onClick = {
-                isExpanded.value = false
                 navController.navigate(MainScreens.SettingsScreen.name)
                             },
             text = { Text(text = stringResource(Res.string.settings_screen_title)) },
@@ -66,6 +53,19 @@ fun MainMenu(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Group,
+                    contentDescription = null
+                )
+            }
+        )
+        DropdownMenuItem(
+            onClick = {
+                isExpanded.value = false
+                navController.navigate(MainScreens.AboutScreen.name)
+            },
+            text = { Text(text = stringResource(Res.string.about_screen_title)) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
                     contentDescription = null
                 )
             }
