@@ -105,7 +105,7 @@ fun Main() {
                 composable(route = MainScreens.AboutScreen.name) {
                     AboutScreen(
                         title = stringResource(Res.string.about_screen_title),
-                        animatedContentScope = this,
+                        //animatedContentScope = this,
                         sharedTransitionScope = sharedTransitionScope,
                         goBack = { navController.popBackStack() }
                     )
