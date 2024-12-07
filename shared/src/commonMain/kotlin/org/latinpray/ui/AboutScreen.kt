@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -28,7 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
 import org.latinpray.getPlatform
+import org.latinpray.shared.Res
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -48,7 +51,7 @@ fun AboutScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
+//                .background(color = MaterialTheme.colorScheme.background)
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
@@ -75,18 +78,21 @@ fun AboutScreen(
                     )
                 }
 
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
+//                Box(
+//                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+//                    contentAlignment = Alignment.TopCenter
+//                ) {
+//                    Text(
+//                        text = title,
+//                        style = MaterialTheme.typography.titleLarge,
+//                    )
+//                }
             }
             Box(
-                modifier = Modifier.width(196.dp).padding(16.dp)
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(150.dp)
+                    .padding(4.dp)
                     .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.TopCenter
             ) {
@@ -97,7 +103,10 @@ fun AboutScreen(
 //                    .align(Alignment.CenterHorizontally),
 //            ) {
                 Text(
-                    text = getPlatform().name,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(4.dp),
+                    text = getPlatform().appName + " " + getPlatform().appVersion,
                     style = MaterialTheme.typography.titleLarge,
                 )
 //            }

@@ -73,7 +73,7 @@ fun PrayerDetailsScreen(
                     .alpha(fraction)
                     //.alpha(alpha = if (fraction <= 0) 1f else 0f)
                     .background(
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = MaterialTheme.colorScheme.background,
                         shape = RoundedCornerShape(50)
                     ).shadow(elevation = 16.dp).padding(5.dp).clickable {
                         goBack()
@@ -82,7 +82,7 @@ fun PrayerDetailsScreen(
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.background,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(30.dp)
                     )
                 }
@@ -94,6 +94,7 @@ fun PrayerDetailsScreen(
                     Text(
                         text = lang1?.title ?: "No title",
                         style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -104,12 +105,14 @@ fun PrayerDetailsScreen(
                 ) {
                     itemsIndexed(lang1.lines) { index, line ->
                         Column(
-                            modifier = Modifier.fillMaxWidth().padding(4.dp),
+                            modifier = Modifier.fillMaxWidth().padding(4.dp)
+                                .background(color = MaterialTheme.colorScheme.background)
                         ) {
                             Text(
                                 text = line ?: "",
                                 style = MaterialTheme.typography.bodyLarge,
-                                textAlign = TextAlign.Justify
+                                textAlign = TextAlign.Justify,
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             if (lang2?.lines != null
                                 && lang2.lines.size > index
@@ -119,7 +122,8 @@ fun PrayerDetailsScreen(
                                 Text(
                                     text = translation ?: "",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    textAlign = TextAlign.Justify
+                                    textAlign = TextAlign.Justify,
+                                    color = MaterialTheme.colorScheme.onBackground
                                 )
                             }
                         }
