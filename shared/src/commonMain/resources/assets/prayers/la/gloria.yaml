@@ -1,6 +1,8 @@
 title: Gloria
 lang: la
 language: Latina
+tags:
+  - Missa
 lines:
   - Gloria in excelsis Deo
   - et in terra pax hominibus bonae voluntatis
@@ -22,4 +24,4 @@ lines:
   - Tu solus Dominus
   - Tu solus Altissimus, Iesu Christe
   - Cum Sancto Spiritu
-  - in gloria Dei Patris. Amen.
+  - in gloria Dei Patris.
