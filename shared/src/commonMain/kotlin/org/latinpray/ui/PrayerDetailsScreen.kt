@@ -15,10 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -32,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
@@ -41,19 +36,14 @@ import org.latinpray.data.Prayer
 @Composable
 fun PrayerDetailsScreen(
     prayer: Prayer,
-    goBack: () -> Unit,
     config: Config,
+    prayers: MutableList<Prayer>,
+    goBack: () -> Unit,
     animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
 ) {
-    val listState = rememberLazyListState()
     val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
 
-    val lang1 = prayer.langs[config.prayerLang]
-    var lang2 = prayer.langs[config.secondLang]
-    if (config.preferTranslation && prayer.langs[config.secondLang + "_tr"] != null) {
-        lang2 = prayer.langs[config.secondLang + "_tr"]
-    }
 
     with(sharedTransitionScope) {
         if (sharedTransitionScope.isTransitionActive.not()) {
@@ -95,44 +85,17 @@ fun PrayerDetailsScreen(
                     contentAlignment = Alignment.TopCenter
                 ) {
                     Text(
-                        text = lang1?.title ?: "No title",
-                        style = MaterialTheme.typography.titleLarge,
+                        text = prayer.langs[config.prayerLang]?.title ?: "No title",
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
-            if (lang1 != null) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = listState
-                ) {
-                    itemsIndexed(lang1.lines) { index, line ->
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(4.dp)
-                                .background(color = MaterialTheme.colorScheme.background)
-                        ) {
-                            Text(
-                                text = line ?: "",
-                                style = MaterialTheme.typography.bodyLarge,
-                                textAlign = TextAlign.Justify,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            if (lang2?.lines != null
-                                && lang2.lines.size > index
-                                && lang2.lines[index]?.isNotEmpty() == true
-                            ) {
-                                val translation = lang2.lines[index]
-                                Text(
-                                    text = translation ?: "",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    textAlign = TextAlign.Justify,
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            PrayerDetails(
+                prayer = prayer,
+                config = config,
+                prayers = prayers,
+            )
         }
     }
 }

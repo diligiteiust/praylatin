@@ -36,6 +36,11 @@ fun AppTheme(
         )
     }
     val typography = Typography(
+        bodySmall = TextStyle(
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Light,
+            fontSize = 14.sp
+        ),
         bodyMedium = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Normal,

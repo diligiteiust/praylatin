@@ -51,6 +51,7 @@ kotlin {
             implementation(libs.kotlin.stdlib)
             implementation(libs.androidx.datastore.core)
             implementation(libs.androidx.datastore.pref)
+            implementation(libs.markdown.renderer)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -92,10 +92,11 @@ fun Main() {
                 }
                 composable(route = MainScreens.PrayerDetailsScreen.name) {
                     PrayerDetailsScreen(
-                        animatedContentScope = this,
-                        sharedTransitionScope = sharedTransitionScope,
                         prayer = currentPrayer,
                         config = defConfig,
+                        prayers = prayers,
+                        animatedContentScope = this,
+                        sharedTransitionScope = sharedTransitionScope,
                         goBack = { navController.popBackStack() }
                     )
                 }
