@@ -47,7 +47,9 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
             }
             if (lang == basicPrayer.lang) {
                 prayer.langs[lang] = basicPrayer
-                config.allPrayerLangs[basicPrayer.lang] = basicPrayer.language
+                if (!lang.endsWith("_tr")) {
+                    config.allPrayerLangs[basicPrayer.lang] = basicPrayer.language
+                }
             }
         }
     }
