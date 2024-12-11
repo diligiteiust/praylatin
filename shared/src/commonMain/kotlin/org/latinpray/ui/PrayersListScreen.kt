@@ -47,13 +47,13 @@ fun PrayersListScreen(
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val (fraction) = remember { mutableStateOf(0.50f) }
-    val expanded : MutableState<Boolean> = remember { mutableStateOf(false) }
+    val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
-        .fillMaxSize()
+            .fillMaxSize()
 //        .background(color = MaterialTheme.colorScheme.onBackground)
-        .padding(bottom = 30.dp)
+            .padding(bottom = 30.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -93,16 +93,54 @@ fun PrayersListScreen(
                 )
             }
         }
+        val groupedPrayers = mutableListOf<Any>()
+        if (config.grouping) {
+            val tags = mutableSetOf<String>()
+            prayers.forEach { prayer ->
+                if (prayer.langs[config.prayerLang] != null && prayer.langs[config.prayerLang]?.tags != null) {
+                    tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
+                }
+            }
+
+            tags.sorted().forEach { tag ->
+                groupedPrayers.add(tag)
+                prayers.forEach { prayer ->
+                    if (prayer.langs[config.prayerLang] != null
+                        && prayer.langs[config.prayerLang]?.tags != null
+                        && prayer.langs[config.prayerLang]?.tags?.contains(tag) == true
+                    ) {
+                        groupedPrayers.add(prayer)
+                    }
+                }
+            }
+        } else {
+            groupedPrayers.addAll(prayers)
+        }
+
         LazyColumn {
-            items(items = prayers) { item ->
-                if (item.langs[config.prayerLang] !=null) {
-                    PrayerListItem(
-                        prayer = item,
-                        config = config,
-                        onClick = onClick,
-                        sharedTransitionScope = sharedTransitionScope,
-                        animatedVisibilityScope = animatedVisibilityScope
-                    )
+            items(items = groupedPrayers) { item ->
+                when (item) {
+                    is String -> {
+                        Text(
+                            text = item,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.background,
+
+                        )
+
+                    }
+
+                    is Prayer -> {
+                        PrayerListItem(
+                            prayer = item,
+                            config = config,
+                            onClick = onClick,
+                            sharedTransitionScope = sharedTransitionScope,
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                    }
+
+                    else -> println("Unknown item $item")
                 }
             }
         }

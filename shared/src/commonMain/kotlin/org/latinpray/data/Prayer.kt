@@ -16,7 +16,7 @@ data class BasicPrayer(
     val lang: String,
     val language: String,
     val lines: List<String?>,
-    val tags: List<String>? = null,
+    val tags: Set<String>? = null,
     val links: List<Link>? = null,
     val notes: String? = null
 )
