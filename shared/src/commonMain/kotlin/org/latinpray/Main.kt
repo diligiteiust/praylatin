@@ -50,7 +50,13 @@ fun Main() {
             println("Loading config from yaml...")
             defConfig = readConfigFromAssets("assets/config.yaml")
             println("Loaded config from yaml")
-            val dsConfig = Config(defConfig.uiLang, defConfig.prayerLang, defConfig.secondLang)
+            val dsConfig = Config(
+                defConfig.uiLang,
+                defConfig.prayerLang,
+                defConfig.secondLang,
+                defConfig.preferTranslation,
+                defConfig.grouping
+            )
             dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
             defConfig = dsConfig
             defConfig.dataStore = getDataStore { keyValueStorePath() }

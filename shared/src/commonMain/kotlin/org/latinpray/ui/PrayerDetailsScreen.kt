@@ -50,7 +50,10 @@ fun PrayerDetailsScreen(
     val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
 
     val lang1 = prayer.langs[config.prayerLang]
-    val lang2 = prayer.langs[config.secondLang]
+    var lang2 = prayer.langs[config.secondLang]
+    if (config.preferTranslation && prayer.langs[config.secondLang + "_tr"] != null) {
+        lang2 = prayer.langs[config.secondLang + "_tr"]
+    }
 
     with(sharedTransitionScope) {
         if (sharedTransitionScope.isTransitionActive.not()) {

@@ -4,6 +4,9 @@ language: Latina
 tags:
   - Primus
   - Beata Virgo Maria
+links:
+  - type: youtube
+    url: https://www.youtube.com/watch?v=XpYGgtrMTYs
 lines:
   - Ave Maria, gratia plena
   - Dominus tecum.
@@ -12,3 +15,8 @@ lines:
   - Sancta Maria, Mater Dei,
   - ora pro nobis peccatoribus,
   - nunc, et in hora mortis nostrae.
+notes: |
+  The prayer, also known as the Hail Mary, is a central devotion in the Roman Catholic Church. 
+  The prayer has two parts, with the first part coming from the Gospel of Luke and the second 
+  part added in the 15th century. It is commonly recited in private and in public, 
+  and is said 150 times as part of the Rosary.

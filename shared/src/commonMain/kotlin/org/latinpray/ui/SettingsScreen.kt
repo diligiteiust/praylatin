@@ -125,6 +125,26 @@ fun SettingsScreen(
 
                     }
                 )
+                LangSelection(
+                    title = "Prefer Translation",
+                    langs = mapOf("on" to "On", "off" to "Off"),
+                    selectedItem = if (config.preferTranslation) "on" else "off",
+                    onItemSelected = { lang ->
+                        scope.launch {
+                            config.savePreferTranslation(lang == "on")
+                        }
+                    }
+                )
+                LangSelection(
+                    title = "Prayer grouping",
+                    langs = mapOf("on" to "On", "off" to "Off"),
+                    selectedItem = if (config.grouping) "on" else "off",
+                    onItemSelected = { lang ->
+                        scope.launch {
+                            config.saveGrouping(lang == "on")
+                        }
+                    }
+                )
             }
         }
     }

@@ -1,3 +1,5 @@
 uiLang: en
 prayerLang: la
 secondLang: en
+preferTranslation: true
+grouping: true

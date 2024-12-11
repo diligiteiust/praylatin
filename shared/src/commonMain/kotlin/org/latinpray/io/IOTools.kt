@@ -22,12 +22,6 @@ fun readConfigFromAssets(assetsFile: String): Config {
     return Yaml.default.decodeFromString<Config>(yamlContent)
 }
 
-//fun readConfigFromDataStore(config: Config): Config {
-//    val configDataStore = createConfigDataStore({ configStoreFileName })
-//
-//    return config
-//}
-
 fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {
     val prayers = emptyMap<String, Prayer>().toMutableMap()
     initialPrayers.forEach { prayer ->

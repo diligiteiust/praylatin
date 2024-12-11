@@ -86,5 +86,10 @@ val paternoster = Prayer(
 
 val samplePrayers = listOf(avemaria, paternoster)
 
-var sampleConfig = Config( "en", "la", "en")
+var sampleConfig = Config(
+    "en",
+    "la",
+    "en",
+    true,
+    true)
 //var defConfig : Config? = sampleConfig

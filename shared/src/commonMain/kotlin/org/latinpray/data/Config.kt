@@ -2,20 +2,21 @@ package org.latinpray.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.latinpray.io.getDataStore
 
 @Serializable
 data class Config (
     var uiLang: String,
     var prayerLang: String,
-    var secondLang: String
+    var secondLang: String,
+    var preferTranslation: Boolean,
+    var grouping: Boolean
 ) {
 
     @Transient val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
@@ -24,6 +25,9 @@ data class Config (
     @Transient private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
     @Transient private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
     @Transient private val SECONDLANG_PROP_KEY = stringPreferencesKey("secondLang")
+    @Transient private val PREFER_TRANSLATION_PROP_KEY = booleanPreferencesKey("preferTranslation")
+    @Transient private val GROUPING_PROP_KEY = booleanPreferencesKey("grouping")
+
     @Transient
     var dataStore: DataStore<Preferences>? = null
 
@@ -39,6 +43,10 @@ data class Config (
         println("Loaded ui lang $uiLang")
         secondLang = getSecondLang()
         println("Loaded second lang $secondLang")
+        preferTranslation = getPreferTranslation()
+        println("Loaded prefer translation $preferTranslation")
+        grouping = getGrouping()
+        println("Loaded grouping $grouping")
     }
 
     private suspend fun getPrayerLang(): String =
@@ -56,6 +64,16 @@ data class Config (
             it[SECONDLANG_PROP_KEY] ?: secondLang
         }.first()
 
+    private suspend fun getPreferTranslation(): Boolean =
+        dataStore!!.data.map {
+            it[PREFER_TRANSLATION_PROP_KEY] ?: preferTranslation
+        }.first()
+
+    private suspend fun getGrouping(): Boolean =
+        dataStore!!.data.map {
+            it[GROUPING_PROP_KEY] ?: grouping
+        }.first()
+
     suspend fun saveConfig(
         uiLang: String,
         prayerLang: String,
@@ -64,6 +82,8 @@ data class Config (
         saveUILang(uiLang)
         savePrayerLang(prayerLang)
         saveSecondLang(secondLang)
+        savePreferTranslation(preferTranslation)
+        saveGrouping(grouping)
     }
 
     suspend fun saveUILang(lang: String) {
@@ -93,63 +113,18 @@ data class Config (
         }
     }
 
+    suspend fun savePreferTranslation(pref: Boolean) {
+        preferTranslation = pref
+        dataStore?.edit {
+            it[PREFER_TRANSLATION_PROP_KEY] = preferTranslation
+        }
+    }
+
+    suspend fun saveGrouping(pref: Boolean) {
+        grouping = pref
+        dataStore?.edit {
+            it[GROUPING_PROP_KEY] = grouping
+        }
+    }
 
 }
-
-//class ConfigDataStore(
-//    private val dataStore: DataStore<Preferences>,
-//    var config: Config = sampleConfig
-//) {
-//
-//    private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
-//    private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
-//    private val SECONDLANG_PROP_KEY = stringPreferencesKey("secondLang")
-//
-////    val config: Flow<Config> = dataStore.data.map {
-////        Config(
-////            it[UILANF_PROP_KEY] ?: sampleConfig.uiLang,
-////            it[PRAYERLANG_PROP_KEY] ?: sampleConfig.prayerLang,
-////            it[SECONDLANG_PROP_KEY] ?: sampleConfig.secondLang
-////        )
-////    }
-//
-//    suspend fun loadConfigProps() {
-//        dataStore.data.map {
-//            config.uiLang = it[UILANF_PROP_KEY] ?: sampleConfig.uiLang
-//            config.prayerLang = it[PRAYERLANG_PROP_KEY] ?: sampleConfig.prayerLang
-//            config.secondLang = it[SECONDLANG_PROP_KEY] ?: sampleConfig.secondLang
-//        }
-//    }
-//
-//    suspend fun saveConfig(
-//        uiLang: String,
-//        prayerLang: String,
-//        secondLang: String
-//    ) {
-//        saveUILang(uiLang)
-//        savePrayerLang(prayerLang)
-//        saveSecondLang(secondLang)
-//    }
-//
-//    suspend fun saveUILang(uiLang: String) {
-//        config.uiLang = uiLang
-//        dataStore.edit {
-//            it[UILANF_PROP_KEY] = uiLang
-//        }
-//    }
-//
-//    suspend fun savePrayerLang(prayerLang: String) {
-//        config.prayerLang = prayerLang
-//        dataStore.edit {
-//            it[PRAYERLANG_PROP_KEY] = prayerLang
-//        }
-//    }
-//
-//    suspend fun saveSecondLang(secondLang: String) {
-//        config.secondLang = secondLang
-//        dataStore.edit {
-//            it[SECONDLANG_PROP_KEY] = secondLang
-//        }
-//    }
-//
-//}
