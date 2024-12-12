@@ -39,6 +39,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
             val name = pr.removeSuffix(".yaml")
             val basicPrayer = readPrayerFromAssets("assets/prayers/$lang/$pr")
             println("Loaded prayer ${basicPrayer.title}")
+            println("Notes: ${basicPrayer.notes}")
             var prayer = prayers[name]
             if (prayer == null) {
                 //println("Creating new prayer $name")

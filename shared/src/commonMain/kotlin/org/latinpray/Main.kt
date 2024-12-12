@@ -3,6 +3,8 @@ package org.latinpray
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +43,6 @@ fun Main() {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
 
-    AppTheme {
         var defConfig by remember { mutableStateOf(sampleConfig) }
         var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
         var currentPrayer = prayers.first()
@@ -69,61 +70,66 @@ fun Main() {
             currentPrayer = prayers.first()
         }
 
-        SharedTransitionLayout {
-            val sharedTransitionScope = this
-            NavHost(
-                navController = navController,
-                startDestination = MainScreens.PrayersScreen.name,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                composable(route = MainScreens.PrayersScreen.name) {
-                    PrayersListScreen(
-                        title = stringResource(Res.string.prayers_screen_title),
-                        prayers = prayers,
-                        config = defConfig,
-                        animatedVisibilityScope = this,
-                        sharedTransitionScope = sharedTransitionScope,
-                        onClick = { prayer ->
-                            currentPrayer = prayer
-                            navController.navigate(MainScreens.PrayerDetailsScreen.name)
-                        },
-                        navController = navController,
-                    )
-                }
-                composable(route = MainScreens.PrayerDetailsScreen.name) {
-                    PrayerDetailsScreen(
-                        prayer = currentPrayer,
-                        config = defConfig,
-                        prayers = prayers,
-                        animatedContentScope = this,
-                        sharedTransitionScope = sharedTransitionScope,
-                        goBack = { navController.popBackStack() }
-                    )
-                }
-                composable(route = MainScreens.SettingsScreen.name) {
-                    SettingsScreen(
-                        title = stringResource(Res.string.settings_screen_title),
-                        animatedContentScope = this,
-                        sharedTransitionScope = sharedTransitionScope,
-                        config = defConfig,
-                        goBack = { navController.popBackStack() }
-                    )
-                }
-                composable(route = MainScreens.AboutScreen.name) {
-                    AboutScreen(
-                        title = stringResource(Res.string.about_screen_title),
-                        //animatedContentScope = this,
-                        sharedTransitionScope = sharedTransitionScope,
-                        goBack = { navController.popBackStack() }
-                    )
-                }
-                composable(route = MainScreens.HelpScreen.name) {
-                    HelpScreen(
-                        title = stringResource(Res.string.help_screen_title),
-                        //animatedContentScope = this,
-                        sharedTransitionScope = sharedTransitionScope,
-                        goBack = { navController.popBackStack() }
-                    )
+    AppTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            SharedTransitionLayout {
+                val sharedTransitionScope = this
+                NavHost(
+                    navController = navController,
+                    startDestination = MainScreens.PrayersScreen.name,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    composable(route = MainScreens.PrayersScreen.name) {
+                        PrayersListScreen(
+                            title = stringResource(Res.string.prayers_screen_title),
+                            prayers = prayers,
+                            config = defConfig,
+                            animatedVisibilityScope = this,
+                            sharedTransitionScope = sharedTransitionScope,
+                            onClick = { prayer ->
+                                currentPrayer = prayer
+                                navController.navigate(MainScreens.PrayerDetailsScreen.name)
+                            },
+                            navController = navController,
+                        )
+                    }
+                    composable(route = MainScreens.PrayerDetailsScreen.name) {
+                        PrayerDetailsScreen(
+                            prayer = currentPrayer,
+                            config = defConfig,
+                            prayers = prayers,
+                            animatedContentScope = this,
+                            sharedTransitionScope = sharedTransitionScope,
+                            goBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(route = MainScreens.SettingsScreen.name) {
+                        SettingsScreen(
+                            title = stringResource(Res.string.settings_screen_title),
+                            animatedContentScope = this,
+                            sharedTransitionScope = sharedTransitionScope,
+                            config = defConfig,
+                            goBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(route = MainScreens.AboutScreen.name) {
+                        AboutScreen(
+                            title = stringResource(Res.string.about_screen_title),
+                            //animatedContentScope = this,
+                            sharedTransitionScope = sharedTransitionScope,
+                            goBack = { navController.popBackStack() }
+                        )
+                    }
+                    composable(route = MainScreens.HelpScreen.name) {
+                        HelpScreen(
+                            title = stringResource(Res.string.help_screen_title),
+                            //animatedContentScope = this,
+                            sharedTransitionScope = sharedTransitionScope,
+                            goBack = { navController.popBackStack() }
+                        )
+                    }
                 }
             }
         }

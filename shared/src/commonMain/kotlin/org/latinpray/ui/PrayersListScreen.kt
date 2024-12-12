@@ -52,12 +52,12 @@ fun PrayersListScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-//        .background(color = MaterialTheme.colorScheme.onBackground)
+            .background(color = MaterialTheme.colorScheme.background)
             .padding(bottom = 30.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
-                .windowInsetsPadding(WindowInsets.systemBars),
+                .windowInsetsPadding(WindowInsets.systemBars)
         ) {
             Box(modifier = Modifier.size(50.dp)
                 .align(Alignment.CenterStart)
@@ -89,7 +89,7 @@ fun PrayersListScreen(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }
@@ -117,19 +117,18 @@ fun PrayersListScreen(
             groupedPrayers.addAll(prayers)
         }
 
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
+        ) {
             items(items = groupedPrayers) { item ->
                 when (item) {
                     is String -> {
                         Text(
                             text = item,
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.background,
-
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
-
                     }
-
                     is Prayer -> {
                         PrayerListItem(
                             prayer = item,
@@ -139,7 +138,6 @@ fun PrayersListScreen(
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                     }
-
                     else -> println("Unknown item $item")
                 }
             }

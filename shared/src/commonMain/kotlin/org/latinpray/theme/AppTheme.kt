@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
+
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -22,17 +24,47 @@ fun AppTheme(
 ) {
     val colors = if (darkTheme) {
         darkColorScheme(
-            primary = Color(0xFFBB86FC),
-            secondary = Color(0xFF03DAC5),
-            tertiary = Color(0xFF3700B3),
-            background = Color(0xFF121212)
+//            primary = Color(0xf0ebe0),
+//            secondary = Color(0xdbceb4),
+//            tertiary = Color(0xcbb893),
+//            background = Color(0x312917),
+//            onBackground = Color(0xf0ebe0),
+//            surface = Color(0x312917),
+//            onSurface = Color(0xf0ebe0),
+//            onPrimary = Color(0x312917),
+//            onSecondary = Color(0x312917),
+//            onTertiary = Color(0x312917)
         )
     } else {
         lightColorScheme(
-            primary = Color(0xFF6200EE),
-            secondary = Color(0xFF03DAC5),
-            tertiary = Color(0xFF3700B3),
-            background = Color(0xFFFFFFFF)
+//            primary = Color(0x312917),
+//            onPrimary = Color(0xf0ebe0),
+//
+//            secondary = Color(0x473b22),
+//            onSecondary = Color(0xf0ebe0),
+//
+//            tertiary = Color(0x211b0f),
+//            onTertiary = Color(0xf0ebe0),
+//
+//            background = Color(0xf0ebe0),
+//            onBackground = Color(0x312917),
+//
+//            surface = Color(0xf0ebe0),
+//            onSurface = Color(0x312917),
+//
+//            error = Color(0xf0ebe0),
+//            onError = Color(0x312917),
+//            errorContainer = Color(0xf0ebe0),
+//            onErrorContainer = Color(0x312917),
+//            outline = Color(0x473b22),
+//            outlineVariant = Color(0x473b22),
+//            scrim = Color(0x00000000),
+//            inverseSurface = Color(0xf0ebe0),
+//            inverseOnSurface = Color(0x312917),
+//            inversePrimary = Color(0xf0ebe0),
+//            surfaceVariant = Color(0xdbceb4),
+//            onSurfaceVariant = Color(0x473b22),
+//            surfaceTint = Color(0x312917),
         )
     }
     val typography = Typography(

@@ -41,7 +41,7 @@ fun LangSelection(
         Text(
             modifier = Modifier.padding(vertical = 8.dp),
             text = title,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         OutlinedTextField(
             value = langs[selectedLang] ?: "none",
@@ -49,9 +49,9 @@ fun LangSelection(
 //                focusedBorderColor = MaterialTheme.colorScheme.secondary,
 //                unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
 //                disabledBorderColor = MaterialTheme.colorScheme.secondary,
-                focusedTextColor = MaterialTheme.colorScheme.secondary,
-                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-                disabledTextColor = MaterialTheme.colorScheme.secondary,
+//                focusedTextColor = MaterialTheme.colorScheme.secondary,
+//                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+//                disabledTextColor = MaterialTheme.colorScheme.secondary,
 //                cursorColor = MaterialTheme.colorScheme.secondary,
             ),
             onValueChange = { },
@@ -70,8 +70,7 @@ fun LangSelection(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.background(MaterialTheme.colorScheme.onBackground),
-
+            //modifier = Modifier.background(MaterialTheme.colorScheme.onBackground),
         ) {
             langs.forEach { item ->
                 DropdownMenuItem(
