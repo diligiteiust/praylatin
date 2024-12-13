@@ -59,12 +59,12 @@ fun preparePrayer(
             }
             return@forEachIndexed
         }
-        result += indent + "" + (it ?: "") + "\n"
+        result += indent + "" + (it ?: "") + "\n\n"
         if (lang2?.lines != null
             && lang2.lines.size > i
             && lang2.lines[i]?.isNotEmpty() == true
         ) {
-            result += "\n" + TRANSLATION + indent + lang2.lines[i] + "\n\n"
+            result += TRANSLATION + indent + lang2.lines[i] + "\n\n"
             //if (indent.isEmpty()) result += "\n"
         }
     }
