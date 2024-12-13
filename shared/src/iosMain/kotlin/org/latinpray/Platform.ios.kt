@@ -10,6 +10,7 @@ class IOSPlatform: Platform {
     override val appVersion: String =
         (NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as String? ?: "0.0.0") +
                 " (" + (NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleVersion") as String? ?: "0") + ")"
+    override val extraIndent: String = "\t\t"
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()

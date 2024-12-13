@@ -5,6 +5,7 @@ class AndroidPlatform : Platform {
     override val versionCode: String = "${android.os.Build.VERSION.SDK_INT}"
     override val appName: String
     override val appVersion: String = "1.0"
+    override val extraIndent: String = ""
 
     init {
         val context = AndroidInjector.application.applicationInfo

@@ -5,6 +5,7 @@ interface Platform {
     val versionCode: String
     val appName: String
     val appVersion: String
+    val extraIndent: String
 }
 
 expect fun getPlatform(): Platform

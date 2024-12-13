@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -23,8 +24,14 @@ import com.mikepenz.markdown.model.markdownPadding
 import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.getPlatform
 
 val INDENT = "%"
+val TRANSLATION = "!"
+val EMBEDDED = "@"
+val TRANSLATION_TRAIL = "_tr"
+val TRANSLATION_INDENT = "\t\t"
+val EMBEDDED_INDENT = "\t\t\t\t\t\t"
 
 fun preparePrayer(
     prayer: Prayer,
@@ -36,14 +43,14 @@ fun preparePrayer(
 
     val lang1 = prayer.langs[config.prayerLang]
     var lang2 = prayer.langs[config.secondLang]
-    if (config.preferTranslation && prayer.langs[config.secondLang + "_tr"] != null) {
-        lang2 = prayer.langs[config.secondLang + "_tr"]
+    if (config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
+        lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
     }
 
     var result = ""
 
     lang1?.lines?.forEachIndexed { i, it ->
-        if (it != null && it.trim().startsWith("@")) {
+        if (it != null && it.trim().startsWith(EMBEDDED)) {
             val subprayer = prayers.find { p -> p.name == it.trim().substring(1) }
             result += if (subprayer != null) {
                 preparePrayer(subprayer, config, prayers, indent + INDENT, false)
@@ -57,19 +64,19 @@ fun preparePrayer(
             && lang2.lines.size > i
             && lang2.lines[i]?.isNotEmpty() == true
         ) {
-            result += "\n" + "!" + indent + lang2.lines[i] + "\n\n"
+            result += "\n" + TRANSLATION + indent + lang2.lines[i] + "\n\n"
             //if (indent.isEmpty()) result += "\n"
         }
     }
 
     if (extras) {
         if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
-            result += "\n\n__Notes:__\n\n" + lang2.notes
+            result += "\n\n\n\n__Notes:__\n\n" + lang2.notes
         }
         if (lang1?.links != null && lang1.links.isNotEmpty()) {
             lang1.links.forEach { link ->
                 if (link is org.latinpray.data.Link.Youtube) {
-                    result += "\n\n[Listen on YouTube](${link.url})\n\n"
+                    result += "\n\n\n\n[Listen on YouTube](${link.url})\n\n"
                 }
             }
         }
@@ -81,36 +88,49 @@ fun preparePrayer(
 
 val customParagraphComponent: MarkdownComponent = {
     // build a styled paragraph. (util function provided by the library)
-    var style = LocalMarkdownTypography.current.paragraph.toSpanStyle()
+    var mainStyle = LocalMarkdownTypography.current.paragraph.toSpanStyle()
     var styledText = buildAnnotatedString {
-        pushStyle(style)
+        pushStyle(mainStyle)
         //println("Children size: ${it.node.children.size}")
         buildMarkdownAnnotatedString(it.content, it.node)
         pop()
     }
-    //println("Paragraph after: ${styledText.text}")
-    if (styledText.text.startsWith("!")) {
-        style = style.copy(
-            fontSize = MaterialTheme.typography.bodySmall.fontSize,
-            fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
-            baselineShift = BaselineShift.Superscript,
+
+    if (styledText.text.startsWith(TRANSLATION+INDENT)) {
+        val style = mainStyle.copy(
+            fontSize = mainStyle.fontSize * 0.7f,
+            fontWeight = FontWeight.Light,
         )
         styledText = buildAnnotatedString {
             withStyle(style) {
-                append(styledText.text.substring(1))
+                append(EMBEDDED_INDENT+TRANSLATION_INDENT+ getPlatform().extraIndent + styledText.text.substring(2))
             }
         }
     }
+
     if (styledText.text.startsWith(INDENT)) {
-        style = style.copy(
-            fontSize = style.fontSize * 0.8f,
+        val style = mainStyle.copy(
+            fontSize = mainStyle.fontSize * 0.8f,
         )
         styledText = buildAnnotatedString {
             withStyle(style) {
-                append("\t\t\t\t\t\t" + styledText.text.substring(1))
+                append(EMBEDDED_INDENT + styledText.text.substring(1))
             }
         }
     }
+
+    if (styledText.text.startsWith(TRANSLATION)) {
+        val style = mainStyle.copy(
+            fontSize =  mainStyle.fontSize * 0.8f,
+            fontWeight = FontWeight.Light,
+        )
+        styledText = buildAnnotatedString {
+            withStyle(style) {
+                append(TRANSLATION_INDENT + styledText.text.substring(1))
+            }
+        }
+    }
+
     Text(
         styledText,
     )
