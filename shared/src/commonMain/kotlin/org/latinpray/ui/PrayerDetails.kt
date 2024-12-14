@@ -22,6 +22,7 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownPadding
 import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
+import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 import org.latinpray.getPlatform
@@ -38,11 +39,17 @@ fun preparePrayer(
     config: Config,
     prayers: MutableList<Prayer>,
     indent: String = "",
-    extras: Boolean = true
+    extras: Boolean = true,
+    listMode : Boolean = false
 ): String {
-
-    val lang1 = prayer.langs[config.prayerLang]
-    var lang2 = prayer.langs[config.secondLang]
+    var list = listMode
+    var lang2: BasicPrayer? = null
+    var lang1 = prayer.langs[config.prayerLang]
+    if (lang1 == null) {
+        lang1 = prayer.langs[config.secondLang]
+    } else {
+        lang2 = prayer.langs[config.secondLang]
+    }
     if (config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
         lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
     }
@@ -51,9 +58,15 @@ fun preparePrayer(
 
     lang1?.lines?.forEachIndexed { i, it ->
         if (it != null && it.trim().startsWith(EMBEDDED)) {
+            if (i == 0) {
+                list = true
+            }
+            if (it.trim().substring(1).isEmpty()) {
+                return@forEachIndexed
+            }
             val subprayer = prayers.find { p -> p.name == it.trim().substring(1) }
             result += if (subprayer != null) {
-                preparePrayer(subprayer, config, prayers, indent + INDENT, false)
+                preparePrayer(subprayer, config, prayers, indent + INDENT, false, list)
             } else {
                 "$indent *$it* not found\n\n"
             }
@@ -70,17 +83,16 @@ fun preparePrayer(
     }
 
     if (extras) {
-        if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
-            result += "\n\n\n\n__Notes:__\n\n" + lang2.notes
-        }
-        if (lang1?.links != null && lang1.links.isNotEmpty()) {
-            lang1.links.forEach { link ->
+        if (lang1?.links != null && lang1.links!!.isNotEmpty()) {
+            lang1.links!!.forEach { link ->
                 if (link is org.latinpray.data.Link.Youtube) {
-                    result += "\n\n\n\n[Listen on YouTube](${link.url})\n\n"
+                    result += "^^^\n\n[Listen on YouTube](${link.url})\n\n"
                 }
             }
         }
-
+        if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
+            result += "^^^\n\n__Notes:__\n\n" + lang2.notes
+        }
     }
 
     return result
@@ -88,12 +100,22 @@ fun preparePrayer(
 
 val customParagraphComponent: MarkdownComponent = {
     // build a styled paragraph. (util function provided by the library)
-    var mainStyle = LocalMarkdownTypography.current.paragraph.toSpanStyle()
+    var verPadding = 0.dp
+    val mainStyle = LocalMarkdownTypography.current.paragraph.toSpanStyle()
     var styledText = buildAnnotatedString {
         pushStyle(mainStyle)
         //println("Children size: ${it.node.children.size}")
         buildMarkdownAnnotatedString(it.content, it.node)
         pop()
+    }
+
+    if (styledText.text.equals("^^^")) {
+        //verPadding = 4.dp
+        styledText = buildAnnotatedString {
+            withStyle(mainStyle) {
+                append("   ")
+            }
+        }
     }
 
     if (styledText.text.startsWith(TRANSLATION+INDENT)) {
@@ -133,6 +155,7 @@ val customParagraphComponent: MarkdownComponent = {
 
     Text(
         styledText,
+        modifier = Modifier.padding(vertical = verPadding)
     )
 }
 

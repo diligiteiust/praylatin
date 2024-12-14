@@ -34,8 +34,13 @@ fun PrayerListItem(
         elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(4.dp)) {
-            val title = prayer.langs[config.prayerLang]?.title
-            val subtitle = prayer.langs[config.secondLang]?.title
+            var subtitle: String? = null
+            var title = prayer.langs[config.prayerLang]?.title
+            if (title == null) {
+                title = prayer.langs[config.secondLang]?.title
+            } else {
+                subtitle = prayer.langs[config.secondLang]?.title
+            }
             Text(text = title ?: "No title", style = MaterialTheme.typography.titleMedium)
             if (subtitle != null) {
                 Text(text = subtitle, style = MaterialTheme.typography.labelSmall)
