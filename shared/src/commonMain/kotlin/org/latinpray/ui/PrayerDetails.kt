@@ -66,7 +66,7 @@ fun preparePrayer(
             }
             val subprayer = prayers.find { p -> p.name == it.trim().substring(1) }
             result += if (subprayer != null) {
-                preparePrayer(subprayer, config, prayers, indent + INDENT, false, list)
+                preparePrayer(subprayer, config, prayers, indent + (if (list)  "" else INDENT), false, list)
             } else {
                 "$indent *$it* not found\n\n"
             }
