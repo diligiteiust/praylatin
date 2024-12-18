@@ -6,18 +6,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.compose.components.MarkdownComponent
 import com.mikepenz.markdown.compose.components.markdownComponents
+import com.mikepenz.markdown.compose.elements.MarkdownText
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownPadding
@@ -86,7 +85,9 @@ fun preparePrayer(
         if (lang1?.links != null && lang1.links!!.isNotEmpty()) {
             lang1.links!!.forEach { link ->
                 if (link is org.latinpray.data.Link.Youtube) {
-                    result += "^^^\n\n[Listen on YouTube](${link.url})\n\n"
+                    val yt_link = "[Listen on YouTube](${link.url})"
+                    //println("YT Link: $yt_link")
+                    result += "^^^\n\n$yt_link\n\n"
                 }
             }
         }
@@ -100,7 +101,6 @@ fun preparePrayer(
 
 val customParagraphComponent: MarkdownComponent = {
     // build a styled paragraph. (util function provided by the library)
-    var verPadding = 0.dp
     val mainStyle = LocalMarkdownTypography.current.paragraph.toSpanStyle()
     var styledText = buildAnnotatedString {
         pushStyle(mainStyle)
@@ -110,7 +110,6 @@ val customParagraphComponent: MarkdownComponent = {
     }
 
     if (styledText.text.equals("^^^")) {
-        //verPadding = 4.dp
         styledText = buildAnnotatedString {
             withStyle(mainStyle) {
                 append("   ")
@@ -153,9 +152,8 @@ val customParagraphComponent: MarkdownComponent = {
         }
     }
 
-    Text(
+    MarkdownText(
         styledText,
-        modifier = Modifier.padding(vertical = verPadding)
     )
 }
 
@@ -185,7 +183,8 @@ fun PrayerDetails(
             .background(color = MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState),
         components = markdownComponents(
-            paragraph = customParagraphComponent
+            paragraph = customParagraphComponent,
+
         )
     )
 
