@@ -32,6 +32,7 @@ val EMBEDDED = "@"
 val TRANSLATION_TRAIL = "_tr"
 val TRANSLATION_INDENT = "\t\t"
 val EMBEDDED_INDENT = "\t\t\t\t\t\t"
+val EMPTY_LINE = "^^^"
 
 fun preparePrayer(
     prayer: Prayer,
@@ -71,10 +72,15 @@ fun preparePrayer(
             }
             return@forEachIndexed
         }
+        if (i == 0 && list) {
+            result += "## " + lang1.title + "\n\n"
+        }
         result += indent + "" + (it ?: "") + "\n\n"
         if (lang2?.lines != null
             && lang2.lines.size > i
             && lang2.lines[i]?.isNotEmpty() == true
+            && lang2.lines[i]?.trim()?.startsWith(EMBEDDED) == false
+            && lang2.lines[i]?.trim() != EMPTY_LINE
         ) {
             result += TRANSLATION + indent + lang2.lines[i] + "\n\n"
             //if (indent.isEmpty()) result += "\n"
@@ -109,7 +115,7 @@ val customParagraphComponent: MarkdownComponent = {
         pop()
     }
 
-    if (styledText.text.equals("^^^")) {
+    if (styledText.text.trim() == EMPTY_LINE) {
         styledText = buildAnnotatedString {
             withStyle(mainStyle) {
                 append("   ")
@@ -177,7 +183,8 @@ fun PrayerDetails(
         typography = markdownTypography(
             text = MaterialTheme.typography.bodySmall,
             paragraph = MaterialTheme.typography.bodyMedium,
-            quote = MaterialTheme.typography.bodySmall
+            quote = MaterialTheme.typography.bodySmall,
+            h2 = MaterialTheme.typography.titleMedium,
         ),
         modifier = Modifier.fillMaxSize().padding(4.dp)
             .background(color = MaterialTheme.colorScheme.background)
