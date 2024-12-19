@@ -6,16 +6,18 @@ tags:
   - Beata Virgo Maria
 links:
   - type: youtube
-    url: https://www.youtube.com/watch?v=ZjA4mlNfqtk&pp=ygUMbGF0aW4gcm9zYXJ5
+    title: Gregorian Chant Rosary in Latin
+    url: https://www.youtube.com/watch?v=ZjA4mlNfqtk
 lines:
-  - "@signumcrucis"
+  - "@"
+  - "[Credo - Symbolum Apostolorum](https://www.youtube.com/watch?v=i5qVE-_LvLk)"
+  - "[Pater Noster...](https://www.youtube.com/watch?v=JrZiC8Zajh4)"
+  - "3x [Ave Maria...](https://www.youtube.com/watch?v=sWe95K5BEoM)"
+  - "[Gloria Patri...](https://www.youtube.com/watch?v=aB4Y9m18v9Q)"
   - ^^^
-  - "@symbolumapostolorum"
-  - ^^^
-  - "@paternoster"
-  - ^^^
-  - 3x
-  - "@avemaria"
-  - ^^^
-  - "@gloriapatri"
-
+  - "## Mystéria Gaudiósa"
+  - "@mysteriagaudiosa"
+  - "## Mystéria Dolorósa"
+  - "@mysteriadolorosa"
+  - "## Mystéria Gloriósa"
+  - "@mysteriagloriosa"

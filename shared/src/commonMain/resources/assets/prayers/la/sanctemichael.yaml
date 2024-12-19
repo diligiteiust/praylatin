@@ -3,6 +3,10 @@ lang: la
 language: Latina
 tags:
   - Angelos
+links:
+  - type: youtube
+    title: Sancte Michael Archangele
+    url: "https://www.youtube.com/watch?v=i5rhM5JTdb8"
 lines:
   - Sancte Michael Archangele,
   - Defende nos in proelio,
