@@ -29,6 +29,7 @@ import org.latinpray.getPlatform
 const val INDENT = "%"
 const val TRANSLATION = "!"
 const val EMBEDDED = "@"
+const val EMBEDDED_NO_TTILE = "@@"
 const val TRANSLATION_TRAIL = "_tr"
 const val TRANSLATION_INDENT = "\t\t"
 const val EMBEDDED_INDENT = "\t\t\t\t\t\t"
@@ -42,7 +43,8 @@ fun preparePrayer(
     prayers: MutableList<Prayer>,
     indent: String = "",
     extras: Boolean = true,
-    listMode : Boolean = false
+    listMode : Boolean = false,
+    title: Boolean = true
 ): String {
     var list = listMode
     var lang2: BasicPrayer? = null
@@ -75,17 +77,25 @@ fun preparePrayer(
             if (it.trim().substring(1).isEmpty()) {
                 return@forEachIndexed
             }
+            var t = true
+            var subprayer: Prayer? = null
             // Find the embedded prayer content
-            val subprayer = prayers.find { p -> p.name == it.trim().substring(1) }
+            if (it.trim().startsWith(EMBEDDED_NO_TTILE)) {
+                t = false
+                subprayer = prayers.find { p -> p.name == it.trim().substring(2) }
+            } else {
+                subprayer = prayers.find { p -> p.name == it.trim().substring(1) }
+            }
             result += if (subprayer != null) {
-                preparePrayer(subprayer, config, prayers, indent + (if (list)  "" else INDENT), false, list)
+                preparePrayer(subprayer, config, prayers,
+                    indent + (if (list)  "" else INDENT), false, list, t)
             } else {
                 "$indent *$it* not found\n\n"
             }
             return@forEachIndexed
         }
         // In list mode, display each prayer title
-        if (i == 0 && list) {
+        if (i == 0 && list && title) {
             result += "## " + lang1.title + "\n\n"
         }
         result += indent + "" + (it ?: "") + "\n\n"
