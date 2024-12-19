@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 sealed class Link {
     @SerialName("youtube")
     @Serializable
-    data class Youtube(val url: String) : Link()
+    data class Youtube(val url: String, val title: String? = null) : Link()
 }
 
 @Serializable
@@ -26,3 +26,5 @@ data class Prayer(
     val name: String,
     val langs: MutableMap<String, BasicPrayer>
 )
+
+val HIDE_TAG = "Hide"
