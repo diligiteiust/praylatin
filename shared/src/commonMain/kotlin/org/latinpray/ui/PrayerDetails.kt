@@ -26,13 +26,15 @@ import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 import org.latinpray.getPlatform
 
-val INDENT = "%"
-val TRANSLATION = "!"
-val EMBEDDED = "@"
-val TRANSLATION_TRAIL = "_tr"
-val TRANSLATION_INDENT = "\t\t"
-val EMBEDDED_INDENT = "\t\t\t\t\t\t"
-val EMPTY_LINE = "^^^"
+const val INDENT = "%"
+const val TRANSLATION = "!"
+const val EMBEDDED = "@"
+const val TRANSLATION_TRAIL = "_tr"
+const val TRANSLATION_INDENT = "\t\t"
+const val EMBEDDED_INDENT = "\t\t\t\t\t\t"
+const val EMPTY_LINE = "^^^"
+const val QUOTE = ">"
+val MULTI_REGEX = Regex("[0-9]+x")
 
 fun preparePrayer(
     prayer: Prayer,
@@ -45,11 +47,15 @@ fun preparePrayer(
     var list = listMode
     var lang2: BasicPrayer? = null
     var lang1 = prayer.langs[config.prayerLang]
+    // If content for the primary language is not found,
+    // we use content for secondary language as primary
     if (lang1 == null) {
         lang1 = prayer.langs[config.secondLang]
     } else {
         lang2 = prayer.langs[config.secondLang]
     }
+    // If prefered translation is enabled, we try to find content with translation
+    // instead of the standard content
     if (config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
         lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
     }
@@ -58,12 +64,18 @@ fun preparePrayer(
 
     lang1?.lines?.forEachIndexed { i, it ->
         if (it != null && it.trim().startsWith(EMBEDDED)) {
+            // If the first line starts from embedded content
+            // `list` mode is turned on. No indentation for embedded content.
             if (i == 0) {
                 list = true
             }
+            // If the line contains only embedded content mark, skip the line
+            // It is used to enable `list` mode for lists which do not start
+            // with embedded content
             if (it.trim().substring(1).isEmpty()) {
                 return@forEachIndexed
             }
+            // Find the embedded prayer content
             val subprayer = prayers.find { p -> p.name == it.trim().substring(1) }
             result += if (subprayer != null) {
                 preparePrayer(subprayer, config, prayers, indent + (if (list)  "" else INDENT), false, list)
@@ -72,6 +84,7 @@ fun preparePrayer(
             }
             return@forEachIndexed
         }
+        // In list mode, display each prayer title
         if (i == 0 && list) {
             result += "## " + lang1.title + "\n\n"
         }
@@ -82,8 +95,13 @@ fun preparePrayer(
             && lang2.lines[i]?.trim()?.startsWith(EMBEDDED) == false
             && lang2.lines[i]?.trim() != EMPTY_LINE
         ) {
-            result += TRANSLATION + indent + lang2.lines[i] + "\n\n"
-            //if (indent.isEmpty()) result += "\n"
+            var line = lang2.lines[i]
+            if (line?.startsWith(QUOTE) == true) {
+                line = line.substring(1).trim()
+            }
+            val nline = MULTI_REGEX.replace(line ?: "", "")
+            if (nline.trim().isEmpty()) return@forEachIndexed
+            result += TRANSLATION + indent + line + "\n\n"
         }
     }
 
@@ -91,8 +109,8 @@ fun preparePrayer(
         if (lang1?.links != null && lang1.links!!.isNotEmpty()) {
             lang1.links!!.forEach { link ->
                 if (link is org.latinpray.data.Link.Youtube) {
-                    val yt_link = "[Listen on YouTube](${link.url})"
-                    //println("YT Link: $yt_link")
+                    val title = link.title ?: "Listen on YouTube"
+                    val yt_link = "[$title](${link.url})"
                     result += "^^^\n\n$yt_link\n\n"
                 }
             }

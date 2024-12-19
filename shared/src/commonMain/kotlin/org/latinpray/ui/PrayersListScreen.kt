@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.latinpray.data.Config
+import org.latinpray.data.HIDE_TAG
 import org.latinpray.data.Prayer
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -101,13 +102,14 @@ fun PrayersListScreen(
                     tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
                 }
             }
-
+            tags.remove(HIDE_TAG)
             tags.sorted().forEach { tag ->
                 groupedPrayers.add(tag)
                 prayers.forEach { prayer ->
                     if (prayer.langs[config.prayerLang] != null
                         && prayer.langs[config.prayerLang]?.tags != null
                         && prayer.langs[config.prayerLang]?.tags?.contains(tag) == true
+                        && prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false
                     ) {
                         groupedPrayers.add(prayer)
                     }
