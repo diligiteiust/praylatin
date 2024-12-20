@@ -29,7 +29,7 @@ import org.latinpray.getPlatform
 const val INDENT = "%"
 const val TRANSLATION = "!"
 const val EMBEDDED = "@"
-const val EMBEDDED_NO_TTILE = "@@"
+//const val EMBEDDED_TTILE = "@@"
 const val TRANSLATION_TRAIL = "_tr"
 const val TRANSLATION_INDENT = "\t\t"
 const val EMBEDDED_INDENT = "\t\t\t\t\t\t"
@@ -44,7 +44,7 @@ fun preparePrayer(
     indent: String = "",
     extras: Boolean = true,
     listMode : Boolean = false,
-    title: Boolean = true
+    title: Boolean = false
 ): String {
     var list = listMode
     var lang2: BasicPrayer? = null
@@ -63,6 +63,7 @@ fun preparePrayer(
     }
 
     var result = ""
+    var prayerStart = true
 
     lang1?.lines?.forEachIndexed { i, it ->
         if (it != null && it.trim().startsWith(EMBEDDED)) {
@@ -71,21 +72,20 @@ fun preparePrayer(
             if (i == 0) {
                 list = true
             }
+            var file = it.trim().substring(1)
             // If the line contains only embedded content mark, skip the line
             // It is used to enable `list` mode for lists which do not start
             // with embedded content
-            if (it.trim().substring(1).isEmpty()) {
+            if (file.isEmpty()) {
                 return@forEachIndexed
             }
-            var t = true
-            var subprayer: Prayer? = null
-            // Find the embedded prayer content
-            if (it.trim().startsWith(EMBEDDED_NO_TTILE)) {
-                t = false
-                subprayer = prayers.find { p -> p.name == it.trim().substring(2) }
-            } else {
-                subprayer = prayers.find { p -> p.name == it.trim().substring(1) }
+            var t = false
+            // Double embedded mark means title = true
+            if (file.startsWith(EMBEDDED)) {
+                t = true
+                file = file.substring(1)
             }
+            val subprayer = prayers.find { p -> p.name == file }
             result += if (subprayer != null) {
                 preparePrayer(subprayer, config, prayers,
                     indent + (if (list)  "" else INDENT), false, list, t)
@@ -94,9 +94,10 @@ fun preparePrayer(
             }
             return@forEachIndexed
         }
-        // In list mode, display each prayer title
-        if (i == 0 && list && title) {
-            result += "## " + lang1.title + "\n\n"
+        // Display prayer title at the very beginning
+        if (prayerStart && title) {
+            result += "## " + lang1.title + "\n\n^^^\n\n"
+            prayerStart = false
         }
         result += indent + "" + (it ?: "") + "\n\n"
         if (lang2?.lines != null
@@ -119,14 +120,16 @@ fun preparePrayer(
         if (lang1?.links != null && lang1.links!!.isNotEmpty()) {
             lang1.links!!.forEach { link ->
                 if (link is org.latinpray.data.Link.Youtube) {
-                    val title = link.title ?: "Listen on YouTube"
-                    val yt_link = "[$title](${link.url})"
+                    val url_title = link.title ?: "Listen on YouTube"
+                    val yt_link = "[$url_title](${link.url})"
                     result += "^^^\n\n$yt_link\n\n"
                 }
             }
         }
         if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
             result += "^^^\n\n__Notes:__\n\n" + lang2.notes
+        } else if (lang2 == null && lang1?.notes != null && lang1.notes!!.isNotEmpty()) {
+            result += "^^^\n\n__Notes:__\n\n" + lang1.notes
         }
     }
 
@@ -213,14 +216,15 @@ fun PrayerDetails(
             paragraph = MaterialTheme.typography.bodyMedium,
             quote = MaterialTheme.typography.bodySmall,
             h2 = MaterialTheme.typography.titleMedium,
+            h3 = MaterialTheme.typography.titleSmall,
+            link = MaterialTheme.typography.labelMedium
         ),
         modifier = Modifier.fillMaxSize().padding(4.dp)
             .background(color = MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState),
         components = markdownComponents(
             paragraph = customParagraphComponent,
-
-        )
+        ),
     )
 
 //    if (prayer.langs[config.secondLang]?.notes != null) {

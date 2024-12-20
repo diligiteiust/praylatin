@@ -32,21 +32,21 @@ data class Config (
     var dataStore: DataStore<Preferences>? = null
 
     suspend fun loadConfigProps(ds: DataStore<Preferences>) {
-        println("Loading config props")
+        //println("Loading config props")
         dataStore = ds
         if (dataStore == null) {
             println("DataStore is null")
         }
         prayerLang = getPrayerLang()
-        println("Loaded prayer lang $prayerLang")
+        //println("Loaded prayer lang $prayerLang")
         uiLang = getUILang()
-        println("Loaded ui lang $uiLang")
+        //println("Loaded ui lang $uiLang")
         secondLang = getSecondLang()
-        println("Loaded second lang $secondLang")
+        //println("Loaded second lang $secondLang")
         preferTranslation = getPreferTranslation()
-        println("Loaded prefer translation $preferTranslation")
+        //println("Loaded prefer translation $preferTranslation")
         grouping = getGrouping()
-        println("Loaded grouping $grouping")
+        //println("Loaded grouping $grouping")
     }
 
     private suspend fun getPrayerLang(): String =
@@ -97,7 +97,7 @@ data class Config (
         prayerLang = lang
         dataStore?.edit {
             it[PRAYERLANG_PROP_KEY] = prayerLang
-            println("Saved prayer lang $prayerLang")
+            //println("Saved prayer lang $prayerLang")
         }
     }
 
@@ -105,11 +105,11 @@ data class Config (
         if (dataStore == null) {
             println("DataStore is null")
         }
-        println("Saving second lang $lang")
+        //println("Saving second lang $lang")
         secondLang = lang
         dataStore?.edit {
             it[SECONDLANG_PROP_KEY] = secondLang
-            println("Saved second lang $secondLang")
+            //println("Saved second lang $secondLang")
         }
     }
 

@@ -41,7 +41,8 @@ fun PrayerListItem(
             } else {
                 subtitle = prayer.langs[config.secondLang]?.title
             }
-            Text(text = title ?: "No title", style = MaterialTheme.typography.titleMedium)
+            Text(text = title ?: "No title", style = MaterialTheme.typography.titleSmall)
+            //println("Rendering prayer ${prayer.name}")
             if (subtitle != null) {
                 Text(text = subtitle, style = MaterialTheme.typography.labelSmall)
             }

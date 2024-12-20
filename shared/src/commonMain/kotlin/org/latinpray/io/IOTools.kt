@@ -31,15 +31,15 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
 
     val langs = listAssetsInDirectory("assets/prayers/")
     langs.forEach { lang ->
-        println("Loading prayers for $lang")
+        //println("Loading prayers for $lang")
         val prs = listAssetsInDirectory("assets/prayers/$lang/")
         var i = 1
         prs.forEach { pr ->
-            println("Loading prayer $pr")
+            //println("Loading prayer $pr")
             val name = pr.removeSuffix(".yaml")
             val basicPrayer = readPrayerFromAssets("assets/prayers/$lang/$pr")
-            println("Loaded prayer ${basicPrayer.title}")
-            println("Notes: ${basicPrayer.notes}")
+            //println("Loaded prayer ${basicPrayer.title}")
+            //println("Notes: ${basicPrayer.notes}")
             var prayer = prayers[name]
             if (prayer == null) {
                 //println("Creating new prayer $name")

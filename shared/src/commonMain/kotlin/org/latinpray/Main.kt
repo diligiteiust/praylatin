@@ -48,9 +48,9 @@ fun Main() {
         var currentPrayer = prayers.first()
 
         scope.launch {
-            println("Loading config from yaml...")
+            //println("Loading config from yaml...")
             defConfig = readConfigFromAssets("assets/config.yaml")
-            println("Loaded config from yaml")
+            //println("Loaded config from yaml")
             val dsConfig = Config(
                 defConfig.uiLang,
                 defConfig.prayerLang,
@@ -61,8 +61,8 @@ fun Main() {
             dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
             defConfig = dsConfig
             defConfig.dataStore = getDataStore { keyValueStorePath() }
-            println("Loaded config from datastore ${defConfig.prayerLang}")
-            println("Loading prayers...")
+            //println("Loaded config from datastore ${defConfig.prayerLang}")
+            //println("Loading prayers...")
             prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
                 prayer.langs[defConfig.prayerLang]?.title
             }.toMutableList()

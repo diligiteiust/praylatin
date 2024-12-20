@@ -85,7 +85,8 @@ fun PrayerDetailsScreen(
                     contentAlignment = Alignment.TopCenter
                 ) {
                     Text(
-                        text = prayer.langs[config.prayerLang]?.title ?: "No title",
+                        text = prayer.langs[config.prayerLang]?.title ?:
+                        (prayer.langs[config.secondLang]?.title ?: "No title"),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )

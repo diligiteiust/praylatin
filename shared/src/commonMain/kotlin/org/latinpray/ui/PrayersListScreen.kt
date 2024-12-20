@@ -98,20 +98,34 @@ fun PrayersListScreen(
         if (config.grouping) {
             val tags = mutableSetOf<String>()
             prayers.forEach { prayer ->
-                if (prayer.langs[config.prayerLang] != null && prayer.langs[config.prayerLang]?.tags != null) {
-                    tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
+                if ((prayer.langs[config.prayerLang] != null && prayer.langs[config.prayerLang]?.tags != null)
+                    || (prayer.langs[config.secondLang] != null && prayer.langs[config.secondLang]?.tags != null)) {
+                    if (prayer.langs[config.prayerLang]?.tags != null) {
+                        tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
+                    } else if (prayer.langs[config.secondLang]?.tags != null) {
+                        tags.addAll(prayer.langs[config.secondLang]?.tags!!)
+                    }
+
+                    //tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
                 }
             }
             tags.remove(HIDE_TAG)
             tags.sorted().forEach { tag ->
                 groupedPrayers.add(tag)
                 prayers.forEach { prayer ->
-                    if (prayer.langs[config.prayerLang] != null
-                        && prayer.langs[config.prayerLang]?.tags != null
-                        && prayer.langs[config.prayerLang]?.tags?.contains(tag) == true
-                        && prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false
+                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
+                    if ((prayer.langs[config.prayerLang] != null)
+                        && (prayer.langs[config.prayerLang]?.tags?.contains(tag) == true)
+                        && (prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false)
                     ) {
                         groupedPrayers.add(prayer)
+                        //println("Added 1st prayer ${prayer.name} to group: $tag")
+                    } else if ((prayer.langs[config.secondLang] != null)
+                        && (prayer.langs[config.secondLang]?.tags?.contains(tag) == true)
+                        && prayer.langs[config.secondLang]?.tags?.contains(HIDE_TAG) == false
+                    ) {
+                        groupedPrayers.add(prayer)
+                        //println("Added 2nd prayer ${prayer.name} to group: $tag")
                     }
                 }
             }
@@ -139,6 +153,7 @@ fun PrayersListScreen(
                             sharedTransitionScope = sharedTransitionScope,
                             animatedVisibilityScope = animatedVisibilityScope
                         )
+                        //println("Displaying prayer ${item.name}")
                     }
                     else -> println("Unknown item $item")
                 }
