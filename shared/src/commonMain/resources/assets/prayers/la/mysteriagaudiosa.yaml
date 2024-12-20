@@ -4,21 +4,21 @@ language: Latina
 tags:
   - Rosarium
   - Beata Virgo Maria
-#  - Hide
+  - Hide
 lines:
   - "@"
-  - "## 1. Annuntiatiónem Beátæ Maríæ Vírginis"
-  - "@@rosariumdecembrevis"
+  - "### 1. Annuntiatiónem Beátæ Maríæ Vírginis"
+  - "@rosariumdecembrevis"
   - ^^^
-  - "## 2. Visitatiónem Beátæ Maríæ Vírginis"
-  - "@@rosariumdecembrevis"
+  - "### 2. Visitatiónem Beátæ Maríæ Vírginis"
+  - "@rosariumdecembrevis"
   - ^^^
-  - "## 3. Nativitátem Dómini nostri Iesu Christi"
-  - "@@rosariumdecembrevis"
+  - "### 3. Nativitátem Dómini nostri Iesu Christi"
+  - "@rosariumdecembrevis"
   - ^^^
-  - "## 4. Oblatiónem Dómini nostri Iesu Christi"
-  - "@@rosariumdecembrevis"
+  - "### 4. Oblatiónem Dómini nostri Iesu Christi"
+  - "@rosariumdecembrevis"
   - ^^^
-  - "## 5. Inventiónem Dómini nostri Iesu Christi in templo"
-  - "@@rosariumdecembrevis"
+  - "### 5. Inventiónem Dómini nostri Iesu Christi in templo"
+  - "@rosariumdecembrevis"
   - ^^^

@@ -15,9 +15,6 @@ lines:
   - "3x [Ave Maria...](https://www.youtube.com/watch?v=sWe95K5BEoM)"
   - "[Gloria Patri...](https://www.youtube.com/watch?v=aB4Y9m18v9Q)"
   - ^^^
-  - "## Mystéria Gaudiósa"
-  - "@mysteriagaudiosa"
-  - "## Mystéria Dolorósa"
-  - "@mysteriadolorosa"
-  - "## Mystéria Gloriósa"
-  - "@mysteriagloriosa"
+  - "@@mysteriagaudiosa"
+  - "@@mysteriadolorosa"
+  - "@@mysteriagloriosa"

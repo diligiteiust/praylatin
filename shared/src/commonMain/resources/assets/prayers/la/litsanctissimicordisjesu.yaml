@@ -8,14 +8,14 @@ links:
   - type: youtube
     url: https://youtu.be/VXa3MSeIFGU?si=NgvUd8m03dkZyalM
 lines:
-  - Kyrie, eleison, Christe, eleison. Kyrie, eleison,
-  - Christe, audi nos, Christe, exaudi nos.
-  - Pater de caelis, Deus, miserere nobis.
-  - Fili, Redemptor mundi, Deus, miserere nobis.
-  - Spiritus Sancte, Deus, miserere nobis.
-  - Sancta Trinitas, unus Deus, miserere nobis.
+  - __Kyrie, eleison,__ Christe, eleison. Kyrie, eleison,
+  - __Christe, audi nos,__ Christe, exaudi nos.
+  - __Pater de caelis, Deus,__ miserere nobis.
+  - __Fili, Redemptor mundi, Deus,__ miserere nobis.
+  - __Spiritus Sancte, Deus,__ miserere nobis.
+  - __Sancta Trinitas, unus Deus,__ miserere nobis.
   - ^^^
-  - Cor Iesu, Filii Patris aeterni, miserere nobis.
+  - Cor Iesu, Filii Patris aeterni, __miserere nobis__
   - Cor Iesu, in sinu Virginis Matris a Spiritu Sancto formatum...
   - Cor Iesu, Verbo Dei substantialiter unitum...
   - Cor Iesu, maiestatis inifinitae...
@@ -49,14 +49,14 @@ lines:
   - Cor Iesu, spes in te morientium...
   - Cor Iesu, deliciae Sanctorum omnium...
   - ^^^
-  - Agnus Dei, qui tollis peccata mundi, parce nobis, Domine.
-  - Agnus Dei, qui tollis peccata mundi, exaudi nos, Domine.
-  - Agnus Dei, qui tollis peccata mundi, miserere nobis, Domine.
+  - __Agnus Dei, qui tollis peccata mundi,__ parce nobis, Domine.
+  - __Agnus Dei, qui tollis peccata mundi,__ exaudi nos, Domine.
+  - __Agnus Dei, qui tollis peccata mundi,__ miserere nobis, Domine.
   - ^^^
-  - Iesu, mitis et humilis Corde,
+  - __Iesu,__ mitis et humilis Corde,
   - Fac cor nostrum secundum Cor tuum.
   - ^^^
-  - "Oremus:"
+  - "__Oremus:__"
   - Omnipotens sempiterne Deus,
   - respice in Cor dilectissimi Filii tui
   - et in laudes et satisfactiones,

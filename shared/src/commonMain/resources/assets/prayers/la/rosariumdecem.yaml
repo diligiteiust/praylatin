@@ -9,13 +9,13 @@ links:
     title: Gregorian Chant Rosary in Latin
     url: https://www.youtube.com/watch?v=ZjA4mlNfqtk
 lines:
-  - "@@paternoster"
+  - "@paternoster"
   - ^^^
   - 10x
-  - "@@avemaria"
+  - "@avemaria"
   - ^^^
-  - "@@gloriapatri"
+  - "@gloriapatri"
   - ^^^
   - "> Ad libitum:"
-  - "@@domineiesu"
+  - "@domineiesu"
 
