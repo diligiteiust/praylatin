@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.revenuecat.purchases.kmp.Purchases
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
+import org.latinpray.data.offers
 import org.latinpray.data.sampleConfig
 import org.latinpray.data.samplePrayers
 import org.latinpray.io.getDataStore
@@ -40,35 +42,56 @@ import org.latinpray.ui.SettingsScreen
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Main() {
+    // Initialize platform-specific data
+    getPlatform()
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
 
-        var defConfig by remember { mutableStateOf(sampleConfig) }
-        var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
-        var currentPrayer = prayers.first()
+    var defConfig by remember { mutableStateOf(sampleConfig) }
+    var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
+    var currentPrayer = prayers.first()
 
-        scope.launch {
-            //println("Loading config from yaml...")
-            defConfig = readConfigFromAssets("assets/config.yaml")
-            //println("Loaded config from yaml")
-            val dsConfig = Config(
-                defConfig.uiLang,
-                defConfig.prayerLang,
-                defConfig.secondLang,
-                defConfig.preferTranslation,
-                defConfig.grouping
+    scope.launch {
+        //println("Loading config from yaml...")
+        defConfig = readConfigFromAssets("assets/config.yaml")
+        //println("Loaded config from yaml")
+        val dsConfig = Config(
+            defConfig.uiLang,
+            defConfig.prayerLang,
+            defConfig.secondLang,
+            defConfig.preferTranslation,
+            defConfig.grouping
+        )
+        dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
+        defConfig = dsConfig
+        defConfig.dataStore = getDataStore { keyValueStorePath() }
+        //println("Loaded config from datastore ${defConfig.prayerLang}")
+        //println("Loading prayers...")
+        prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
+            prayer.langs[defConfig.prayerLang]?.title
+        }.toMutableList()
+        println("Loaded ${prayers.size} prayers")
+        currentPrayer = prayers.first()
+        if (getPlatform().isIOS) {
+            Purchases.sharedInstance.getOfferings(
+                onError = { error ->
+                    // An error occurred
+                    println("Error: $error")
+                    //Text(text = "Error: $error")
+                },
+                onSuccess = { offerings ->
+                    offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let { it ->
+                        offers = it
+                        println("Offers: $offers")
+                        offers!!.forEach { offer ->
+                            println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
+                        }
+                        // Display packages for sale
+                    }
+                }
             )
-            dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
-            defConfig = dsConfig
-            defConfig.dataStore = getDataStore { keyValueStorePath() }
-            //println("Loaded config from datastore ${defConfig.prayerLang}")
-            //println("Loading prayers...")
-            prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
-                prayer.langs[defConfig.prayerLang]?.title
-            }.toMutableList()
-            println("Loaded ${prayers.size} prayers")
-            currentPrayer = prayers.first()
         }
+    }
 
     AppTheme {
         Surface(
@@ -125,6 +148,7 @@ fun Main() {
                     composable(route = MainScreens.HelpScreen.name) {
                         HelpScreen(
                             title = stringResource(Res.string.help_screen_title),
+                            config = defConfig,
                             //animatedContentScope = this,
                             sharedTransitionScope = sharedTransitionScope,
                             goBack = { navController.popBackStack() }

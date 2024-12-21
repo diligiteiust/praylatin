@@ -16,7 +16,8 @@ data class Config (
     var prayerLang: String,
     var secondLang: String,
     var preferTranslation: Boolean,
-    var grouping: Boolean
+    var grouping: Boolean,
+    var donation: String? = null
 ) {
 
     @Transient val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
@@ -27,6 +28,7 @@ data class Config (
     @Transient private val SECONDLANG_PROP_KEY = stringPreferencesKey("secondLang")
     @Transient private val PREFER_TRANSLATION_PROP_KEY = booleanPreferencesKey("preferTranslation")
     @Transient private val GROUPING_PROP_KEY = booleanPreferencesKey("grouping")
+    @Transient private val DONATION_PROP_KEY = stringPreferencesKey("donation")
 
     @Transient
     var dataStore: DataStore<Preferences>? = null
@@ -47,7 +49,13 @@ data class Config (
         //println("Loaded prefer translation $preferTranslation")
         grouping = getGrouping()
         //println("Loaded grouping $grouping")
+        donation = getDonation()
     }
+
+    private suspend fun getDonation(): String? =
+        dataStore!!.data.map {
+            it[DONATION_PROP_KEY]
+        }.first()
 
     private suspend fun getPrayerLang(): String =
         dataStore!!.data.map {
@@ -84,6 +92,14 @@ data class Config (
         saveSecondLang(secondLang)
         savePreferTranslation(preferTranslation)
         saveGrouping(grouping)
+        saveDonation(donation)
+    }
+
+    suspend fun saveDonation(donation: String?) {
+        this.donation = donation
+        dataStore?.edit {
+            it[DONATION_PROP_KEY] = donation ?: ""
+        }
     }
 
     suspend fun saveUILang(lang: String) {

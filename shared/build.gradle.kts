@@ -52,9 +52,19 @@ kotlin {
             implementation(libs.androidx.datastore.core)
             implementation(libs.androidx.datastore.pref)
             implementation(libs.markdown.renderer)
+            // Add the purchases-kmp dependencies.
+            implementation(libs.purchases.core)
+            implementation(libs.purchases.datetime)   // Optional
+            implementation(libs.purchases.either)     // Optional
+            implementation(libs.purchases.result)     // Optional
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        named { it.lowercase().startsWith("ios") }.configureEach {
+            languageSettings {
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            }
         }
     }
 }

@@ -17,27 +17,36 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import com.revenuecat.purchases.kmp.Purchases
+import kotlinx.coroutines.launch
+import org.latinpray.data.Config
+import org.latinpray.data.offers
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun HelpScreen(
     title: String,
     goBack: () -> Unit,
+    config: Config,
     //animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
 ) {
     val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
-    //val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
     with(sharedTransitionScope) {
         if (sharedTransitionScope.isTransitionActive.not()) {
@@ -82,6 +91,93 @@ fun HelpScreen(
                         style = MaterialTheme.typography.titleLarge,
                     )
                 }
+            }
+            if (offers == null) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Loading...")
+                }
+            } else {
+                offers!!.forEach { offer ->
+                    var tit = "Monthly"
+                    var active = true
+                    if (offer.storeProduct.id == config.donation) {
+                        tit = "Active"
+                        active = false
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(
+                            modifier = Modifier.fillMaxWidth().padding(16.dp),
+                            enabled = active,
+//                            colors = ButtonDefaults.buttonColors(
+//                                containerColor = color,
+//                                //contentColor = color
+//                            ),
+                            shape = RoundedCornerShape(16.dp),
+                            elevation = ButtonDefaults.buttonElevation(
+                                defaultElevation = 16.dp
+                            ),
+                            onClick = {
+                                Purchases.sharedInstance.purchase(
+                                    storeProduct = offer.storeProduct,
+                                    onError = { error, userCancelled ->
+                                        // An error occurred
+                                        println("Error: $error, cancelled: $userCancelled")
+                                        //Text(text = "Error: $error")
+                                    },
+                                    onSuccess = { storeTransaction, customerInfo ->
+                                        // Purchase was successful
+                                        println("Success: $storeTransaction, $customerInfo")
+                                        scope.launch {
+                                            config.saveDonation(offer.storeProduct.id)
+                                        }
+                                    }
+                                )
+                            }
+                        )
+                        {
+                            Text(text = "$tit donation of " + offer.storeProduct.price.formatted)
+                        }
+                    }
+                }
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    TextButton(
+                        onClick = {
+                            Purchases.sharedInstance.restorePurchases(
+                                onError = { error ->
+                                    // An error occurred
+                                    println("Error: $error")
+                                    //Text(text = "Error: $error")
+                                },
+                                onSuccess = { customerInfo ->
+                                    // Purchases were restored
+                                    println("Success: $customerInfo")
+                                    if (customerInfo.entitlements.active.isNotEmpty()) {
+                                        customerInfo.entitlements.active.forEach {
+                                            val product = it.value.productIdentifier
+                                            offers?.find { offer ->
+                                                offer.storeProduct.id == product
+                                            }?.let { offer ->
+                                                val subs = offer.storeProduct.title + " " + offer.storeProduct.price.formatted
+                                                println("Active purchase: $subs")
+                                                scope.launch {
+                                                    config.saveDonation(product)
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        println("No active purchases")
+                                    }
+                                }
+                            )
+                        }
+                    ) {
+                        Text(text = "Restore")
+                    }
+                }
+
             }
         }
     }

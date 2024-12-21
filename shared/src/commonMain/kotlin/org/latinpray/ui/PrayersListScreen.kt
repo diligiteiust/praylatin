@@ -148,10 +148,8 @@ fun PrayersListScreen(
                     is Prayer -> {
                         PrayerListItem(
                             prayer = item,
-                            config = config,
                             onClick = onClick,
-                            sharedTransitionScope = sharedTransitionScope,
-                            animatedVisibilityScope = animatedVisibilityScope
+                            config = config
                         )
                         //println("Displaying prayer ${item.name}")
                     }

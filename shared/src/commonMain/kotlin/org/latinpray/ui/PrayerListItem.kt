@@ -1,8 +1,5 @@
 package org.latinpray.ui
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,31 +14,35 @@ import androidx.compose.ui.unit.dp
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PrayerListItem(
     prayer: Prayer,
     onClick: (prayer: Prayer) -> Unit,
-    config: Config,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
-    ) {
+    config: Config
+) {
+    var subtitle: String? = null
+    var title = prayer.langs[config.prayerLang]?.title
+    var pad = 2.dp
+    if (title == null) {
+        title = prayer.langs[config.secondLang]?.title
+    } else {
+        subtitle = prayer.langs[config.secondLang]?.title
+    }
+    if (subtitle == null || subtitle.isEmpty()) {
+        pad = 6.dp
+    }
     Card(
         modifier = Modifier
-            .padding(1.dp)
+            .padding(2.dp)
             .fillMaxWidth()
             .clickable { onClick(prayer) },
         elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(4.dp)) {
-            var subtitle: String? = null
-            var title = prayer.langs[config.prayerLang]?.title
-            if (title == null) {
-                title = prayer.langs[config.secondLang]?.title
-            } else {
-                subtitle = prayer.langs[config.secondLang]?.title
-            }
-            Text(text = title ?: "No title", style = MaterialTheme.typography.titleSmall)
+            Text(
+                modifier = Modifier.padding(vertical = pad),
+                text = title ?: "No title", style = MaterialTheme.typography.titleSmall
+            )
             //println("Rendering prayer ${prayer.name}")
             if (subtitle != null) {
                 Text(text = subtitle, style = MaterialTheme.typography.labelSmall)

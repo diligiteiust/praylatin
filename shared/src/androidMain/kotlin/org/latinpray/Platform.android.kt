@@ -6,6 +6,7 @@ class AndroidPlatform : Platform {
     override val appName: String
     override val appVersion: String = "1.0"
     override val extraIndent: String = ""
+    override val isIOS: Boolean = false
 
     init {
         val context = AndroidInjector.application.applicationInfo
@@ -14,4 +15,4 @@ class AndroidPlatform : Platform {
     }
 }
 
-actual fun getPlatform(): Platform = AndroidPlatform()
+actual fun getPlatformPriv(): Platform = AndroidPlatform()

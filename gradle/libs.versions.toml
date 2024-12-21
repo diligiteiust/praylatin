@@ -20,6 +20,7 @@ okioVer = "3.9.1"
 kotlinStdLibVer = "2.1.0"
 androidxDatastoreVer = "1.1.1"
 markdownVer="0.27.0"
+purchases-kmp = "1.3.6+13.13.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinVer" }
@@ -60,6 +61,16 @@ kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 squareup-okio = { module = "com.squareup.okio:okio", version.ref = "okioVer" }
 
 markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdownVer"}
+
+# Required
+purchases-core = { module = "com.revenuecat.purchases:purchases-kmp-core", version.ref = "purchases-kmp" }
+# Optional: adds extension properties representing timestamps as kotlinx-datetime Instants.
+purchases-datetime = { module = "com.revenuecat.purchases:purchases-kmp-datetime", version.ref = "purchases-kmp" }
+# Optional: adds suspending functions that return Arrow's Either to indicate success / failure.
+purchases-either = { module = "com.revenuecat.purchases:purchases-kmp-either", version.ref = "purchases-kmp" }
+# Optional: adds suspending functions that return kotlin.Result to indicate success / failure.
+purchases-result = { module = "com.revenuecat.purchases:purchases-kmp-result", version.ref = "purchases-kmp" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVer" }

@@ -1,5 +1,8 @@
 package org.latinpray
 
+import com.revenuecat.purchases.kmp.LogLevel
+import com.revenuecat.purchases.kmp.Purchases
+import com.revenuecat.purchases.kmp.configure
 import platform.Foundation.NSBundle
 import platform.UIKit.UIDevice
 
@@ -11,6 +14,13 @@ class IOSPlatform: Platform {
         (NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as String? ?: "0.0.0") +
                 " (" + (NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleVersion") as String? ?: "0") + ")"
     override val extraIndent: String = "\t\t"
+    override val isIOS = true
+
+    init {
+        println("IOSPlatform: $osName")
+        Purchases.logLevel = LogLevel.DEBUG
+        Purchases.configure(apiKey = "appl_nltzYgyKKbijoRZvcmgvvsumVPt")
+    }
 }
 
-actual fun getPlatform(): Platform = IOSPlatform()
+actual fun getPlatformPriv(): Platform = IOSPlatform()
