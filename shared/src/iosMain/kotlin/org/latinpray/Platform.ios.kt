@@ -5,6 +5,7 @@ import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
 import platform.Foundation.NSBundle
 import platform.UIKit.UIDevice
+import platform.UIKit.UIUserInterfaceIdiomPad
 
 class IOSPlatform: Platform {
     override val osName: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
@@ -17,9 +18,13 @@ class IOSPlatform: Platform {
     override val isIOS = true
 
     init {
-        println("IOSPlatform: $osName")
+        //println("IOSPlatform: $osName")
         Purchases.logLevel = LogLevel.DEBUG
         Purchases.configure(apiKey = "appl_nltzYgyKKbijoRZvcmgvvsumVPt")
+    }
+
+    override fun isTablet(): Boolean {
+        return UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad
     }
 }
 

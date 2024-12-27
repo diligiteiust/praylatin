@@ -93,7 +93,9 @@ fun Main() {
         }
     }
 
-    AppTheme {
+    val fontFactor = if (getPlatform().isTablet()) 1.5f else 1.0f
+
+    AppTheme(fontFactor = fontFactor) {
         Surface(
             color = MaterialTheme.colorScheme.background,
         ) {

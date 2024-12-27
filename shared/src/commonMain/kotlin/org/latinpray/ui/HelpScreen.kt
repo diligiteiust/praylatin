@@ -48,137 +48,135 @@ fun HelpScreen(
     val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
     val scope = rememberCoroutineScope()
 
-    with(sharedTransitionScope) {
-        if (sharedTransitionScope.isTransitionActive.not()) {
-            setFraction(0f)
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
+    if (sharedTransitionScope.isTransitionActive.not()) {
+        setFraction(0f)
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
 //                .background(color = MaterialTheme.colorScheme.background)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.systemBars),
+            //verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .windowInsetsPadding(WindowInsets.systemBars),
-                //verticalAlignment = Alignment.CenterVertically
+            Box(modifier = Modifier.size(50.dp)
+                .align(Alignment.CenterStart)
+                .padding(10.dp)
+                .alpha(fraction)
+                //.alpha(alpha = if (fraction <= 0) 1f else 0f)
+                .background(
+                    color = MaterialTheme.colorScheme.onBackground,
+                    shape = RoundedCornerShape(50)
+                ).shadow(elevation = 16.dp).padding(5.dp).clickable {
+                    goBack()
+                }
             ) {
-                Box(modifier = Modifier.size(50.dp)
-                    .align(Alignment.CenterStart)
-                    .padding(10.dp)
-                    .alpha(fraction)
-                    //.alpha(alpha = if (fraction <= 0) 1f else 0f)
-                    .background(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        shape = RoundedCornerShape(50)
-                    ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                        goBack()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.background,
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.size(30.dp)
+                )
             }
-            if (offers == null) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Loading...")
+
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            }
+        }
+        if (offers == null) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "Loading...")
+            }
+        } else {
+            offers!!.forEach { offer ->
+                var tit = "Monthly"
+                var active = true
+                if (offer.storeProduct.id == config.donation) {
+                    tit = "Active"
+                    active = false
                 }
-            } else {
-                offers!!.forEach { offer ->
-                    var tit = "Monthly"
-                    var active = true
-                    if (offer.storeProduct.id == config.donation) {
-                        tit = "Active"
-                        active = false
-                    }
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 16.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Button(
-                            modifier = Modifier.fillMaxWidth().padding(16.dp),
-                            enabled = active,
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        enabled = active,
 //                            colors = ButtonDefaults.buttonColors(
 //                                containerColor = color,
 //                                //contentColor = color
 //                            ),
-                            shape = RoundedCornerShape(16.dp),
-                            elevation = ButtonDefaults.buttonElevation(
-                                defaultElevation = 16.dp
-                            ),
-                            onClick = {
-                                Purchases.sharedInstance.purchase(
-                                    storeProduct = offer.storeProduct,
-                                    onError = { error, userCancelled ->
-                                        // An error occurred
-                                        println("Error: $error, cancelled: $userCancelled")
-                                        //Text(text = "Error: $error")
-                                    },
-                                    onSuccess = { storeTransaction, customerInfo ->
-                                        // Purchase was successful
-                                        println("Success: $storeTransaction, $customerInfo")
-                                        scope.launch {
-                                            config.saveDonation(offer.storeProduct.id)
-                                        }
-                                    }
-                                )
-                            }
-                        )
-                        {
-                            Text(text = "$tit donation of " + offer.storeProduct.price.formatted)
-                        }
-                    }
-                }
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    TextButton(
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = ButtonDefaults.buttonElevation(
+                            defaultElevation = 16.dp
+                        ),
                         onClick = {
-                            Purchases.sharedInstance.restorePurchases(
-                                onError = { error ->
+                            Purchases.sharedInstance.purchase(
+                                storeProduct = offer.storeProduct,
+                                onError = { error, userCancelled ->
                                     // An error occurred
-                                    println("Error: $error")
+                                    println("Error: $error, cancelled: $userCancelled")
                                     //Text(text = "Error: $error")
                                 },
-                                onSuccess = { customerInfo ->
-                                    // Purchases were restored
-                                    println("Success: $customerInfo")
-                                    if (customerInfo.entitlements.active.isNotEmpty()) {
-                                        customerInfo.entitlements.active.forEach {
-                                            val product = it.value.productIdentifier
-                                            offers?.find { offer ->
-                                                offer.storeProduct.id == product
-                                            }?.let { offer ->
-                                                val subs = offer.storeProduct.title + " " + offer.storeProduct.price.formatted
-                                                println("Active purchase: $subs")
-                                                scope.launch {
-                                                    config.saveDonation(product)
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        println("No active purchases")
+                                onSuccess = { storeTransaction, customerInfo ->
+                                    // Purchase was successful
+                                    println("Success: $storeTransaction, $customerInfo")
+                                    scope.launch {
+                                        config.saveDonation(offer.storeProduct.id)
                                     }
                                 }
                             )
                         }
-                    ) {
-                        Text(text = "Restore")
+                    )
+                    {
+                        Text(text = "$tit donation of " + offer.storeProduct.price.formatted)
                     }
                 }
-
             }
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                TextButton(
+                    onClick = {
+                        Purchases.sharedInstance.restorePurchases(
+                            onError = { error ->
+                                // An error occurred
+                                println("Error: $error")
+                                //Text(text = "Error: $error")
+                            },
+                            onSuccess = { customerInfo ->
+                                // Purchases were restored
+                                println("Success: $customerInfo")
+                                if (customerInfo.entitlements.active.isNotEmpty()) {
+                                    customerInfo.entitlements.active.forEach {
+                                        val product = it.value.productIdentifier
+                                        offers?.find { offer ->
+                                            offer.storeProduct.id == product
+                                        }?.let { offer ->
+                                            val subs = offer.storeProduct.title + " " + offer.storeProduct.price.formatted
+                                            println("Active purchase: $subs")
+                                            scope.launch {
+                                                config.saveDonation(product)
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    println("No active purchases")
+                                }
+                            }
+                        )
+                    }
+                ) {
+                    Text(text = "Restore")
+                }
+            }
+
         }
     }
 }

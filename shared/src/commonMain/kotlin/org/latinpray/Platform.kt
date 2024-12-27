@@ -11,6 +11,8 @@ interface Platform {
     val appVersion: String
     val extraIndent: String
     val isIOS: Boolean
+
+    fun isTablet(): Boolean
 }
 
 expect fun getPlatformPriv(): Platform

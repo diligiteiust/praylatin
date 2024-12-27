@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun AppTheme(
+    fontFactor: Float = 1.0f,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -70,32 +71,32 @@ fun AppTheme(
         bodySmall = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Light,
-            fontSize = 14.sp
+            fontSize = 14.sp * fontFactor
         ),
         bodyMedium = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontSize = 16.sp * fontFactor
         ),
         bodyLarge = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            fontSize = 18.sp * fontFactor
         ),
         titleMedium = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
+            fontSize = 20.sp * fontFactor,
         ),
         titleSmall = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
+            fontSize = 18.sp * fontFactor,
         ),
         labelMedium = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
+            fontSize = 16.sp * fontFactor,
             textDecoration = TextDecoration.Underline
         )
     )
