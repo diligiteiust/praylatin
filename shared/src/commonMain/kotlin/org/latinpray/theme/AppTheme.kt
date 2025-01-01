@@ -15,10 +15,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+const val TABLET_UI_FONT_FACTOR = 1.1f
+const val TABLET_HEADLINE_FONT_FACTOR = 1.25f
+const val TABLET_CONTENT_FONT_FACTOR = 1.5f
 
 @Composable
 fun AppTheme(
-    fontFactor: Float = 1.0f,
+    uiFontFactor: Float = 1.0f,
+    headlineFontFactor: Float = 1.0f,
+    contentFontFactor: Float = 1.0f,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -71,33 +76,48 @@ fun AppTheme(
         bodySmall = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Light,
-            fontSize = 14.sp * fontFactor
+            fontSize = 14.sp * contentFontFactor
         ),
         bodyMedium = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp * fontFactor
+            fontSize = 16.sp * contentFontFactor
         ),
         bodyLarge = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp * fontFactor
+            fontSize = 18.sp * contentFontFactor
         ),
         titleMedium = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp * fontFactor,
+            fontSize = 20.sp * contentFontFactor,
         ),
         titleSmall = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp * fontFactor,
+            fontSize = 18.sp * contentFontFactor,
         ),
         labelMedium = TextStyle(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp * fontFactor,
+            fontSize = 16.sp * uiFontFactor,
             textDecoration = TextDecoration.Underline
+        ),
+        headlineLarge = TextStyle(
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp * headlineFontFactor,
+        ),
+        headlineMedium = TextStyle(
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp * headlineFontFactor,
+        ),
+        headlineSmall = TextStyle(
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp * headlineFontFactor,
         )
     )
     val shapes = Shapes(

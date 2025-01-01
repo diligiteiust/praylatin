@@ -41,11 +41,11 @@ fun PrayerListItem(
         Column(modifier = Modifier.padding(4.dp)) {
             Text(
                 modifier = Modifier.padding(vertical = pad),
-                text = title ?: "No title", style = MaterialTheme.typography.titleSmall
+                text = title ?: "No title", style = MaterialTheme.typography.headlineMedium
             )
             //println("Rendering prayer ${prayer.name}")
             if (subtitle != null) {
-                Text(text = subtitle, style = MaterialTheme.typography.labelSmall)
+                Text(text = subtitle, style = MaterialTheme.typography.headlineSmall)
             }
         }
     }

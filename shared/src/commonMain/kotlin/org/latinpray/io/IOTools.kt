@@ -17,9 +17,12 @@ fun readPrayerFromAssets(assetsFile: String): BasicPrayer {
     return yaml.decodeFromString<BasicPrayer>(yamlContent)
 }
 
+fun readFileFromAssets(assetsFile: String): String {
+    return defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
+}
+
 fun readConfigFromAssets(assetsFile: String): Config {
-    val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
-    return Yaml.default.decodeFromString<Config>(yamlContent)
+    return Yaml.default.decodeFromString<Config>(readFileFromAssets(assetsFile))
 }
 
 fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {

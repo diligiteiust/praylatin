@@ -26,12 +26,16 @@ import org.latinpray.io.getDataStore
 import org.latinpray.io.keyValueStorePath
 import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
+import org.latinpray.io.readFileFromAssets
 import org.latinpray.shared.Res
 import org.latinpray.shared.about_screen_title
 import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.prayers_screen_title
 import org.latinpray.shared.settings_screen_title
 import org.latinpray.theme.AppTheme
+import org.latinpray.theme.TABLET_CONTENT_FONT_FACTOR
+import org.latinpray.theme.TABLET_HEADLINE_FONT_FACTOR
+import org.latinpray.theme.TABLET_UI_FONT_FACTOR
 import org.latinpray.ui.AboutScreen
 import org.latinpray.ui.HelpScreen
 import org.latinpray.ui.MainScreens
@@ -50,6 +54,8 @@ fun Main() {
     var defConfig by remember { mutableStateOf(sampleConfig) }
     var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var currentPrayer = prayers.first()
+    var helpContent by remember { mutableStateOf("") }
+    var aboutContent by remember { mutableStateOf("") }
 
     scope.launch {
         //println("Loading config from yaml...")
@@ -67,6 +73,8 @@ fun Main() {
         defConfig.dataStore = getDataStore { keyValueStorePath() }
         //println("Loaded config from datastore ${defConfig.prayerLang}")
         //println("Loading prayers...")
+        helpContent = readFileFromAssets("assets/help.md")
+        aboutContent = readFileFromAssets("assets/about.md")
         prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
             prayer.langs[defConfig.prayerLang]?.title
         }.toMutableList()
@@ -93,9 +101,15 @@ fun Main() {
         }
     }
 
-    val fontFactor = if (getPlatform().isTablet()) 1.5f else 1.0f
+    val uiFontFactor = if (getPlatform().isTablet()) TABLET_UI_FONT_FACTOR else 1.0f
+    val headlineFontFactor = if  (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
+    val contentFontFactor = if  (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
 
-    AppTheme(fontFactor = fontFactor) {
+    AppTheme(
+        uiFontFactor = uiFontFactor,
+        headlineFontFactor = headlineFontFactor,
+        contentFontFactor = contentFontFactor
+        ) {
         Surface(
             color = MaterialTheme.colorScheme.background,
         ) {
@@ -142,7 +156,7 @@ fun Main() {
                     composable(route = MainScreens.AboutScreen.name) {
                         AboutScreen(
                             title = stringResource(Res.string.about_screen_title),
-                            //animatedContentScope = this,
+                            content = aboutContent,
                             sharedTransitionScope = sharedTransitionScope,
                             goBack = { navController.popBackStack() }
                         )
@@ -150,6 +164,7 @@ fun Main() {
                     composable(route = MainScreens.HelpScreen.name) {
                         HelpScreen(
                             title = stringResource(Res.string.help_screen_title),
+                            content = helpContent,
                             config = defConfig,
                             //animatedContentScope = this,
                             sharedTransitionScope = sharedTransitionScope,

@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "org.latinpray.android"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "org.latinpray.android"
         minSdk = 28
@@ -35,6 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildToolsVersion = "34.0.0"
 
     dependencies {
         implementation(projects.shared)

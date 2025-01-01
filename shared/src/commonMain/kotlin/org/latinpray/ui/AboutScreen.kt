@@ -29,6 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import com.mikepenz.markdown.compose.Markdown
+import com.mikepenz.markdown.m3.markdownColor
+import com.mikepenz.markdown.m3.markdownTypography
+import com.mikepenz.markdown.model.markdownPadding
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.getPlatform
 import org.latinpray.shared.Res
@@ -37,6 +41,7 @@ import org.latinpray.shared.Res
 @Composable
 fun AboutScreen(
     title: String,
+    content: String,
     goBack: () -> Unit,
 //    animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
@@ -110,6 +115,32 @@ fun AboutScreen(
                     style = MaterialTheme.typography.titleLarge,
                 )
 //            }
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Markdown(
+                    content = content.replace('\n', ' ').replace("<p>", "\n   \n"),
+                    padding = markdownPadding(
+                        block = 4.dp,
+                        //list = 0.dp,
+                    ),
+                    colors = markdownColor(
+                        text = MaterialTheme.colorScheme.onBackground,
+                    ),
+                    typography = markdownTypography(
+                        text = MaterialTheme.typography.bodySmall,
+                        paragraph = MaterialTheme.typography.bodyMedium,
+                        quote = MaterialTheme.typography.bodySmall,
+                        h2 = MaterialTheme.typography.titleMedium,
+                        h3 = MaterialTheme.typography.titleSmall,
+                        link = MaterialTheme.typography.labelMedium
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                        .background(color = MaterialTheme.colorScheme.background),
+                )
+
+            }
         }
     }
 }

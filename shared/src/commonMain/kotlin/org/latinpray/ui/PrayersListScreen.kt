@@ -49,6 +49,48 @@ fun PrayersListScreen(
 ) {
     val (fraction) = remember { mutableStateOf(0.50f) }
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val groupedPrayers: MutableList<Any> = remember(prayers, config) {
+        val gp = mutableListOf<Any>()
+        if (config.grouping) {
+            val tags = mutableSetOf<String>()
+            prayers.forEach { prayer ->
+                if ((prayer.langs[config.prayerLang] != null && prayer.langs[config.prayerLang]?.tags != null)
+                    || (prayer.langs[config.secondLang] != null && prayer.langs[config.secondLang]?.tags != null)
+                ) {
+                    if (prayer.langs[config.prayerLang]?.tags != null) {
+                        tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
+                    } else if (prayer.langs[config.secondLang]?.tags != null) {
+                        tags.addAll(prayer.langs[config.secondLang]?.tags!!)
+                    }
+
+                    //tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
+                }
+            }
+            tags.remove(HIDE_TAG)
+            tags.sorted().forEach { tag ->
+                gp.add(tag)
+                prayers.forEach { prayer ->
+                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
+                    if ((prayer.langs[config.prayerLang] != null)
+                        && (prayer.langs[config.prayerLang]?.tags?.contains(tag) == true)
+                        && (prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false)
+                    ) {
+                        gp.add(prayer)
+                        //println("Added 1st prayer ${prayer.name} to group: $tag")
+                    } else if ((prayer.langs[config.secondLang] != null)
+                        && (prayer.langs[config.secondLang]?.tags?.contains(tag) == true)
+                        && prayer.langs[config.secondLang]?.tags?.contains(HIDE_TAG) == false
+                    ) {
+                        gp.add(prayer)
+                        //println("Added 2nd prayer ${prayer.name} to group: $tag")
+                    }
+                }
+            }
+            gp
+        } else {
+            prayers.toMutableList()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -60,16 +102,17 @@ fun PrayersListScreen(
             modifier = Modifier.fillMaxWidth()
                 .windowInsetsPadding(WindowInsets.systemBars)
         ) {
-            Box(modifier = Modifier.size(50.dp)
-                .align(Alignment.CenterStart)
-                .padding(10.dp)
-                .alpha(fraction)
-                .background(
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(50)
-                ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                    expanded.value = true
-                }
+            Box(
+                modifier = Modifier.size(50.dp)
+                    .align(Alignment.CenterStart)
+                    .padding(10.dp)
+                    .alpha(fraction)
+                    .background(
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = RoundedCornerShape(50)
+                    ).shadow(elevation = 16.dp).padding(5.dp).clickable {
+                        expanded.value = true
+                    }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Menu,
@@ -94,44 +137,6 @@ fun PrayersListScreen(
                 )
             }
         }
-        val groupedPrayers = mutableListOf<Any>()
-        if (config.grouping) {
-            val tags = mutableSetOf<String>()
-            prayers.forEach { prayer ->
-                if ((prayer.langs[config.prayerLang] != null && prayer.langs[config.prayerLang]?.tags != null)
-                    || (prayer.langs[config.secondLang] != null && prayer.langs[config.secondLang]?.tags != null)) {
-                    if (prayer.langs[config.prayerLang]?.tags != null) {
-                        tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
-                    } else if (prayer.langs[config.secondLang]?.tags != null) {
-                        tags.addAll(prayer.langs[config.secondLang]?.tags!!)
-                    }
-
-                    //tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
-                }
-            }
-            tags.remove(HIDE_TAG)
-            tags.sorted().forEach { tag ->
-                groupedPrayers.add(tag)
-                prayers.forEach { prayer ->
-                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
-                    if ((prayer.langs[config.prayerLang] != null)
-                        && (prayer.langs[config.prayerLang]?.tags?.contains(tag) == true)
-                        && (prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false)
-                    ) {
-                        groupedPrayers.add(prayer)
-                        //println("Added 1st prayer ${prayer.name} to group: $tag")
-                    } else if ((prayer.langs[config.secondLang] != null)
-                        && (prayer.langs[config.secondLang]?.tags?.contains(tag) == true)
-                        && prayer.langs[config.secondLang]?.tags?.contains(HIDE_TAG) == false
-                    ) {
-                        groupedPrayers.add(prayer)
-                        //println("Added 2nd prayer ${prayer.name} to group: $tag")
-                    }
-                }
-            }
-        } else {
-            groupedPrayers.addAll(prayers)
-        }
 
         LazyColumn(
             modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
@@ -141,10 +146,11 @@ fun PrayersListScreen(
                     is String -> {
                         Text(
                             text = item,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.headlineLarge,
                             color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
+
                     is Prayer -> {
                         PrayerListItem(
                             prayer = item,
@@ -153,6 +159,7 @@ fun PrayersListScreen(
                         )
                         //println("Displaying prayer ${item.name}")
                     }
+
                     else -> println("Unknown item $item")
                 }
             }

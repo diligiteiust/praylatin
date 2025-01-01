@@ -23,14 +23,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import com.mikepenz.markdown.compose.Markdown
+import com.mikepenz.markdown.m3.markdownColor
+import com.mikepenz.markdown.m3.markdownTypography
+import com.mikepenz.markdown.model.markdownPadding
 import com.revenuecat.purchases.kmp.Purchases
 import kotlinx.coroutines.launch
 import org.latinpray.data.Config
@@ -40,6 +46,7 @@ import org.latinpray.data.offers
 @Composable
 fun HelpScreen(
     title: String,
+    content: String,
     goBack: () -> Unit,
     config: Config,
     //animatedContentScope: AnimatedContentScope,
@@ -91,29 +98,48 @@ fun HelpScreen(
                 )
             }
         }
+        Box(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Markdown(
+                content = content.replace('\n', ' ').replace("<p>", "\n   \n"),
+                padding = markdownPadding(
+                    block = 4.dp,
+                    //list = 0.dp,
+                ),
+                colors = markdownColor(
+                    text = MaterialTheme.colorScheme.onBackground,
+                ),
+                typography = markdownTypography(
+                    text = MaterialTheme.typography.bodySmall,
+                    paragraph = MaterialTheme.typography.bodyMedium,
+                    quote = MaterialTheme.typography.bodySmall,
+                    h2 = MaterialTheme.typography.titleMedium,
+                    h3 = MaterialTheme.typography.titleSmall,
+                    link = MaterialTheme.typography.labelMedium
+                ),
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    .background(color = MaterialTheme.colorScheme.background),
+            )
+
+        }
         if (offers == null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(text = "Loading...")
             }
+            //println("Offers are null")
         } else {
+            var currentDonation by remember { mutableStateOf<String?>(config.donation) }
             offers!!.forEach { offer ->
-                var tit = "Monthly"
-                var active = true
-                if (offer.storeProduct.id == config.donation) {
-                    tit = "Active"
-                    active = false
-                }
+                //println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
                 Box(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 16.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        enabled = active,
-//                            colors = ButtonDefaults.buttonColors(
-//                                containerColor = color,
-//                                //contentColor = color
-//                            ),
+                        enabled = offer.storeProduct.id != currentDonation,
                         shape = RoundedCornerShape(16.dp),
                         elevation = ButtonDefaults.buttonElevation(
                             defaultElevation = 16.dp
@@ -132,11 +158,17 @@ fun HelpScreen(
                                     scope.launch {
                                         config.saveDonation(offer.storeProduct.id)
                                     }
+                                    currentDonation = offer.storeProduct.id
                                 }
                             )
                         }
                     )
                     {
+                        val tit = if (offer.storeProduct.id == currentDonation) {
+                            "Active"
+                        } else {
+                            "Monthly"
+                        }
                         Text(text = "$tit donation of " + offer.storeProduct.price.formatted)
                     }
                 }
@@ -164,6 +196,7 @@ fun HelpScreen(
                                             scope.launch {
                                                 config.saveDonation(product)
                                             }
+                                            currentDonation = product
                                         }
                                     }
                                 } else {
@@ -173,7 +206,7 @@ fun HelpScreen(
                         )
                     }
                 ) {
-                    Text(text = "Restore")
+                    Text(text = "Restore donations")
                 }
             }
 
