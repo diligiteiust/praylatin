@@ -28,6 +28,51 @@
  *  If not, see http://www.gnu.org/licenses/.
  */
 
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
 package org.latinpray.data
 
 import androidx.datastore.core.DataStore
@@ -51,7 +96,8 @@ data class Config (
 ) {
 
     @Transient val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
-    @Transient val allUIlangs: MutableMap<String, String> = mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski")
+    @Transient val allUIlangs: MutableMap<String, String> =
+        mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski", "es" to "Español")
 
     @Transient private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
     @Transient private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")

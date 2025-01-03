@@ -73,32 +73,17 @@
   ~  If not, see http://www.gnu.org/licenses/.
   -->
 
-<!--
-  ~ This program is free software: you can redistribute it and/or modify
-  ~  it under the terms of the GNU Affero General Public License as published by
-  ~  the Free Software Foundation, version 3 of the License.
-  ~
-  ~   This program is distributed in the hope that it will be useful,
-  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~  GNU Affero General Public License for more details.
-  ~
-  ~  You should have received a copy of the GNU Affero General Public License
-  ~  along with this program. Look for COPYING file in the top folder.
-  ~  If not, see http://www.gnu.org/licenses/.
-  -->
-
 <resources>
-    <string name="prayers_screen_title">Prayers</string>
-    <string name="prayer_details_screen_title">Prayer</string>
-    <string name="settings_screen_title">Settings</string>
-    <string name="about_screen_title">About</string>
-    <string name="help_screen_title">Help/Contribute</string>
-    <string name="settings_ui_lang">UI Language</string>
-    <string name="settings_prayer_lang">Prayer Language</string>
-    <string name="settings_second_lang">Second Language</string>
-    <string name="settings_prefer_translation">Prefer Translation</string>
-    <string name="settings_grouping">Grouping</string>
-    <string name="off_option">Off</string>
-    <string name="on_option">On</string>
+    <string name="prayers_screen_title">Preces</string>
+    <string name="prayer_details_screen_title">Oratio</string>
+    <string name="settings_screen_title">Occasus</string>
+    <string name="about_screen_title">De Applicatione</string>
+    <string name="help_screen_title">Auxilium</string>
+    <string name="settings_ui_lang">Applicatione lingua</string>
+    <string name="settings_prayer_lang">Oratio lingua</string>
+    <string name="settings_second_lang">Secunda lingua</string>
+    <string name="settings_prefer_translation">Praefero translationem</string>
+    <string name="settings_grouping">Oratio adjunctio</string>
+    <string name="off_option">Abstineo</string>
+    <string name="on_option">Accende</string>
 </resources>

@@ -28,6 +28,51 @@
  *  If not, see http://www.gnu.org/licenses/.
  */
 
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
 package org.latinpray.ui
 
 import androidx.compose.animation.AnimatedContentScope
@@ -60,13 +105,23 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
+import org.latinpray.shared.Res
+import org.latinpray.shared.off_option
+import org.latinpray.shared.on_option
+import org.latinpray.shared.settings_grouping
+import org.latinpray.shared.settings_prayer_lang
+import org.latinpray.shared.settings_prefer_translation
+import org.latinpray.shared.settings_second_lang
+import org.latinpray.shared.settings_ui_lang
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SettingsScreen(
     title: String,
     goBack: () -> Unit,
+    uiLandChange: (config: Config) -> Unit,
     config: Config,
     animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
@@ -123,17 +178,20 @@ fun SettingsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 LangSelection(
-                    title = "UI Language",
+                    title = stringResource(Res.string.settings_ui_lang),
                     langs = config.allUIlangs,
                     selectedItem = config.uiLang,
                     onItemSelected = { lang ->
-                        scope.launch {
-                            config.saveUILang(lang)
+                        if (lang != config.uiLang) {
+                            scope.launch {
+                                config.saveUILang(lang)
+                                uiLandChange(config)
+                            }
                         }
                     }
                 )
                 LangSelection(
-                    title = "Prayer Language",
+                    title = stringResource(Res.string.settings_prayer_lang),
                     langs = config.allPrayerLangs,
                     selectedItem = config.prayerLang,
                     onItemSelected = { lang ->
@@ -143,9 +201,9 @@ fun SettingsScreen(
                     }
                 )
                 val secondLang = config.allPrayerLangs
-                secondLang["off"] = "Off"
+                secondLang["off"] = stringResource(Res.string.off_option)
                 LangSelection(
-                    title = "Second Language",
+                    title = stringResource(Res.string.settings_second_lang),
                     langs = secondLang,
                     selectedItem = config.secondLang,
                     onItemSelected = { lang ->
@@ -156,8 +214,8 @@ fun SettingsScreen(
                     }
                 )
                 LangSelection(
-                    title = "Prefer Translation",
-                    langs = mapOf("on" to "On", "off" to "Off"),
+                    title = stringResource(Res.string.settings_prefer_translation),
+                    langs = mapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
                     selectedItem = if (config.preferTranslation) "on" else "off",
                     onItemSelected = { lang ->
                         scope.launch {
@@ -166,8 +224,8 @@ fun SettingsScreen(
                     }
                 )
                 LangSelection(
-                    title = "Prayer grouping",
-                    langs = mapOf("on" to "On", "off" to "Off"),
+                    title = stringResource(Res.string.settings_grouping),
+                    langs = mapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
                     selectedItem = if (config.grouping) "on" else "off",
                     onItemSelected = { lang ->
                         scope.launch {

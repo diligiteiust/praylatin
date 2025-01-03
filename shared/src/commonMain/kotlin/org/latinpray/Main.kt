@@ -28,13 +28,58 @@
  *  If not, see http://www.gnu.org/licenses/.
  */
 
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
 package org.latinpray
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +102,7 @@ import org.latinpray.io.keyValueStorePath
 import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
 import org.latinpray.io.readFileFromAssets
+import org.latinpray.loc.LocalizedApp
 import org.latinpray.shared.Res
 import org.latinpray.shared.about_screen_title
 import org.latinpray.shared.help_screen_title
@@ -73,6 +119,16 @@ import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
 
+fun loadLocalizedContent(file: String, lang: String): String {
+    val f = file.substringBefore('.') + '-' + lang + "." + file.substringAfter('.')
+    println("reading file: $f")
+    try {
+        return readFileFromAssets(f).replace('\n', ' ').replace("<p>", "\n   \n")
+    } catch (e: Exception) {
+        return readFileFromAssets(file).replace('\n', ' ').replace("<p>", "\n   \n")
+    }
+}
+
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Main() {
@@ -86,6 +142,7 @@ fun Main() {
     var currentPrayer = prayers.first()
     var helpContent by remember { mutableStateOf("") }
     var aboutContent by remember { mutableStateOf("") }
+    var lang: String by remember { mutableStateOf(defConfig.uiLang) }
 
     scope.launch {
         //println("Loading config from yaml...")
@@ -101,10 +158,14 @@ fun Main() {
         dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
         defConfig = dsConfig
         defConfig.dataStore = getDataStore { keyValueStorePath() }
+        if (lang != defConfig.uiLang) {
+            lang = defConfig.uiLang
+            getPlatform().changeLang(lang)
+        }
         //println("Loaded config from datastore ${defConfig.prayerLang}")
         //println("Loading prayers...")
-        helpContent = readFileFromAssets("assets/help.md")
-        aboutContent = readFileFromAssets("assets/about.md")
+        helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
+        aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
         prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
             prayer.langs[defConfig.prayerLang]?.title
         }.toMutableList()
@@ -132,74 +193,86 @@ fun Main() {
     }
 
     val uiFontFactor = if (getPlatform().isTablet()) TABLET_UI_FONT_FACTOR else 1.0f
-    val headlineFontFactor = if  (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
-    val contentFontFactor = if  (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
+    val headlineFontFactor = if (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
+    val contentFontFactor = if (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
 
     AppTheme(
         uiFontFactor = uiFontFactor,
         headlineFontFactor = headlineFontFactor,
         contentFontFactor = contentFontFactor
+    ) {
+        LocalizedApp(
+            language = lang
         ) {
-        Surface(
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            SharedTransitionLayout {
-                val sharedTransitionScope = this
-                NavHost(
-                    navController = navController,
-                    startDestination = MainScreens.PrayersScreen.name,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    composable(route = MainScreens.PrayersScreen.name) {
-                        PrayersListScreen(
-                            title = stringResource(Res.string.prayers_screen_title),
-                            prayers = prayers,
-                            config = defConfig,
-                            animatedVisibilityScope = this,
-                            sharedTransitionScope = sharedTransitionScope,
-                            onClick = { prayer ->
-                                currentPrayer = prayer
-                                navController.navigate(MainScreens.PrayerDetailsScreen.name)
-                            },
-                            navController = navController,
-                        )
-                    }
-                    composable(route = MainScreens.PrayerDetailsScreen.name) {
-                        PrayerDetailsScreen(
-                            prayer = currentPrayer,
-                            config = defConfig,
-                            prayers = prayers,
-                            animatedContentScope = this,
-                            sharedTransitionScope = sharedTransitionScope,
-                            goBack = { navController.popBackStack() }
-                        )
-                    }
-                    composable(route = MainScreens.SettingsScreen.name) {
-                        SettingsScreen(
-                            title = stringResource(Res.string.settings_screen_title),
-                            animatedContentScope = this,
-                            sharedTransitionScope = sharedTransitionScope,
-                            config = defConfig,
-                            goBack = { navController.popBackStack() }
-                        )
-                    }
-                    composable(route = MainScreens.AboutScreen.name) {
-                        AboutScreen(
-                            title = stringResource(Res.string.about_screen_title),
-                            content = aboutContent,
-                            sharedTransitionScope = sharedTransitionScope,
-                            goBack = { navController.popBackStack() }
-                        )
-                    }
-                    composable(route = MainScreens.HelpScreen.name) {
-                        HelpScreen(
-                            title = stringResource(Res.string.help_screen_title),
-                            content = helpContent,
-                            config = defConfig,
-                            //animatedContentScope = this,
-                            sharedTransitionScope = sharedTransitionScope,
-                            goBack = { navController.popBackStack() }
-                        )
+            Surface(
+                color = MaterialTheme.colorScheme.background,
+            ) {
+                SharedTransitionLayout {
+                    val sharedTransitionScope = this
+                    NavHost(
+                        navController = navController,
+                        startDestination = MainScreens.PrayersScreen.name,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        composable(route = MainScreens.PrayersScreen.name) {
+                            PrayersListScreen(
+                                title = stringResource(Res.string.prayers_screen_title),
+                                prayers = prayers,
+                                config = defConfig,
+                                animatedVisibilityScope = this,
+                                sharedTransitionScope = sharedTransitionScope,
+                                onClick = { prayer ->
+                                    currentPrayer = prayer
+                                    navController.navigate(MainScreens.PrayerDetailsScreen.name)
+                                },
+                                navController = navController,
+                            )
+                        }
+                        composable(route = MainScreens.PrayerDetailsScreen.name) {
+                            PrayerDetailsScreen(
+                                prayer = currentPrayer,
+                                config = defConfig,
+                                prayers = prayers,
+                                animatedContentScope = this,
+                                sharedTransitionScope = sharedTransitionScope,
+                                goBack = { navController.popBackStack() }
+                            )
+                        }
+                        composable(route = MainScreens.SettingsScreen.name) {
+                            SettingsScreen(
+                                title = stringResource(Res.string.settings_screen_title),
+                                animatedContentScope = this,
+                                sharedTransitionScope = sharedTransitionScope,
+                                config = defConfig,
+                                goBack = { navController.popBackStack() },
+                                uiLandChange = { config ->
+                                    defConfig = config
+                                    lang = defConfig.uiLang
+                                    getPlatform().changeLang(lang)
+                                    println("New lang: $lang")
+                                    helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
+                                    aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
+                                }
+                            )
+                        }
+                        composable(route = MainScreens.AboutScreen.name) {
+                            AboutScreen(
+                                title = stringResource(Res.string.about_screen_title),
+                                content = aboutContent,
+                                sharedTransitionScope = sharedTransitionScope,
+                                goBack = { navController.popBackStack() }
+                            )
+                        }
+                        composable(route = MainScreens.HelpScreen.name) {
+                            HelpScreen(
+                                title = stringResource(Res.string.help_screen_title),
+                                content = helpContent,
+                                config = defConfig,
+                                //animatedContentScope = this,
+                                sharedTransitionScope = sharedTransitionScope,
+                                goBack = { navController.popBackStack() }
+                            )
+                        }
                     }
                 }
             }
