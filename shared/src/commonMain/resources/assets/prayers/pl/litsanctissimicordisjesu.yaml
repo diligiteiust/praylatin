@@ -8,14 +8,14 @@ links:
   - type: youtube
     url: https://youtu.be/wZlJZKeGgnA?si=ppM4uwwcKl5iTDRG
 lines:
-  - Kyrie eleison, Chryste eleison, Kyrie eleison.
-  - Chryste, usłysz nas. Chryste, wysłuchaj nas.
-  - Ojcze z nieba, Boże, zmiłuj się nad nami
-  - Synu, Odkupicielu świata, Boże, zmiłuj się nad nami
-  - Duchu Święty, Boże, zmiłuj się nad nami
-  - Święta Trójco, jedyny Boże, zmiłuj się nad nami
-  -
-  - Serce Jezusa, Syna Ojca Przedwiecznego, zmiłuj się nad nami
+  - __Kyrie eleison__, Chryste eleison, Kyrie eleison.
+  - __Chryste, usłysz nas__. Chryste, wysłuchaj nas.
+  - __Ojcze z nieba, Boże__, zmiłuj się nad nami
+  - __Synu, Odkupicielu świata, Boże__, zmiłuj się nad nami
+  - __Duchu Święty, Boże__, zmiłuj się nad nami
+  - __Święta Trójco, jedyny Boże__, zmiłuj się nad nami
+  - ^^^
+  - Serce Jezusa, Syna Ojca Przedwiecznego, __zmiłuj się nad nami__
   - Serce Jezusa, w łonie Matki – Dziewicy przez Ducha Świętego utworzone...
   - Serce Jezusa, ze Słowem Bożym istotowo zjednoczone...
   - Serce Jezusa, nieskończonego majestatu...
@@ -48,15 +48,15 @@ lines:
   - Serce Jezusa, zbawienie ufających Tobie...
   - Serce Jezusa, nadziejo w Tobie umierających...
   - Serce Jezusa, rozkoszy wszystkich Świętych...
-  -
-  - Baranku Boży, który gładzisz grzechy świata, przepuść nam, Panie
-  - Baranku Boży, który gładzisz grzechy świata, wysłuchaj nas, Panie
-  - Baranku Boży, który gładzisz grzechy świata, zmiłuj się nad nami, Panie
-  -
+  - ^^^
+  - __Baranku Boży, który gładzisz grzechy świata__, przepuść nam, Panie
+  - __Baranku Boży, który gładzisz grzechy świata__, wysłuchaj nas, Panie
+  - __Baranku Boży, który gładzisz grzechy świata__, zmiłuj się nad nami, Panie
+  - ^^^
   - Jezu cichy i pokornego Serca.
   - Uczyń serca nasze według Serca Twego.
-  -
-  - "Módlmy się:"
+  - ^^^
+  - "__Módlmy się:__"
   - Wszechmogący, wieczny Boże,
   - wejrzyj na Serce najmilszego Syna swego
   - i na chwałę, i zadośćuczynienie,

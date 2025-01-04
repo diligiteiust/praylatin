@@ -4,8 +4,12 @@ language: Latina
 tags:
   - Iesus Christus
   - Rosarium
+links:
+  - type: youtube
+    title: Domine Iesu on YouTube
+    url: https://www.youtube.com/watch?v=b5uJmgjHkfQ
 lines:
-  - "[Dómine Jesu](https://www.youtube.com/watch?v=b5uJmgjHkfQ),"
+  - "Dómine Iesu,"
   - dimitte nobis débita nostra,
   - salva nos ab igne inferni,
   - perduc in caelum omnes ánimas,

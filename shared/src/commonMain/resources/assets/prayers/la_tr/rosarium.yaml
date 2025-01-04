@@ -1,0 +1,21 @@
+title: Rosarium
+lang: la_tr
+language: Latina
+tags:
+  - Rosarium
+  - Beata Virgo Maria
+links:
+  - type: youtube
+    title: Gregorian Chant Rosary in Latin
+    url: https://www.youtube.com/watch?v=ZjA4mlNfqtk
+lines:
+  - "@"
+  - "Signum Crucis..."
+  - "Credo - Symbolum Apostolorum"
+  - "Pater Noster..."
+  - "3x Ave Maria..."
+  - "Gloria Patri..."
+  - ^^^
+  - "@@mysteriagaudiosa"
+  - "@@mysteriadolorosa"
+  - "@@mysteriagloriosa"

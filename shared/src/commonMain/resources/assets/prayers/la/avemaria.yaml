@@ -8,8 +8,11 @@ links:
   - type: youtube
     title: Ave Maria by Luciano Pavarotti
     url: https://www.youtube.com/watch?v=XpYGgtrMTYs
+  - type: youtube
+    title: Ave Maria, Schubert
+    url: https://www.youtube.com/watch?v=sWe95K5BEoM
 lines:
-  - "[Ave Maria](https://www.youtube.com/watch?v=sWe95K5BEoM), gratia plena"
+  - "Ave Maria, gratia plena"
   - Dominus tecum.
   - Benedicta Tu in mulieribus,
   - et benedictus fructus ventris tui, Iesus.

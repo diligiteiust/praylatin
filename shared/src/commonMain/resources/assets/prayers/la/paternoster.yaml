@@ -3,8 +3,12 @@ lang: la
 language: Latina
 tags:
   - Primus
+links:
+  - type: youtube
+    title: Pater Noster on YouTube
+    url: https://www.youtube.com/watch?v=JrZiC8Zajh4
 lines:
-  - "[Pater Noster](https://www.youtube.com/watch?v=JrZiC8Zajh4),"
+  - "Pater Noster,"
   - qui es in caelis,
   - sanctificetur nomen Tuum.
   - Adveniat regnum Tuum.
