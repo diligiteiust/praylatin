@@ -28,13 +28,28 @@
  *  If not, see http://www.gnu.org/licenses/.
  */
 
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
 package org.latinpray.data
 
 val avemaryjaLa = BasicPrayer(
-    "Ave Maryja",
-    "la",
-    "Latina",
-    listOf(
+    title = "Ave Maryja",
+    lang = "la",
+    language = "Latina",
+    lines = listOf(
         "Ave Maria, gratia plena,",
         "Dominus tecum.",
         "Benedicta tu in mulieribus,",
@@ -45,10 +60,10 @@ val avemaryjaLa = BasicPrayer(
     )
 )
 val avemaryjaPl = BasicPrayer(
-    "Zdrowaś Maryjo",
-    "pl",
-    "Polski",
-    listOf(
+    title = "Zdrowaś Maryjo",
+    lang = "pl",
+    language = "Polski",
+    lines = listOf(
         "Zdrowaś Maryjo, łaski pełna",
         "Pan z Tobą",
         "Błogosławionaś Ty między niewiastami",
@@ -60,10 +75,10 @@ val avemaryjaPl = BasicPrayer(
 )
 
 val paternosterLa = BasicPrayer(
-        "Pater Noster",
-    "la",
-    "Latine",
-    listOf(
+    title = "Pater Noster",
+    lang = "la",
+    language = "Latine",
+    lines = listOf(
         "Pater Noster,",
         "qui es in caelis,",
         "sanctificetur nomen tuum.",
@@ -78,10 +93,10 @@ val paternosterLa = BasicPrayer(
     )
 )
 val paternosterPl = BasicPrayer(
-    "Ojcze nasz",
-    "pl",
-    "Polski",
-    listOf(
+    title = "Ojcze nasz",
+    lang = "pl",
+    language = "Polski",
+    lines = listOf(
         "Ojcze nasz,",
         "któryś jest w niebie,",
         "święć się imię Twoje,",
