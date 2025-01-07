@@ -5,13 +5,7 @@ tags:
   - Litania
   - Do Ducha Świetego
 lines:
-  - "@"
-  - __Kyrie eleison,__ Chryste eleison, Kyrie eleison.
-  - __Chryste, usłysz nas.__ Chryste, wysłuchaj nas.
-  - __Ojcze z nieba, Boże,__ zmiłuj się nad nami
-  - __Synu, Odkupicielu świata,__ Boże, zmiłuj się nad nami
-  - __Duchu Święty, Boże,__ zmiłuj się nad nami
-  - __Święta Trójco, jedyny Boże,__ zmiłuj się nad nami
+  - "@litkyrie"
   - ^^^
   - Duchu Święty, od Ojca i Syna pochodzący, __zmiłuj się nad nami__
   - Duchu Święty, mądrości...
@@ -60,9 +54,8 @@ lines:
   - Przez przyjście Twoje w językach ognistych...
   - Abyśmy Ciebie miłowali i dla Ciebie grzechów się strzegli...
   - ^^^
-  - Baranku Boży, który gładzisz grzechy świata, __przepuść nam, Panie__
-  - Baranku Boży, który gładzisz grzechy świata, __wysłuchaj nas, Panie__
-  - Baranku Boży, który gładzisz grzechy świata, __zmiłuj się nad nami__
+  - "@litagnus"
+  - ^^^
   - Kýrie, eléison. Christe, eléison. Kýrie, eléison.
   - ^^^
   - "@paternoster"
@@ -75,5 +68,5 @@ lines:
   - __Módlmy się.__
   - >
     Przybądź, Duchu Święty, któryś ludy różnych języków zespolił w jedności wiary,
-    racz napełnić serca Twoich wiernych i zapal w nich ogień Twoje miłości, aby Twoja łaska nas
+    racz napełnić serca Twoich wiernych i zapal w nich ogień Twojej miłości, aby Twoja łaska nas
     oświeciła i broniła od wszelkiego zła. __Amen.__

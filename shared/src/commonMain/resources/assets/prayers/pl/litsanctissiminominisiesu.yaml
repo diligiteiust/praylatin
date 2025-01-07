@@ -1,17 +1,13 @@
 title: Litania do Najświętszego Imienia Jezus
 lang: pl
 language: Polski
-date: "* * 3 1 *"
+dates:
+  - "* * 5 1 *"
 tags:
   - Litania
   - Do Pana Jezusa
 lines:
-  - __Kyrie elejson,__ Chryste elejson, Kyrie elejson.
-  - __Chryste usłysz nas__, Chryste wysłuchaj nas.
-  - __Ojcze z nieba Boże__, zmiłuj się nad nami.
-  - __Synu Odkupicielu świata Boże__, zmiłuj się nad nami.
-  - __Duchu Święty Boże__, zmiłuj się nad nami.
-  - __Święta Trójco, Jedyny Boże__, zmiłuj się nad nami.
+  - "@litkyrie"
   - ^^^
   - Jezu, Synu Boga żywego, __zmiłuj się nad nami.__
   - Jezu, odblasku Ojca...
@@ -86,9 +82,7 @@ lines:
   - Przez radości Twoje...
   - Przez chwałę twoją...
   - ^^^
-  - __Baranku Boży, który gładzisz grzechy świata__, przepuść nam, Panie.
-  - __Baranku Boży, który gładzisz grzechy świata__, wysłuchaj nas, Jezu.
-  - __Baranku Boży, który gładzisz grzechy świata__, zmiłuj się nad nami, Jezu.
+  - "@litagnus"
   - ^^^
   - Jezu, usłysz nas. Jezu, wysłuchaj nas.
   - ^^^

@@ -5,7 +5,8 @@ tags:
   - Różaniec
   - Do Matki Bożej
   - Hide
-date: "* * * * 2,5"
+dates:
+  - "* * * * 2,5"
 lines:
   - "@"
   - "1. Modlitwa naszego Pana Jezusa Chrystusa w Ogrójcu"

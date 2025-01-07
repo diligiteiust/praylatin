@@ -8,12 +8,7 @@ links:
   - type: youtube
     url: https://youtu.be/wZlJZKeGgnA?si=ppM4uwwcKl5iTDRG
 lines:
-  - __Kyrie eleison__, Chryste eleison, Kyrie eleison.
-  - __Chryste, usłysz nas__. Chryste, wysłuchaj nas.
-  - __Ojcze z nieba, Boże__, zmiłuj się nad nami
-  - __Synu, Odkupicielu świata, Boże__, zmiłuj się nad nami
-  - __Duchu Święty, Boże__, zmiłuj się nad nami
-  - __Święta Trójco, jedyny Boże__, zmiłuj się nad nami
+  - "@litkyrie"
   - ^^^
   - Krwi Chrystusa, Jednorodzonego Syna Ojca Przedwiecznego, __wybaw nas__.
   - Krwi Chrystusa, wcielonego Słowa Bożego...
@@ -40,9 +35,7 @@ lines:
   - Krwi Chrystusa, wybawienie dusz z otchłani czyśćcowej...
   - Krwi Chrystusa, wszelkiej chwały i czci najgodniejsza...
   - ^^^
-  - __Baranku Boży, który gładzisz grzechy świata__, przepuść nam, Panie
-  - __Baranku Boży, który gładzisz grzechy świata__, wysłuchaj nas, Panie
-  - __Baranku Boży, który gładzisz grzechy świata__, zmiłuj się nad nami, Panie
+  - "@litagnus"
   - ^^^
   - Odkupiłeś nas, Panie, Krwią swoją.
   - I uczyniłeś nas królestwem Boga naszego.

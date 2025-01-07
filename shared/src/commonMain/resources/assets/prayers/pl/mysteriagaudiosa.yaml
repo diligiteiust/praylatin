@@ -5,7 +5,8 @@ tags:
   - Różaniec
   - Do Matki Bożej
   - Hide
-date: "* * * * 1,4,6"
+dates:
+  - "* * * * 1,4,6"
 lines:
   - "@"
   - "1. Zwiastowanie Najświętszej Maryi Pannie"
