@@ -13,21 +13,6 @@
  *  If not, see http://www.gnu.org/licenses/.
  */
 
-/*
- * This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as published by
- *  the Free Software Foundation, version 3 of the License.
- *
- *   This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program. Look for COPYING file in the top folder.
- *  If not, see http://www.gnu.org/licenses/.
- */
-
 package org.latinpray.ui
 
 import androidx.compose.foundation.background
@@ -37,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -231,7 +217,7 @@ fun PrayerDetails(
     prayers: MutableList<Prayer>,
 ) {
     val scrollState = rememberScrollState()
-    val content = preparePrayer(prayer, config, prayers)
+    val content: String = remember(prayer, config) { preparePrayer(prayer, config, prayers) }
     Markdown(
         content = content,
         padding = markdownPadding(
