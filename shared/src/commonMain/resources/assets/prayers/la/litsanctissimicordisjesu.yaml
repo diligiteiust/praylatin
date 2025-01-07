@@ -8,12 +8,7 @@ links:
   - type: youtube
     url: https://youtu.be/VXa3MSeIFGU?si=NgvUd8m03dkZyalM
 lines:
-  - __Kyrie, eleison,__ Christe, eleison. Kyrie, eleison,
-  - __Christe, audi nos,__ Christe, exaudi nos.
-  - __Pater de caelis, Deus,__ miserere nobis.
-  - __Fili, Redemptor mundi, Deus,__ miserere nobis.
-  - __Spiritus Sancte, Deus,__ miserere nobis.
-  - __Sancta Trinitas, unus Deus,__ miserere nobis.
+  - "@litkyrie"
   - ^^^
   - Cor Iesu, Filii Patris aeterni, __miserere nobis__
   - Cor Iesu, in sinu Virginis Matris a Spiritu Sancto formatum...
@@ -49,9 +44,7 @@ lines:
   - Cor Iesu, spes in te morientium...
   - Cor Iesu, deliciae Sanctorum omnium...
   - ^^^
-  - __Agnus Dei, qui tollis peccata mundi,__ parce nobis, Domine.
-  - __Agnus Dei, qui tollis peccata mundi,__ exaudi nos, Domine.
-  - __Agnus Dei, qui tollis peccata mundi,__ miserere nobis, Domine.
+  - "@litagnus"
   - ^^^
   - __Iesu,__ mitis et humilis Corde,
   - Fac cor nostrum secundum Cor tuum.

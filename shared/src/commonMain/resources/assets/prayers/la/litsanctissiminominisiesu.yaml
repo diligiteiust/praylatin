@@ -1,17 +1,13 @@
 title: Litaniae Sanctissimi Nominis Iesu
 lang: la
 language: Latina
-date: "* * 3 1 *"
+dates:
+  - "* * 5 1 *"
 tags:
   - Litaniae
   - Iesus Christus
 lines:
-  - __Kyrie, eleison__, Kyrie, eleison, Kyrie, eleison.
-  - __Chryste,Iesu, audi nos__ Iesu, exaudi nos.
-  - __Pater de caelis, Deus__, Miserere nobis.
-  - __Fili, Redemptor mundi, Deus__, Miserere nobis.
-  - __Spiritus Sancte, Deus__, Miserere nobis.
-  - __Sancta Trinitas, unus Deus__, Miserere nobis.
+  - "@litkyrie"
   - ^^^
   - Iesu, Fili Dei vivi, __Miserere nobis.__
   - Iesu, splendor Patris...
@@ -86,9 +82,7 @@ lines:
   - Per gaudia tua...
   - Per gloriam tuam...
   - ^^^
-  - __Agnus Dei, qui tollis peccata mundi__, Parce nobis, Domine.
-  - __Agnus Dei, qui tollis peccata mundi__, Exaudi nos, Iesu.
-  - __Agnus Dei, qui tollis peccata mundi__, Miserere nobis, Iesu.
+  - "@litagnus"
   - ^^^
   - Iesu, audi nos, Iesu, exaudi nos.
   - ^^^
