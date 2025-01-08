@@ -1,15 +1,17 @@
-title: Pater Noster
-lang: la
-language: Latina
+title: El Padre Nuestro
+lang: es
+language: Espaniol
+tags:
+  - Básico
 lines:
-  - Pater Noster,
-  - qui es in caelis,
-  - sanctificetur nomen Tuum.
-  - Adveniat regnum Tuum.
-  - Fiat voluntas Tua,
-  - sicut in caelo et in terra.
-  - Panem nostrum quotidianum da nobis hodie,
-  - et dimitte nobis debita nostra
-  - sicut et nos dimittimus debitoribus nostris.
-  - Et ne nos inducas in tentationem,
-  - sed libera nos a malo.
+  - Padre Nuestro,
+  - que estás en el cielo,
+  - santificado sea tu nombre;
+  - venga a nosotros tu reino;
+  - hágase tu voluntad,
+  - en la tierra como en el cielo.
+  - Danos hoy nuestro pan de cada día;
+  - perdona nuestras ofensas,
+  - como también nosotros perdonamos a los que nos ofenden;
+  - no nos dejes caer en tentación,
+  - y líbranos del mal.

@@ -1,7 +1,9 @@
-title: Gloria Patri
-lang: la
-language: Latina
+title: Gloria al Padre
+lang: es
+language: Espaniol
+tags:
+  - Básico
 lines:
-  - Gloria Patri, et Filio, et Spiritui Sancto.
-  - Sicut erat in principio, et nunc, et semper,
-  - et in saecula saeculorum.
+  - Gloria al Padre y al Hijo y al Espíritu Santo.
+  - Como era en el principio, ahora y siempre,
+  - por los siglos de los siglos.
