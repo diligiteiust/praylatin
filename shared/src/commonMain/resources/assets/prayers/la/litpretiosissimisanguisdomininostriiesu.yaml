@@ -4,6 +4,8 @@ language: Latina
 tags:
   - Litaniae
   - Iesus Christus
+dates:
+  - "* * * 7 *"
 lines:
   - "@litkyrie"
   - ^^^
