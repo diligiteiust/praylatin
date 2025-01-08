@@ -4,14 +4,10 @@ language: English
 tags:
   - Litany
   - Juesus Christ
-date: "* * 3 1 *"
+dates:
+  - "* * 5 1 *"
 lines:
-  - __Kyrie, eleison__, Kyrie, eleison, Kyrie, eleison.
-  - __Christ, hear us__. Christ, graciously hear us.
-  - __God the Father of Heaven__, have mercy on us.
-  - __God the Son, Redeemer of the world__, have mercy on us.
-  - __God the Holy Spirit__, have mercy on us.
-  - __Holy Trinity, one God__, have mercy on us.
+  - "@litkyrie"
   - ^^^
   - Jesus, Son of the living God, __have mercy on us.__
   - Jesus, splendor of the Father...
@@ -86,9 +82,7 @@ lines:
   - Through Thy joys...
   - Through Thy glory...
   - ^^^
-  - __Lamb of God, Who takest away the sins of the world__, Spare us, O Jesus.
-  - __Lamb of God, Who takest away the sins of the world__, Graciously hear us, O Jesus.
-  - __Lamb of God, Who takest away the sins of the world__, Have mercy on us, O Jesus.
+  - "@litagnus"
   - ^^^
   - Jesus, hear us. Jesus, graciously hear us.
   - ^^^

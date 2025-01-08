@@ -1,16 +1,11 @@
-title: Litania do Najświętszego Serca Pana Jezusa
+title: Litany of the Most Precious Blood of Jesus
 lang: en
 language: English
 tags:
   - Litany
   - Juesus Christ
 lines:
-  - Lord, have mercy on us, Christ, have mercy on us, Lord, have mercy on us.
-  - Christ, hear us, Christ, graciously hear us.
-  - God the Father of Heaven, Have mercy on us.
-  - God the Son, Redeemer of the world, Have mercy on us.
-  - God the Holy Spirit, Have mercy on us.
-  - Holy Trinity, one God, Have mercy on us.
+  - "@litkyrie"
   -
   - Blood of Christ, only-begotten Son of the Eternal Father, save us.
   - Blood of Christ, Incarnate Word of God...
@@ -37,9 +32,7 @@ lines:
   - Blood of Christ, freeing souls from purgatory...
   - Blood of Christ, most worthy of all glory and honor...
   -
-  - Lamb of God Who takest away the sins of the world, Spare us, O Lord.
-  - Lamb of God Who takest away the sins of the world, Graciously hear us, O Lord.
-  - Lamb of God Who takest away the sins of the world, Have mercy on us, O Lord.
+  - "@litagnus"
   -
   - Thou hast redeemed us, O Lord, in Thy Blood.
   - And made us, for our God, a kingdom.
