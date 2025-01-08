@@ -1,0 +1,23 @@
+title: Rosarium
+lang: es
+language: Espaniol
+tags:
+  - Rosario
+  - Santisima Virgen Maria
+links:
+  - type: youtube
+    title: Gregorian Chant Rosary in Latin
+    url: https://www.youtube.com/watch?v=ZjA4mlNfqtk
+lines:
+  - "@"
+  - "La Senal De La Cruz..."
+  - "Creo en Dios..."
+  - "Padre Nuestro..."
+  - "3x Dios te salve, Maria..."
+  - "Gloria al Padre..."
+  - ^^^
+  - "@@mysteriagaudiosa"
+  - "@@mysteriadolorosa"
+  - "@@mysteriagloriosa"
+  - ^^^
+  - "La Senal De La Cruz..."
