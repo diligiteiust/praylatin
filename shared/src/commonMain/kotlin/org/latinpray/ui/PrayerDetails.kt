@@ -112,7 +112,11 @@ fun preparePrayer(
         }
         // Display prayer title at the very beginning
         if (prayerStart && title) {
-            result += "## " + lang1.title + "\n\n^^^\n\n"
+            result += "## " + lang1.title + "\n\n"
+            if (lang2?.title != null) {
+                result += "### " + lang2.title + "\n\n"
+            }
+            result += "^^^\n\n"
             prayerStart = false
         }
         result += indent + "" + (it ?: "") + "\n\n"
