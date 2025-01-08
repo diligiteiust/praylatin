@@ -1,17 +1,13 @@
 title: Letanía Del Santo Nombre De Jesús
 lang: es
 language: Espaniol
-date: "* * 3 1 *"
+dates:
+  - "* * 5 1 *"
 tags:
   - Letanía
   - Jesucristo
 lines:
-  - __Señor, Ten piedad de nosotros__. Cristo, Ten piedad de nosotros. Señor, Ten piedad de nosotros.
-  - __Cristo, óyenos__, Cristo, escúchanos.
-  - __Dios, Padre celestial__, Ten misericordia de nosotros.
-  - __Dios Hijo, Redentor del mundo__, Ten misericordia de nosotros.
-  - __Dios Espíritu Santo__, Ten misericordia de nosotros.
-  - __Santísima Trinidad, un solo Dios__, Ten misericordia de nosotros.
+  - "@litkyrie"
   - ^^^
   - Jesús, hijo de Dios vivo, __Ten misericordia de nosotros__.
   - Jesús, esplendor del Padre...
@@ -86,9 +82,7 @@ lines:
   - Por tus gozosa...
   - Por tu gloria...
   - ^^^
-  - __Cordero de Dios, que quitas los pecados del mundo__, Perdónanos, Jesús.
-  - __Cordero de Dios, que quitas los pecados del mundo__, Escúchanos Jesús.
-  - __Cordero de Dios, que quitas los pecados del mundo__, Ten misericordia de nosotros Jesús.
+  - "@litagnus"
   - ^^^
   - Jesús, óyenos. Jesús, escúchanos.
   - ^^^

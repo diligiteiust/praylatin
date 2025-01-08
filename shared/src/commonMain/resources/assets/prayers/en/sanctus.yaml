@@ -1,12 +1,12 @@
-title: Sanctus
-lang: la
-language: Latina
+title: Holy, Holy, Holy
+lang: en
+language: English
+tags:
+  - Holy Mass
 lines:
-  - Sanctus Sanctus Sanctus
-  - Dominus Deus Sabaoth
-  - Pleni sunt coeli
-  - et terra gloria tua
-  - Hosanna in excelsis
-  - Benedictus
-  - qui venit in nomine Domini
-  - Hosanna in excelsis
+  - Holy, Holy, Holy
+  - Lord God of power and might
+  - Heaven and earth are full of your glory.
+  - Hosanna in the highest.
+  - Blessed is He Who comes in the name of the Lord.
+  - Hosanna in the highest.

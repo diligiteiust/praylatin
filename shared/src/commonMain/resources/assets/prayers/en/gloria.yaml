@@ -1,25 +1,27 @@
-title: Gloria
-lang: la
-language: Latina
+title: Glory to God
+lang: en
+language: English
+tags:
+  - Holy Mass
 lines:
-  - Gloria in excelsis Deo
-  - et in terra pax hominibus bonae voluntatis
-  - Laudamus te, benedicimus te
-  - Adoramus te, glorificamus te
-  - Gratiam agimus tibi
-  - propter magnam gloriam tuam
-  - Domine Deus, Rex coelestis
-  - Deus Pater omnipotens
-  - Domine Fili unigenite, Iesu Christe
-  - Domine Deus, Agnus Dei, Filius Patris
-  - Qui tollis peccata mundi
-  - miserere nobis
-  - Qui tollis peccata mundi
-  - suscipe deprecationem nostram
-  - Qui sedes ad dexteram Patris
-  - miserere nobis
-  - Quoniam tu solus Sanctus
-  - Tu solus Dominus
-  - Tu solus Altissimus, Iesu Christe
-  - Cum Sancto Spiritu
-  - in gloria Dei Patris. Amen.
+  - Glory to God in the highest,
+  - and peace on earth to men of good will.
+  - We praise Thee, we bless Thee,
+  - we adore Thee, we glorify Thee,
+  - we give Thee thanks
+  - for Thy great glory,
+  - O Lord God, heavenly King,
+  - God the Father Almighty.
+  - O Lord Jesus Christ, only begotten Son,
+  - Lord God, Lamb of God, Son of the Father,
+  - Thou who takest away the sins of the world,
+  - have mercy on us;
+  - Thou who takest away the sins of the world,
+  - receive our prayer.
+  - Thou who sittest at the right hand of the Father,
+  - have mercy on us.
+  - For Thou alone art the Holy One,
+  - Thou alone art the Lord,
+  - Thou alone art the Most High, Jesus Christ,
+  - with the Holy Spirit,
+  - in the glory of God the Father.
