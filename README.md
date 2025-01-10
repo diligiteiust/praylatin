@@ -46,6 +46,8 @@ The prayer content can be formatted using [Markdown](https://www.markdownguide.o
 
 Except the prayer content, there is some additional information required and some optional. So, please pay attention to include all required information, otherwise the prayer will not load in the app.
 
+### Basic prayer information
+
 Mandatory prayer information:
 1. __title__ is the prayer title in the same language as the prayer content
 2. __lang__ is the 2-letter code of the prayer language, for example: __en__
@@ -59,7 +61,7 @@ title: Ave Maria
 lang: la
 language: Latina
 lines:
-  - "Ave Maria, gratia plena"
+  - Ave Maria, gratia plena
   - Dominus tecum.
   - Benedicta Tu in mulieribus,
   - et benedictus fructus ventris tui, Iesus.
@@ -67,3 +69,77 @@ lines:
   - ora pro nobis peccatoribus,
   - nunc, et in hora mortis nostrae.
 ```
+
+### Additional and advanced options
+
+#### Content formatting
+
+In the example above we can update the prayer content with some text formatting using [Markdown](https://www.markdownguide.org). While most of markdown formatting is supported and should work I highly recommend to avoid overusing formatting. Some formatting, like links in the prayer content while they work, they may cause displaying issue.
+
+Also, some formatting tags may require to put content in quotes. Here is an example:
+
+```yaml
+title: Ave Maria
+lang: la
+language: Latina
+lines:
+  - __Ave Maria__, gratia plena
+  - Dominus tecum.
+  - Benedicta Tu in mulieribus,
+  - et benedictus fructus ventris tui, __Iesus__.
+  - "**Sancta Maria**, Mater Dei,"
+  - ora pro nobis peccatoribus,
+  - nunc, et in hora mortis nostrae.
+```
+This will result in the following prayer formatting:
+> __Ave Maria__, gratia plena<br/>
+> Dominus tecum.<br/>
+> Benedicta Tu in mulieribus,<br/>
+> et benedictus fructus ventris tui, __Iesus__.<br/>
+> **Sancta Maria**, Mater Dei,<br/>
+> ora pro nobis peccatoribus,<br/>
+> nunc, et in hora mortis nostrae.<br/>
+
+Please note, when stars: '\*' are used for formatting, the line must be in quotes.
+
+#### Advanced and optional prayer information
+
+1. __tags__ allows to assign tags or labels to the prayer which is then used for prayer grouping on the list. This helps with finding prayers on the long list in the app.<br/>
+   Example:
+   ```yaml
+   tags:
+     - Basic
+     - Blessed Virgin Mary
+   ```
+2. __links__ allows to provide links related to the prayer. Right now, only links to `youtube` are allowed and supported. Adding links, will display links below the prayer content.<br/>
+    Example:
+    ```yaml
+    links:
+      - type: youtube
+         title: Ave Maria by Luciano Pavarotti
+         url: https://www.youtube.com/watch?v=XpYGgtrMTYs
+    ```
+3. __notes__ allows to add additional information about the prayer which is then displayed below the prayer and links in the app. Notes tag allows to add free form content, formatted using markdown tags.<br/>
+   Example:
+   ```yaml
+   notes: |
+     The prayer, also known as the Hail Mary, is a central devotion in the Roman Catholic Church. 
+     The prayer has two parts, with the first part coming from the Gospel of Luke and the second 
+     part added in the 15th century. It is commonly recited in private and in public, 
+     and is said 150 times as part of the Rosary.
+   ```
+4. __dates__ allows you to specify dates for the prayer. These are dates for which the prayer is recommended. For example, _Joyful Rosary Mysteries_ are recommended for: _Monday_, _Thursday_ and _Saturday_. _Litany of the Sacred Heart of Jesus_ is recommended for the month of _June_ and so on.<br/>
+   The format for putting dates is based on `crontab` file. You can find more details on this [here](https://www.geeksforgeeks.org/crontab-in-linux-with-examples/).<br/>
+    __This is not yet implemented in the app.__<br/>
+    Example:
+    ```yaml
+    dates:
+       - "* * * * 1,4,6"
+       - "* * * 6 *"
+    ```
+
+#### Non standard formatting and advanced content techniques 
+
+1. Embedding prayers
+2. Empty lines
+    
