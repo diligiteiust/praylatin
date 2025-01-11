@@ -140,6 +140,87 @@ Please note, when stars: '\*' are used for formatting, the line must be in quote
 
 #### Non standard formatting and advanced content techniques 
 
-1. Embedding prayers
-2. Empty lines
-    
+There are some non-standard formatting tags which are not defined in Markdown spec but available to use while preparing prayer file.
+
+##### Embedding prayers
+
+Some prayers contain other prayers text as part of it content. For example prayer _The Angelus Prayer_ _(Angelus Domini)_:
+
+> __Angelus Domini nuntiavit Mariae__<br/>
+>  __Et concepit de Spiritu Sancto.__<br/>
+>      Ave Maria, gratia plena<br/>
+>      Dominus tecum.<br/>
+>      Benedicta Tu in mulieribus,<br/>
+>      et benedictus fructus ventris tui, Iesus.<br/>
+>      Sancta Maria, Mater Dei,<br/>
+>      ora pro nobis peccatoribus,<br/>
+>      nunc, et in hora mortis nostrae.<br/>
+>  <br/>
+>  __Ecce ancilla Domini,__<br/>
+>  __Fiat mihi secundum verbum tuum.__<br/>
+>      Ave Maria, gratia plena<br/>
+>      Dominus tecum.<br/>
+>      Benedicta Tu in mulieribus,<br/>
+>      et benedictus fructus ventris tui, Iesus.<br/>
+>      Sancta Maria, Mater Dei,<br/>
+>      ora pro nobis peccatoribus,<br/>
+>      nunc, et in hora mortis nostrae.<br/>
+>  <br/>
+>  __Et Verbum caro factum est,__<br/>
+>  __Et habitavit in nobis.__<br/>
+>      Ave Maria, gratia plena<br/>
+>      Dominus tecum.<br/>
+>      Benedicta Tu in mulieribus,<br/>
+>      et benedictus fructus ventris tui, Iesus.<br/>
+>      Sancta Maria, Mater Dei,<br/>
+>      ora pro nobis peccatoribus,<br/>
+>      nunc, et in hora mortis nostrae.<br/>
+>  
+
+As you can see _Ave Maria_ is included several times as part of the prayer. We could prepare the prayer file like this with _Ave Maria_ text included as many times as necessary but this solution comes with a few problems:
+1. It is a lot of work to include the same prayer many times
+2. It takes a lot of space
+3. If you want to change something in the included prayer you have to do it multiple times
+4. Mistakes are easy to make and difficult to find and correct
+
+For this reason we have _prayer embed_ tag: __'\@prayerfile'__ which allows you to point to a file from which a prayer must be included in the content. For _The Angelus Prayer_ the file can look like this:
+
+```yaml
+lines:
+  - The Angel of the Lord declared unto Mary.
+  - Et concepit de Spiritu Sancto.
+  - "@avemaria"
+  - 
+  - Behold the handmaid of the Lord.
+  - Be it done unto me according to thy word.
+  - "@avemaria"
+  - 
+  - And the Word was made flesh.
+  - And dwelt among us.
+  - "@avemaria"
+```
+
+This makes the file much smaller and overall content much shorter and easier to manage. When the app displays the prayer it automatically includes the _Ave Maria_ prayer from specified file and includes it in the content of the main prayer.
+
+This tag has a variation: __'\@@prayerfile'__, note the double __'\@@'__. In this variant, the included prayer title is also added to the content. With a single __'\@`__ only the prayer text is added. This variations is sometimes useful when creating prayers lists.
+
+##### Empty lines
+
+Normally when we prepare prayer file like in previous example, the empty lines are removed from the rendered text. And all the text is displayed line under a lines. This sometimes makes it harder to read the text. For readability it makes sense to add an empty line to the displayed text, to separate sections of the content. To add an empty line which is displayed you can use __^^^__ tag. 
+
+Using this, the above example looks like this:
+
+```yaml
+lines:
+  - The Angel of the Lord declared unto Mary.
+  - Et concepit de Spiritu Sancto.
+  - "@avemaria"
+  - ^^^
+  - Behold the handmaid of the Lord.
+  - Be it done unto me according to thy word.
+  - "@avemaria"
+  - ^^^
+  - And the Word was made flesh.
+  - And dwelt among us.
+  - "@avemaria"
+```
