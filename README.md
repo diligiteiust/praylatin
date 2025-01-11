@@ -224,3 +224,5 @@ lines:
   - And dwelt among us.
   - "@avemaria"
 ```
+
+For more practical examples, formatting and tags, please take a look at existing prayers files.
