@@ -3,6 +3,6 @@ please open a ticket on the [project development site](https://just-4.dev/LatinP
 or send an email to address: [devel@praylatin.app](mailto:devel@praylatin.app).
 <p>
 __To submit a new prayer or translation__ please check the 
-[README](https://just-4.dev/LatinPray/~files) file for instructions on how to do it.
+[website](https://praylatin.app/) file for instructions on how to do it.
 <p>
 __You can also help__ the project development with a donation:

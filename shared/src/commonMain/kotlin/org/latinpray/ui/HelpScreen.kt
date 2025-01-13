@@ -76,24 +76,24 @@ fun HelpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-//                .background(color = MaterialTheme.colorScheme.background)
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .windowInsetsPadding(WindowInsets.systemBars),
-            //verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(modifier = Modifier.size(50.dp)
-                .align(Alignment.CenterStart)
-                .padding(10.dp)
-                .alpha(fraction)
-                //.alpha(alpha = if (fraction <= 0) 1f else 0f)
-                .background(
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(50)
-                ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                    goBack()
-                }
+            Box(
+                modifier = Modifier.size(50.dp)
+                    .align(Alignment.CenterStart)
+                    .padding(10.dp)
+                    .alpha(fraction)
+                    //.alpha(alpha = if (fraction <= 0) 1f else 0f)
+                    .background(
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = RoundedCornerShape(50)
+                    ).shadow(elevation = 16.dp).padding(5.dp).clickable {
+                        goBack()
+                    }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
@@ -104,7 +104,9 @@ fun HelpScreen(
             }
 
             Box(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Text(
@@ -114,7 +116,8 @@ fun HelpScreen(
             }
         }
         Box(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier.fillMaxWidth()
+                .padding(vertical = 4.dp, horizontal = 16.dp),
             contentAlignment = Alignment.TopCenter
         ) {
             Markdown(
@@ -149,7 +152,9 @@ fun HelpScreen(
             offers!!.forEach { offer ->
                 //println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
                 Box(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp, horizontal = 16.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
@@ -188,7 +193,11 @@ fun HelpScreen(
                     }
                 }
             }
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .padding(vertical = 4.dp, horizontal = 16.dp)
+                    .fillMaxWidth(), contentAlignment = Alignment.Center
+            ) {
                 TextButton(
                     onClick = {
                         Purchases.sharedInstance.restorePurchases(
@@ -206,7 +215,8 @@ fun HelpScreen(
                                         offers?.find { offer ->
                                             offer.storeProduct.id == product
                                         }?.let { offer ->
-                                            val subs = offer.storeProduct.title + " " + offer.storeProduct.price.formatted
+                                            val subs =
+                                                offer.storeProduct.title + " " + offer.storeProduct.price.formatted
                                             println("Active purchase: $subs")
                                             scope.launch {
                                                 config.saveDonation(product)
@@ -224,7 +234,12 @@ fun HelpScreen(
                     Text(text = "Restore donations")
                 }
             }
-
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = "You can cancel any time using your account settings.",
+                style = MaterialTheme.typography.bodySmall,
+            )
+            Legal(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
     }
 }

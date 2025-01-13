@@ -69,24 +69,23 @@ fun AboutScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-//                .background(color = MaterialTheme.colorScheme.background)
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.systemBars),
-                //verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(modifier = Modifier.size(50.dp)
-                    .align(Alignment.CenterStart)
-                    .padding(10.dp)
-                    .alpha(fraction)
-                    //.alpha(alpha = if (fraction <= 0) 1f else 0f)
-                    .background(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        shape = RoundedCornerShape(50)
-                    ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                        goBack()
-                    }
+                Box(
+                    modifier = Modifier.size(50.dp)
+                        .align(Alignment.CenterStart)
+                        .padding(10.dp)
+                        .alpha(fraction)
+                        //.alpha(alpha = if (fraction <= 0) 1f else 0f)
+                        .background(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            shape = RoundedCornerShape(50)
+                        ).shadow(elevation = 16.dp).padding(5.dp).clickable {
+                            goBack()
+                        }
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
@@ -95,16 +94,6 @@ fun AboutScreen(
                         modifier = Modifier.size(30.dp)
                     )
                 }
-
-//                Box(
-//                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-//                    contentAlignment = Alignment.TopCenter
-//                ) {
-//                    Text(
-//                        text = title,
-//                        style = MaterialTheme.typography.titleLarge,
-//                    )
-//                }
             }
             Box(
                 modifier = Modifier
@@ -116,18 +105,13 @@ fun AboutScreen(
             ) {
                 AppIcon()
             }
-//            Box(
-//                modifier = Modifier.padding(16.dp)
-//                    .align(Alignment.CenterHorizontally),
-//            ) {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(4.dp),
-                    text = getPlatform().appName + " " + getPlatform().appVersion,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-//            }
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(4.dp),
+                text = getPlatform().appName + " " + getPlatform().appVersion,
+                style = MaterialTheme.typography.titleLarge,
+            )
             Box(
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
                 contentAlignment = Alignment.TopCenter
@@ -154,6 +138,7 @@ fun AboutScreen(
                 )
 
             }
+            Legal(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
     }
 }

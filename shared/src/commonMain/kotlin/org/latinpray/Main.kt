@@ -35,8 +35,10 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.offers
+import org.latinpray.data.privacy
 import org.latinpray.data.sampleConfig
 import org.latinpray.data.samplePrayers
+import org.latinpray.data.terms
 import org.latinpray.io.getDataStore
 import org.latinpray.io.keyValueStorePath
 import org.latinpray.io.prayersList
@@ -106,6 +108,8 @@ fun Main() {
         //println("Loading prayers...")
         helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
         aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
+        privacy = readFileFromAssets("assets/privacy.md")
+        terms = readFileFromAssets("assets/terms.md")
         prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
             prayer.langs[defConfig.prayerLang]?.title
         }.toMutableList()

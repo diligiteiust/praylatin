@@ -7,5 +7,5 @@ __It contains large collection of prayers__ in Latin and other languages and it 
 as daily prayer book.
 <p>
 __This is an open source software__ available online on
-[the project development site](https://just-4.dev/LatinPray). Source code is available under
+[the project development site](https://praylatin.app/). Source code is available under
 __[AGPLv3 License](https://www.gnu.org/licenses/agpl-3.0.en.html)__.
