@@ -26,7 +26,7 @@ android {
     defaultConfig {
         applicationId = "org.latinpray.android"
         minSdk = 28
-        //targetSdk = 34
+        targetSdk = 35
         versionCode = properties["app.version.code"].toString().toInt()
         versionName = properties["app.version.name"].toString()
     }
