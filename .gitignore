@@ -10,3 +10,5 @@ local.properties
 xcuserdata
 /.kotlin/
 /.run/
+/iosApp/Configuration/Versions.xcconfig
+/gradle.properties-e

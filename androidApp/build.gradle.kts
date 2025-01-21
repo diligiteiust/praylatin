@@ -26,9 +26,9 @@ android {
     defaultConfig {
         applicationId = "org.latinpray.android"
         minSdk = 28
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        //targetSdk = 34
+        versionCode = properties["app.version.code"].toString().toInt()
+        versionName = properties["app.version.name"].toString()
     }
     buildFeatures {
         compose = true
@@ -50,7 +50,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildToolsVersion = "34.0.0"
+    //buildToolsVersion = "34.0.0"
 
     dependencies {
         implementation(projects.shared)
@@ -65,4 +65,3 @@ android {
     }
     bundle {}
 }
-

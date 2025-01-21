@@ -1,1 +1,1 @@
-[Privacy Policy](https://just-4.dev/LatinPray/~files/master/docs/privacypolicy.md)
+[Privacy Policy](https://praylatin.app/privacy)
