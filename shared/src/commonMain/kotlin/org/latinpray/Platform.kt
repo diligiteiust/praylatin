@@ -21,8 +21,9 @@ import kotlinx.coroutines.internal.synchronized
 
 interface Platform {
     val osName: String
-    val versionCode: String
+    val osVersion: String
     val appName: String
+    val appVersionCode: String
     val appVersion: String
     val extraIndent: String
     val isIOS: Boolean

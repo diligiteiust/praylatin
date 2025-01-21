@@ -16,6 +16,7 @@ agvtool new-version -all ${COMMIT_COUNT}
 cd - || exit
 
 MODIFIED_FILES=$(git diff --name-only)
+MODIFIED_FILES="gradle.properties iosApp/iosApp.xcodeproj/project.pbxproj iosApp/iosApp/Info.plist"
 for FILE in $MODIFIED_FILES ; do
   # Add the modified file to the staging area
   git add "$FILE"
