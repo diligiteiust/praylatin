@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Running pre-commit script..."
+
+COMMIT_COUNT=$((`git rev-list --count HEAD`+1))
+LATEST_TAG=`git describe --tags --abbrev=0`
+
+ANDROID_VERSIONS="gradle.properties"
+
+sed -i -e "s/app.version.code.*/app.version.code=${COMMIT_COUNT}/" ${ANDROID_VERSIONS}
+sed -i -e "s/app.version.name.*/app.version.name=${LATEST_TAG}/" ${ANDROID_VERSIONS}
+
+cd iosApp || exit
+agvtool new-marketing-version ${LATEST_TAG}
+agvtool new-version -all ${COMMIT_COUNT}
