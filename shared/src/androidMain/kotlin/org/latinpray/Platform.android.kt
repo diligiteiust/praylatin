@@ -18,6 +18,9 @@ package org.latinpray
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import com.revenuecat.purchases.kmp.LogLevel
+import com.revenuecat.purchases.kmp.Purchases
+import com.revenuecat.purchases.kmp.configure
 import java.util.Locale
 
 
@@ -41,6 +44,8 @@ class AndroidPlatform : Platform {
         }
         appVersionCode = pinfo!!.longVersionCode.toString()
         appVersion = (pinfo.versionName ?: "-1") + " (" + appVersionCode + ")"
+        Purchases.logLevel = LogLevel.DEBUG
+        Purchases.configure(apiKey = "goog_FrlZhVGmEeKNhhUjBAovKNGEXuq")
     }
 
     override fun isTablet(): Boolean {

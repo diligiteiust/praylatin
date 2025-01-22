@@ -115,7 +115,7 @@ fun Main() {
         }.toMutableList()
         println("Loaded ${prayers.size} prayers")
         currentPrayer = prayers.first()
-        if (getPlatform().isIOS) {
+        //if (getPlatform().isIOS) {
             Purchases.sharedInstance.getOfferings(
                 onError = { error ->
                     // An error occurred
@@ -133,7 +133,7 @@ fun Main() {
                     }
                 }
             )
-        }
+        //}
     }
 
     val uiFontFactor = if (getPlatform().isTablet()) TABLET_UI_FONT_FACTOR else 1.0f

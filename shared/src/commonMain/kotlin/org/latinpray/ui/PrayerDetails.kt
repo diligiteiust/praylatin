@@ -82,6 +82,16 @@ fun preparePrayer(
     var prayerStart = true
 
     lang1?.lines?.forEachIndexed { i, it ->
+        // Display prayer title at the very beginning
+        if (prayerStart && title) {
+            result += "## " + lang1.title + "\n\n"
+            if (lang2?.title != null) {
+                result += "### " + lang2.title + "\n\n"
+            }
+            result += "^^^\n\n"
+            prayerStart = false
+        }
+
         if (it != null && it.trim().startsWith(EMBEDDED)) {
             // If the first line starts from embedded content
             // `list` mode is turned on. No indentation for embedded content.
@@ -109,15 +119,6 @@ fun preparePrayer(
                 "$indent *$it* not found\n\n"
             }
             return@forEachIndexed
-        }
-        // Display prayer title at the very beginning
-        if (prayerStart && title) {
-            result += "## " + lang1.title + "\n\n"
-            if (lang2?.title != null) {
-                result += "### " + lang2.title + "\n\n"
-            }
-            result += "^^^\n\n"
-            prayerStart = false
         }
         result += indent + "" + (it ?: "") + "\n\n"
         if (lang2?.lines != null
