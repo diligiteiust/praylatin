@@ -21,9 +21,10 @@ lines:
   - "Panem de coelo praestitisti eis:"
   - Omne delectamentum in se habentem.
   - ^^^
-  - "Oremus:"
-  - Deus, qui nobis sub sacramento mirabili passionis tuae
-  - "memoriam reliquisti: tribue, quaesumus, ita nos corporis"
-  - et sanguinis tui sacra mysteria venerari, ut redemptionis
-  - tuae fructum in nobis iugiter sentiamus. Qui vivis et
-  - regnas in saecula saeculorum. Amen.
+  - "__Oremus:__"
+  - >
+    __Deus__, qui nobis sub sacramento mirabili passionis tuae
+    "memoriam reliquisti: tribue, quaesumus, ita nos corporis"
+    et sanguinis tui sacra mysteria venerari, ut redemptionis
+    tuae fructum in nobis iugiter sentiamus. Qui vivis et
+    regnas in saecula saeculorum. __Amen.__
