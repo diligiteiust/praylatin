@@ -4,6 +4,13 @@
 
 <h1 style="text-align: center;">Pray Latin</h1>
 
+<img src="" alt="AppStore QR Code", width="150"/>
+<a href="https://apple.co/4geZxUH" style="display: inline-block;">
+<img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1736812800" 
+alt="Download on the App Store" style="width: 245px; height: 82px; vertical-align: middle; object-fit: contain;" />
+</a>
+
+
 ## About
 
 __Pray Latin__ is an application helping with praying in Latin and learning Latin prayers.
@@ -116,8 +123,8 @@ Please note, when stars: '\*' are used for formatting, the line must be in quote
     ```yaml
     links:
       - type: youtube
-         title: Ave Maria by Luciano Pavarotti
-         url: https://www.youtube.com/watch?v=XpYGgtrMTYs
+        title: Ave Maria by Luciano Pavarotti
+        url: https://www.youtube.com/watch?v=XpYGgtrMTYs
     ```
 3. __notes__ allows to add additional information about the prayer which is then displayed below the prayer and links in the app. Notes tag allows to add free form content, formatted using markdown tags.<br/>
    Example:
