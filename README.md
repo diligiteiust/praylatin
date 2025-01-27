@@ -6,11 +6,8 @@
 
 <img src="assets/appstore-qr-code.png" alt="AppStore QR Code" width="122"/>
 
-<a href="https://apple.co/4geZxUH" style="display: inline-block;">
-<img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1736812800" 
-alt="Download on the App Store" style="width: 122px; height: 41px; vertical-align: middle; object-fit: contain;" />
-</a>
-
+| --- | --- |
+| <a href="https://apple.co/4geZxUH" style="display: inline-block;"><br/><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1736812800" alt="Download on the App Store" style="width: 122px; height: 41px; vertical-align: middle; object-fit: contain;" /></a> | |
 
 ## About
 
