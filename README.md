@@ -15,9 +15,9 @@ App for Android devices is in testing phase. You can start testing by joining [p
 </div>
 
 <div align="center">
-<img src="assets/en_list.png" alt="English List" width="150"/>
-<img src="assets/ave_maria.png" alt="English List" width="150"/>
-<img src="assets/settings.png" alt="English List" width="150"/>
+<img src="assets/en_list.png" alt="English List" width="200"/>
+<img src="assets/ave_maria.png" alt="English List" width="200"/>
+<img src="assets/settings.png" alt="English List" width="200"/>
 </div>
 
 ## About
