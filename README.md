@@ -14,6 +14,12 @@ App for Android devices is in testing phase. You can start testing by joining [p
 
 </div>
 
+<div align="center">
+<img src="assets/en_list.png" alt="English List" width="100"/>
+<img src="assets/ave_maria.png" alt="English List" width="100"/>
+<img src="assets/settings.png" alt="English List" width="100"/>
+</div>
+
 ## About
 
 __Pray Latin__ is an application helping with praying in Latin and learning Latin prayers.
