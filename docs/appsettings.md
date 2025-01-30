@@ -27,11 +27,9 @@ any available language or it can be turned off.
 
 If the prayer does not have version in the selected second language, the app will display only
 prayer in the main language.
-{: .notice--info}
 
 If some prayers are available only in the second language, the app with also include
 these prayers in the prayers list.
-{: .notice--info}
 
 ## Prefer Translation
 
