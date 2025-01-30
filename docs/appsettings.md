@@ -1,3 +1,3 @@
 # App settings description
 
-<img src="/assets/settings.png" alt="English List" width="200"/>
+<img src="../assets/settings.png" alt="English List" width="200"/>
