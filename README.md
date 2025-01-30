@@ -58,5 +58,5 @@ If you are interested in contributing new prayers, please continue to read below
 
 ## Other documents
 
-1. [Prayer file format](assets/prayerfile.md)
-2. [App settings description](assets/appsettings.md)
+1. [Prayer file format](docs/prayerfile.md)
+2. [App settings description](docs/appsettings.md)
