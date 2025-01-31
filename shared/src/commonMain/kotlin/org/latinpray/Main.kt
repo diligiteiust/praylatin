@@ -85,6 +85,7 @@ fun Main() {
     var helpContent by remember { mutableStateOf("") }
     var aboutContent by remember { mutableStateOf("") }
     var lang: String by remember { mutableStateOf(defConfig.uiLang) }
+    var fontScale by remember { mutableStateOf(defConfig.fontScale) }
 
     scope.launch {
         //println("Loading config from yaml...")
@@ -104,6 +105,7 @@ fun Main() {
             lang = defConfig.uiLang
             getPlatform().changeLang(lang)
         }
+        fontScale = defConfig.fontScale
         //println("Loaded config from datastore ${defConfig.prayerLang}")
         //println("Loading prayers...")
         helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
@@ -141,9 +143,9 @@ fun Main() {
     val contentFontFactor = if (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
 
     AppTheme(
-        uiFontFactor = uiFontFactor,
-        headlineFontFactor = headlineFontFactor,
-        contentFontFactor = contentFontFactor
+        uiFontFactor = uiFontFactor * fontScale,
+        headlineFontFactor = headlineFontFactor * fontScale,
+        contentFontFactor = contentFontFactor * fontScale
     ) {
         LocalizedApp(
             language = lang
@@ -170,6 +172,12 @@ fun Main() {
                                     navController.navigate(MainScreens.PrayerDetailsScreen.name)
                                 },
                                 navController = navController,
+                                fontChange = { scale ->
+                                    fontScale += scale
+                                    scope.launch {
+                                        defConfig.saveFontScale(fontScale)
+                                    }
+                                }
                             )
                         }
                         composable(route = MainScreens.PrayerDetailsScreen.name) {
@@ -189,7 +197,7 @@ fun Main() {
                                 sharedTransitionScope = sharedTransitionScope,
                                 config = defConfig,
                                 goBack = { navController.popBackStack() },
-                                uiLandChange = { config ->
+                                uiLangChange = { config ->
                                     defConfig = config
                                     lang = defConfig.uiLang
                                     getPlatform().changeLang(lang)

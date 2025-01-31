@@ -61,7 +61,7 @@ import org.latinpray.shared.settings_ui_lang
 fun SettingsScreen(
     title: String,
     goBack: () -> Unit,
-    uiLandChange: (config: Config) -> Unit,
+    uiLangChange: (config: Config) -> Unit,
     config: Config,
     animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
@@ -125,7 +125,7 @@ fun SettingsScreen(
                         if (lang != config.uiLang) {
                             scope.launch {
                                 config.saveUILang(lang)
-                                uiLandChange(config)
+                                uiLangChange(config)
                             }
                         }
                     }

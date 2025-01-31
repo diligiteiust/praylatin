@@ -60,7 +60,8 @@ fun PrayersListScreen(
     onClick: (prayer: Prayer) -> Unit,
     navController: NavController,
     sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    fontChange: (scale: Float) -> Unit
 ) {
     val (fraction) = remember { mutableStateOf(0.50f) }
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
@@ -138,7 +139,8 @@ fun PrayersListScreen(
             }
             MainMenu(
                 navController = navController,
-                isExpanded = expanded
+                isExpanded = expanded,
+                fontChange = fontChange
             )
 
             Box(

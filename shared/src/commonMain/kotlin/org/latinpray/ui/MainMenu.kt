@@ -15,7 +15,11 @@
 
 package org.latinpray.ui
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Group
@@ -23,22 +27,28 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.shared.Res
 import org.latinpray.shared.about_screen_title
 import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.settings_screen_title
+import org.latinpray.shared.text_decrease_24dp_e8eaed_fill0_wght400_grad0_opsz24
+import org.latinpray.shared.text_increase_24dp_e8eaed_fill0_wght400_grad0_opsz24
 
 @Composable
 fun MainMenu(
     navController: NavController,
     isExpanded: MutableState<Boolean>,
+    fontChange: (scale: Float) -> Unit
 ) {
 
     DropdownMenu(
@@ -85,6 +95,36 @@ fun MainMenu(
                 )
             }
         )
+        Row() {
+            IconButton(
+                onClick = {
+                    isExpanded.value = false
+                    fontChange(-0.1f)
+                },
+                modifier = Modifier.size(48.dp).padding(horizontal = 12.dp)
+            ) {
+                Icon(
+                    modifier = Modifier.fillMaxSize(),
+                    painter = painterResource(Res.drawable.text_decrease_24dp_e8eaed_fill0_wght400_grad0_opsz24),
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            IconButton(
+                onClick = {
+                    isExpanded.value = false
+                    fontChange(0.1f)
+                },
+                modifier = Modifier.size(48.dp).padding(horizontal = 12.dp)
+            ) {
+                Icon(
+                    modifier = Modifier.fillMaxSize(),
+                    painter = painterResource(Res.drawable.text_increase_24dp_e8eaed_fill0_wght400_grad0_opsz24),
+                    contentDescription = null
+                )
+            }
+        }
     }
 
 }

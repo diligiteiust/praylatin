@@ -54,7 +54,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
         val prs = listAssetsInDirectory("assets/prayers/$lang/")
         var i = 1
         prs.forEach { pr ->
-            println("Loading prayer $pr for lang: $lang")
+            //println("Loading prayer $pr for lang: $lang")
             val name = pr.removeSuffix(".yaml")
             val basicPrayer = readPrayerFromAssets("assets/prayers/$lang/$pr")
             //println("Loaded prayer ${basicPrayer.title}")

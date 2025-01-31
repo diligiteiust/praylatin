@@ -19,6 +19,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -32,6 +33,7 @@ data class Config (
     var secondLang: String,
     var preferTranslation: Boolean,
     var grouping: Boolean,
+    var fontScale: Float = 1.0f,
     var donation: String? = null
 ) {
 
@@ -44,6 +46,7 @@ data class Config (
     @Transient private val SECONDLANG_PROP_KEY = stringPreferencesKey("secondLang")
     @Transient private val PREFER_TRANSLATION_PROP_KEY = booleanPreferencesKey("preferTranslation")
     @Transient private val GROUPING_PROP_KEY = booleanPreferencesKey("grouping")
+    @Transient private val FONT_SCALE_PROP_KEY = floatPreferencesKey("fontScale")
     @Transient private val DONATION_PROP_KEY = stringPreferencesKey("donation")
 
     @Transient
@@ -65,6 +68,8 @@ data class Config (
         //println("Loaded prefer translation $preferTranslation")
         grouping = getGrouping()
         //println("Loaded grouping $grouping")
+        fontScale = getFontScale()
+        //println("Loaded font scale $fontScale")
         donation = getDonation()
     }
 
@@ -98,6 +103,11 @@ data class Config (
             it[GROUPING_PROP_KEY] ?: grouping
         }.first()
 
+    private suspend fun getFontScale(): Float =
+        dataStore!!.data.map {
+            it[FONT_SCALE_PROP_KEY] ?: fontScale
+        }.first()
+
     suspend fun saveConfig(
         uiLang: String,
         prayerLang: String,
@@ -108,6 +118,7 @@ data class Config (
         saveSecondLang(secondLang)
         savePreferTranslation(preferTranslation)
         saveGrouping(grouping)
+        saveFontScale(fontScale)
         saveDonation(donation)
     }
 
@@ -156,6 +167,13 @@ data class Config (
         grouping = pref
         dataStore?.edit {
             it[GROUPING_PROP_KEY] = grouping
+        }
+    }
+
+    suspend fun saveFontScale(scale: Float) {
+        fontScale = scale
+        dataStore?.edit {
+            it[FONT_SCALE_PROP_KEY] = fontScale
         }
     }
 
