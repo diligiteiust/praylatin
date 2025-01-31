@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -107,7 +108,7 @@ fun MainMenu(
                     modifier = Modifier.fillMaxSize(),
                     painter = painterResource(Res.drawable.text_decrease_24dp_e8eaed_fill0_wght400_grad0_opsz24),
                     contentDescription = null,
-                    tint = Color.Gray
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -121,7 +122,8 @@ fun MainMenu(
                 Icon(
                     modifier = Modifier.fillMaxSize(),
                     painter = painterResource(Res.drawable.text_increase_24dp_e8eaed_fill0_wght400_grad0_opsz24),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
