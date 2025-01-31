@@ -16,10 +16,7 @@
 package org.latinpray.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -42,11 +39,6 @@ fun Legal(modifier: Modifier) {
             terms.replace('\n', ' ') +" | " + privacy.replace('\n', ' ')
         )
     }
-//    Row(
-//        modifier = Modifier.fillMaxWidth(),
-//        horizontalArrangement = Arrangement.Center,
-//        //verticalAlignment = Alignment.Bottom
-//    ) {
         Box(
             modifier = modifier
                 .padding(vertical = 4.dp, horizontal = 16.dp),
@@ -68,10 +60,8 @@ fun Legal(modifier: Modifier) {
                     h3 = MaterialTheme.typography.titleSmall,
                     link = MaterialTheme.typography.labelMedium
                 ),
-//                modifier = Modifier.fillMaxWidth().padding(8.dp)
                 modifier = modifier
                     .background(color = MaterialTheme.colorScheme.background),
             )
         }
-//    }
 }

@@ -53,93 +53,88 @@ import org.latinpray.getPlatform
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AboutScreen(
-    title: String,
     content: String,
     goBack: () -> Unit,
-//    animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
 ) {
     val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
-//    val scope = rememberCoroutineScope()
 
-    with(sharedTransitionScope) {
-        if (sharedTransitionScope.isTransitionActive.not()) {
-            setFraction(0f)
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
+    if (sharedTransitionScope.isTransitionActive.not()) {
+        setFraction(0f)
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.systemBars),
         ) {
             Box(
-                modifier = Modifier.fillMaxWidth()
-                    .windowInsetsPadding(WindowInsets.systemBars),
+                modifier = Modifier.size(50.dp)
+                    .align(Alignment.CenterStart)
+                    .padding(10.dp)
+                    .alpha(fraction)
+                    //.alpha(alpha = if (fraction <= 0) 1f else 0f)
+                    .background(
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = RoundedCornerShape(50)
+                    ).shadow(elevation = 16.dp).padding(5.dp).clickable {
+                        goBack()
+                    }
             ) {
-                Box(
-                    modifier = Modifier.size(50.dp)
-                        .align(Alignment.CenterStart)
-                        .padding(10.dp)
-                        .alpha(fraction)
-                        //.alpha(alpha = if (fraction <= 0) 1f else 0f)
-                        .background(
-                            color = MaterialTheme.colorScheme.onBackground,
-                            shape = RoundedCornerShape(50)
-                        ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                            goBack()
-                        }
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.background,
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .width(150.dp)
-                    .height(150.dp)
-                    .padding(4.dp)
-                    .align(Alignment.CenterHorizontally),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                AppIcon()
-            }
-            Text(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(4.dp),
-                text = getPlatform().appName + " " + getPlatform().appVersion,
-                style = MaterialTheme.typography.titleLarge,
-            )
-            Box(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                Markdown(
-                    content = content,
-                    padding = markdownPadding(
-                        block = 4.dp,
-                        //list = 0.dp,
-                    ),
-                    colors = markdownColor(
-                        text = MaterialTheme.colorScheme.onBackground,
-                    ),
-                    typography = markdownTypography(
-                        text = MaterialTheme.typography.bodySmall,
-                        paragraph = MaterialTheme.typography.bodyMedium,
-                        quote = MaterialTheme.typography.bodySmall,
-                        h2 = MaterialTheme.typography.titleMedium,
-                        h3 = MaterialTheme.typography.titleSmall,
-                        link = MaterialTheme.typography.labelMedium
-                    ),
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
-                        .background(color = MaterialTheme.colorScheme.background),
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.size(30.dp)
                 )
-
             }
-            Legal(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
+        Box(
+            modifier = Modifier
+                .width(150.dp)
+                .height(150.dp)
+                .padding(4.dp)
+                .align(Alignment.CenterHorizontally),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            AppIcon()
+        }
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(4.dp),
+            text = getPlatform().appName + " " + getPlatform().appVersion,
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Box(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Markdown(
+                content = content,
+                padding = markdownPadding(
+                    block = 4.dp,
+                    //list = 0.dp,
+                ),
+                colors = markdownColor(
+                    text = MaterialTheme.colorScheme.onBackground,
+                ),
+                typography = markdownTypography(
+                    text = MaterialTheme.typography.bodySmall,
+                    paragraph = MaterialTheme.typography.bodyMedium,
+                    quote = MaterialTheme.typography.bodySmall,
+                    h2 = MaterialTheme.typography.titleMedium,
+                    h3 = MaterialTheme.typography.titleSmall,
+                    link = MaterialTheme.typography.labelMedium
+                ),
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    .background(color = MaterialTheme.colorScheme.background),
+            )
+
+        }
+        Legal(modifier = Modifier.align(Alignment.CenterHorizontally))
     }
 }
 

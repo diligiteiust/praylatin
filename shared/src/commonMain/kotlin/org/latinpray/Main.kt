@@ -46,7 +46,6 @@ import org.latinpray.io.readConfigFromAssets
 import org.latinpray.io.readFileFromAssets
 import org.latinpray.loc.LocalizedApp
 import org.latinpray.shared.Res
-import org.latinpray.shared.about_screen_title
 import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.prayers_screen_title
 import org.latinpray.shared.settings_screen_title
@@ -209,10 +208,9 @@ fun Main() {
                         }
                         composable(route = MainScreens.AboutScreen.name) {
                             AboutScreen(
-                                title = stringResource(Res.string.about_screen_title),
                                 content = aboutContent,
-                                sharedTransitionScope = sharedTransitionScope,
-                                goBack = { navController.popBackStack() }
+                                goBack = { navController.popBackStack() },
+                                sharedTransitionScope = sharedTransitionScope
                             )
                         }
                         composable(route = MainScreens.HelpScreen.name) {
