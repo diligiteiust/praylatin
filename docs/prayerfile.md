@@ -89,7 +89,7 @@ Please note, when stars: '\*' are used for formatting, the line must be in quote
      and is said 150 times as part of the Rosary.
    ```
 4. __dates__ allows you to specify dates for the prayer. These are dates for which the prayer is recommended. For example, _Joyful Rosary Mysteries_ are recommended for: _Monday_, _Thursday_ and _Saturday_. _Litany of the Sacred Heart of Jesus_ is recommended for the month of _June_ and so on.<br/>
-   The format for putting dates is based on `crontab` file. You can find more details on this [here](https://www.geeksforgeeks.org/crontab-in-linux-with-examples/).<br/>
+   The format for putting dates is based on `crontab` file. You can find a very good description on the syntax [here](https://www.baeldung.com/cron-expressions).<br/>
    __This is not yet implemented in the app.__<br/>
    Example:
     ```yaml
