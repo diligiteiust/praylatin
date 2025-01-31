@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.jetbrains.compose.resources.painterResource
@@ -66,7 +65,8 @@ fun MainMenu(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         )
@@ -79,7 +79,8 @@ fun MainMenu(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Group,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         )
@@ -92,7 +93,8 @@ fun MainMenu(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Info,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         )
