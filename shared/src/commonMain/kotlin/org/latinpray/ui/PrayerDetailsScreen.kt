@@ -15,7 +15,6 @@
 
 package org.latinpray.ui
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -54,7 +53,7 @@ fun PrayerDetailsScreen(
     config: Config,
     prayers: MutableList<Prayer>,
     goBack: () -> Unit,
-    animatedContentScope: AnimatedContentScope,
+//    animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
 ) {
     val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
@@ -89,7 +88,7 @@ fun PrayerDetailsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = null,
+                        contentDescription = "Go back",
                         tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(30.dp)
                     )

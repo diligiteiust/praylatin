@@ -51,6 +51,7 @@ fun Legal(modifier: Modifier) {
                 ),
                 colors = markdownColor(
                     text = MaterialTheme.colorScheme.onBackground,
+                    linkText = MaterialTheme.colorScheme.onTertiary,
                 ),
                 typography = markdownTypography(
                     text = MaterialTheme.typography.bodySmall,

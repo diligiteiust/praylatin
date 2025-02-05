@@ -15,9 +15,7 @@
 
 package org.latinpray.ui
 
-import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -59,8 +57,8 @@ fun PrayersListScreen(
     config: Config,
     onClick: (prayer: Prayer) -> Unit,
     navController: NavController,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope,
+//    sharedTransitionScope: SharedTransitionScope,
+//    animatedVisibilityScope: AnimatedVisibilityScope,
     fontChange: (scale: Float) -> Unit
 ) {
     val (fraction) = remember { mutableStateOf(0.50f) }
@@ -132,7 +130,7 @@ fun PrayersListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Menu,
-                    contentDescription = null,
+                    contentDescription = "Main menu",
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier.size(30.dp)
                 )

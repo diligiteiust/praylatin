@@ -164,8 +164,8 @@ fun Main() {
                                 title = stringResource(Res.string.prayers_screen_title),
                                 prayers = prayers,
                                 config = defConfig,
-                                animatedVisibilityScope = this,
-                                sharedTransitionScope = sharedTransitionScope,
+                                //animatedVisibilityScope = this,
+                                //sharedTransitionScope = sharedTransitionScope,
                                 onClick = { prayer ->
                                     currentPrayer = prayer
                                     navController.navigate(MainScreens.PrayerDetailsScreen.name)
@@ -184,7 +184,7 @@ fun Main() {
                                 prayer = currentPrayer,
                                 config = defConfig,
                                 prayers = prayers,
-                                animatedContentScope = this,
+                                //animatedContentScope = this,
                                 sharedTransitionScope = sharedTransitionScope,
                                 goBack = { navController.popBackStack() }
                             )
@@ -192,7 +192,7 @@ fun Main() {
                         composable(route = MainScreens.SettingsScreen.name) {
                             SettingsScreen(
                                 title = stringResource(Res.string.settings_screen_title),
-                                animatedContentScope = this,
+                                //animatedContentScope = this,
                                 sharedTransitionScope = sharedTransitionScope,
                                 config = defConfig,
                                 goBack = { navController.popBackStack() },

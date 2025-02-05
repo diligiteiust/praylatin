@@ -23,6 +23,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -54,6 +55,7 @@ fun AppTheme(
 //            onPrimary = Color(0x312917),
 //            onSecondary = Color(0x312917),
 //            onTertiary = Color(0x312917)
+            onTertiary = Color(0xFF87B1FC),
         )
     } else {
         lightColorScheme(
@@ -64,7 +66,7 @@ fun AppTheme(
 //            onSecondary = Color(0xf0ebe0),
 //
 //            tertiary = Color(0x211b0f),
-//            onTertiary = Color(0xf0ebe0),
+            onTertiary = Color.Blue,
 //
 //            background = Color(0xf0ebe0),
 //            onBackground = Color(0x312917),

@@ -85,7 +85,7 @@ fun AboutScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                    contentDescription = null,
+                    contentDescription = "Go back",
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier.size(30.dp)
                 )
@@ -120,6 +120,7 @@ fun AboutScreen(
                 ),
                 colors = markdownColor(
                     text = MaterialTheme.colorScheme.onBackground,
+                    linkText = MaterialTheme.colorScheme.onTertiary,
                 ),
                 typography = markdownTypography(
                     text = MaterialTheme.typography.bodySmall,

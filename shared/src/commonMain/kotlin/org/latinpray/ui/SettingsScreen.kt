@@ -15,7 +15,6 @@
 
 package org.latinpray.ui
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
@@ -63,7 +62,7 @@ fun SettingsScreen(
     goBack: () -> Unit,
     uiLangChange: (config: Config) -> Unit,
     config: Config,
-    animatedContentScope: AnimatedContentScope,
+//    animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
 ) {
     val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
@@ -97,7 +96,7 @@ fun SettingsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = null,
+                        contentDescription = "Go back",
                         tint = MaterialTheme.colorScheme.background,
                         modifier = Modifier.size(30.dp)
                     )

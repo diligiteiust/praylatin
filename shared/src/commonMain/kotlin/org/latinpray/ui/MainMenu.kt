@@ -66,7 +66,7 @@ fun MainMenu(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
-                    contentDescription = null,
+                    contentDescription = "Application Setting",
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
@@ -80,7 +80,7 @@ fun MainMenu(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Group,
-                    contentDescription = null,
+                    contentDescription = "Help and Support Screen",
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
@@ -94,7 +94,7 @@ fun MainMenu(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Info,
-                    contentDescription = null,
+                    contentDescription = "Application About Screen",
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
@@ -111,7 +111,7 @@ fun MainMenu(
                 Icon(
                     modifier = Modifier.fillMaxSize(),
                     painter = painterResource(Res.drawable.text_decrease_24dp_e8eaed_fill0_wght400_grad0_opsz24),
-                    contentDescription = null,
+                    contentDescription = "Decrease font size",
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
@@ -126,7 +126,7 @@ fun MainMenu(
                 Icon(
                     modifier = Modifier.fillMaxSize(),
                     painter = painterResource(Res.drawable.text_increase_24dp_e8eaed_fill0_wght400_grad0_opsz24),
-                    contentDescription = null,
+                    contentDescription = "Increase font size",
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }

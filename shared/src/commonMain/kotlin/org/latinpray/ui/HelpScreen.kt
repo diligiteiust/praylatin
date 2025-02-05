@@ -97,7 +97,7 @@ fun HelpScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                    contentDescription = null,
+                    contentDescription = "Go back",
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier.size(30.dp)
                 )
@@ -128,6 +128,7 @@ fun HelpScreen(
                 ),
                 colors = markdownColor(
                     text = MaterialTheme.colorScheme.onBackground,
+                    linkText = MaterialTheme.colorScheme.onTertiary,
                 ),
                 typography = markdownTypography(
                     text = MaterialTheme.typography.bodySmall,
