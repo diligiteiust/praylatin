@@ -24,6 +24,7 @@
     <string name="settings_second_lang">Drugi język</string>
     <string name="settings_prefer_translation">Preferuj tumaczenie</string>
     <string name="settings_grouping">Grupowanie</string>
+    <string name="settings_substitutions">Zamienniki</string>
     <string name="off_option">Wył</string>
     <string name="on_option">Wł</string>
 </resources>

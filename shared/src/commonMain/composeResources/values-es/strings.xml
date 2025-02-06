@@ -24,6 +24,7 @@
     <string name="settings_second_lang">Segundo idioma</string>
     <string name="settings_prefer_translation">Prefiero la traducción</string>
     <string name="settings_grouping">Agrupamiento</string>
+    <string name="settings_substitutions">Sustituciones</string>
     <string name="off_option">Apagado</string>
     <string name="on_option">Encender</string>
 </resources>

@@ -24,8 +24,22 @@ import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 
-fun readPrayerFromAssets(assetsFile: String): BasicPrayer {
-    val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
+val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
+
+suspend fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
+    var yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
+    //println("Yaml content: $assetsFile")
+    val allsubs = pattern.findAll(yamlContent)
+    for (sub in allsubs) {
+        val token = sub.value.substring(1)
+        //println("Found substitution: ${token}")
+        if (!config.substitutions.containsKey(token)) {
+            config.addSubstitution(token, "")
+        }
+        val substitution = config.substitutions[token] ?: ""
+        val newpattern = Regex("\\$${token}\\b")
+        yamlContent = yamlContent.replace(newpattern, substitution)
+    }
     val yaml = Yaml(configuration = Yaml.default.configuration.copy(
         strictMode = false,
         polymorphismStyle = PolymorphismStyle.Property
@@ -41,7 +55,7 @@ fun readConfigFromAssets(assetsFile: String): Config {
     return Yaml.default.decodeFromString<Config>(readFileFromAssets(assetsFile))
 }
 
-fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {
+suspend fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {
     val prayers = emptyMap<String, Prayer>().toMutableMap()
     initialPrayers.forEach { prayer ->
         //println("initial prayer: ${prayer.name}")
@@ -56,7 +70,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
         prs.forEach { pr ->
             //println("Loading prayer $pr for lang: $lang")
             val name = pr.removeSuffix(".yaml")
-            val basicPrayer = readPrayerFromAssets("assets/prayers/$lang/$pr")
+            val basicPrayer = readPrayerFromAssets("assets/prayers/$lang/$pr", config)
             //println("Loaded prayer ${basicPrayer.title}")
             //println("Notes: ${basicPrayer.notes}")
             var prayer = prayers[name]

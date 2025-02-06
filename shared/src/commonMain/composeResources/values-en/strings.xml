@@ -24,6 +24,7 @@
     <string name="settings_second_lang">Second Language</string>
     <string name="settings_prefer_translation">Prefer Translation</string>
     <string name="settings_grouping">Grouping</string>
+    <string name="settings_substitutions">Substitutions</string>
     <string name="off_option">Off</string>
     <string name="on_option">On</string>
 </resources>

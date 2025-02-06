@@ -53,6 +53,7 @@ import org.latinpray.shared.settings_grouping
 import org.latinpray.shared.settings_prayer_lang
 import org.latinpray.shared.settings_prefer_translation
 import org.latinpray.shared.settings_second_lang
+import org.latinpray.shared.settings_substitutions
 import org.latinpray.shared.settings_ui_lang
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -154,7 +155,7 @@ fun SettingsScreen(
                 )
                 LangSelection(
                     title = stringResource(Res.string.settings_prefer_translation),
-                    langs = mapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
+                    langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
                     selectedItem = if (config.preferTranslation) "on" else "off",
                     onItemSelected = { lang ->
                         scope.launch {
@@ -164,13 +165,24 @@ fun SettingsScreen(
                 )
                 LangSelection(
                     title = stringResource(Res.string.settings_grouping),
-                    langs = mapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
+                    langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
                     selectedItem = if (config.grouping) "on" else "off",
                     onItemSelected = { lang ->
                         scope.launch {
                             config.saveGrouping(lang == "on")
                         }
                     }
+                )
+                LangSelection(
+                    title = stringResource(Res.string.settings_substitutions),
+                    langs = config.substitutions,
+                    selectedItem = config.substitutions.keys.firstOrNull() ?: "",
+                    onItemSelected = { lang ->
+                        scope.launch {
+                            config.saveSubstitutions()
+                        }
+                    },
+                    true
                 )
             }
         }

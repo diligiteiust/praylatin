@@ -40,6 +40,9 @@ data class Config (
     @Transient val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
     @Transient val allUIlangs: MutableMap<String, String> =
         mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski", "es" to "Español")
+    @Transient val substitutions = mutableMapOf<String, String>(
+        "zmoimiswietymi" to "święci patroni małżeństwa..."
+    )
 
     @Transient private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
     @Transient private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
@@ -48,6 +51,7 @@ data class Config (
     @Transient private val GROUPING_PROP_KEY = booleanPreferencesKey("grouping")
     @Transient private val FONT_SCALE_PROP_KEY = floatPreferencesKey("fontScale")
     @Transient private val DONATION_PROP_KEY = stringPreferencesKey("donation")
+    @Transient private val SUBS_PROP_KEY = stringPreferencesKey("substitutions")
 
     @Transient
     var dataStore: DataStore<Preferences>? = null
@@ -71,6 +75,20 @@ data class Config (
         fontScale = getFontScale()
         //println("Loaded font scale $fontScale")
         donation = getDonation()
+        loadSubstitutions()
+    }
+
+    private suspend fun loadSubstitutions() {
+        val subs = dataStore!!.data.map {
+            it[SUBS_PROP_KEY] ?: ""
+        }.first()
+        subs.split(',').forEach { k ->
+            if (k.isEmpty()) return@forEach
+            val v = dataStore!!.data.map {
+                it[stringPreferencesKey(k)] ?: ""
+            }.first()
+            substitutions[k] = v
+        }
     }
 
     private suspend fun getDonation(): String? =
@@ -120,6 +138,7 @@ data class Config (
         saveGrouping(grouping)
         saveFontScale(fontScale)
         saveDonation(donation)
+        saveSubstitutions()
     }
 
     suspend fun saveDonation(donation: String?) {
@@ -175,6 +194,25 @@ data class Config (
         dataStore?.edit {
             it[FONT_SCALE_PROP_KEY] = fontScale
         }
+    }
+
+    suspend fun saveSubstitutions() {
+        var subst = ""
+        substitutions.forEach { (k, v) ->
+            subst += "$k,"
+            dataStore?.edit {
+                it[stringPreferencesKey(k)] = v
+            }
+        }
+        dataStore?.edit {
+            it[SUBS_PROP_KEY] = subst
+        }
+
+    }
+
+    suspend fun addSubstitution(token: String, value: String) {
+        substitutions[token] = value
+        saveSubstitutions()
     }
 
 }

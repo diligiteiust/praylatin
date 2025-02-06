@@ -15,9 +15,9 @@
 
 package org.latinpray.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -35,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -42,14 +43,18 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LangSelection(
     title: String,
-    langs: Map<String, String>,
+    langs: MutableMap<String, String>,
     selectedItem: String,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (String) -> Unit,
+    withInput: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedLang by remember { mutableStateOf(selectedItem) }
+    var text by remember { mutableStateOf(langs[selectedLang] ?: "") }
 
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Spacer(
             modifier = Modifier.padding(vertical = 8.dp)
         )
@@ -59,7 +64,7 @@ fun LangSelection(
             color = MaterialTheme.colorScheme.onBackground,
         )
         OutlinedTextField(
-            value = langs[selectedLang] ?: "none",
+            value = (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
             colors = OutlinedTextFieldDefaults.colors(
 //                focusedBorderColor = MaterialTheme.colorScheme.secondary,
 //                unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
@@ -90,13 +95,16 @@ fun LangSelection(
             langs.forEach { item ->
                 DropdownMenuItem(
                     onClick = {
-                        onItemSelected(item.key)
+                        if (!withInput) {
+                            onItemSelected(item.key)
+                        }
                         expanded = false
                         selectedLang = item.key
+                        text = item.value
                     },
                     text = {
                         Text(
-                            text = item.value,
+                            text = (if (withInput) item.key else item.value),
                             color = if (item.key == selectedLang)
                                 MaterialTheme.colorScheme.tertiary else
                                     MaterialTheme.colorScheme.secondary
@@ -104,6 +112,18 @@ fun LangSelection(
                     }
                 )
             }
+        }
+        if (withInput) {
+            OutlinedTextField(
+                value = text,
+                onValueChange = {
+                    text = it
+                    langs[selectedLang] = it
+                    onItemSelected(selectedLang)
+                                },
+                readOnly = false,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            )
         }
     }
 }

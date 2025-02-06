@@ -24,6 +24,7 @@
     <string name="settings_second_lang">Secunda lingua</string>
     <string name="settings_prefer_translation">Praefero translationem</string>
     <string name="settings_grouping">Oratio adjunctio</string>
+    <string name="settings_substitutions">Substitutiones</string>
     <string name="off_option">Abstineo</string>
     <string name="on_option">Accende</string>
 </resources>
