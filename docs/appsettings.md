@@ -48,3 +48,11 @@ This allows you to switch between long list of all prayers and grouped prayers. 
 might be easier to navigate when searching for a specific prayers category.
 
 Long flat list displays prayers in alphabetic order.
+
+## Substitutions
+
+__Substitutions__ functionality allows to personalize prayers with, for example special intentions,
+custom, additional calls or phrases.
+
+For this to work, the prayer has to contain substitution token, which is any 'word' starting with `$`
+sign. For example: `$subst1`, `$patrons`, etc....
