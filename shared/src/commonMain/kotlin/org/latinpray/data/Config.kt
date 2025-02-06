@@ -41,7 +41,7 @@ data class Config (
     @Transient val allUIlangs: MutableMap<String, String> =
         mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski", "es" to "Español")
     @Transient val substitutions = mutableMapOf<String, String>(
-        "zmoimiswietymi" to "święci patroni małżeństwa..."
+        "patrons" to "my saint patrons..."
     )
 
     @Transient private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
