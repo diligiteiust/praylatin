@@ -122,7 +122,9 @@ fun LangSelection(
                     onItemSelected(selectedLang)
                                 },
                 readOnly = false,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                minLines = 3,
+                maxLines = 3,
+                modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp, top = 8.dp, bottom = 64.dp),
             )
         }
     }
