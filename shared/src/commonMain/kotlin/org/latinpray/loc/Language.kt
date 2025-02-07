@@ -15,9 +15,28 @@
 
 package org.latinpray.loc
 
-sealed class Language(val isoFormat : String) {
-    data object English : Language("en")
-    data object Spanish : Language("es")
-    data object Latin : Language("la")
-    data object Polish : Language("pl")
+sealed class Language(val isoFormat : String, val name : String) {
+    data object English : Language("en", "English")
+    data object Spanish : Language("es", "Español")
+    data object Latin : Language("la", "Latina")
+    data object Polish : Language("pl", "Polski")
+    data object Italian : Language("it", "Italiano")
+    data object German : Language("de", "Deutsch")
+    data object French : Language("fr", "Français")
+    data object Portuguese : Language("pt", "Português")
+    data object Russian : Language("ru", "Русский")
+    data object Turkish : Language("tr", "Türkçe")
+    data object Hebrew : Language("he", "עברית")
+    data object Unknown : Language("unknown", "Unknown")
+
+}
+
+fun getLanguage(isoFormat : String) : Language {
+    return when (isoFormat) {
+        Language.English.isoFormat -> Language.English
+        Language.Spanish.isoFormat -> Language.Spanish
+        Language.Latin.isoFormat -> Language.Latin
+        Language.Polish.isoFormat -> Language.Polish
+        else -> Language.Unknown
+    }
 }

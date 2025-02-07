@@ -34,6 +34,7 @@ import com.revenuecat.purchases.kmp.Purchases
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
+import org.latinpray.data.Prayer
 import org.latinpray.data.offers
 import org.latinpray.data.privacy
 import org.latinpray.data.sampleConfig
@@ -68,6 +69,12 @@ fun loadLocalizedContent(file: String, lang: String): String {
     } catch (e: Exception) {
         return readFileFromAssets(file).replace('\n', ' ').replace("<p>", "\n   \n")
     }
+}
+
+suspend fun reloadPrayers(config: Config): MutableList<Prayer> {
+    return prayersList(mutableListOf<Prayer>(), config).sortedBy { prayer ->
+        prayer.langs[config.prayerLang]?.title
+    }.toMutableList()
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -201,8 +208,16 @@ fun Main() {
                                     lang = defConfig.uiLang
                                     getPlatform().changeLang(lang)
                                     println("New lang: $lang")
-                                    helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
-                                    aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
+                                    helpContent =
+                                        loadLocalizedContent("assets/help.md", defConfig.uiLang)
+                                    aboutContent =
+                                        loadLocalizedContent("assets/about.md", defConfig.uiLang)
+                                },
+                                reloadPrayers = { config ->
+                                    scope.launch {
+                                        prayers = reloadPrayers(config)
+                                        currentPrayer = prayers.first()
+                                    }
                                 }
                             )
                         }

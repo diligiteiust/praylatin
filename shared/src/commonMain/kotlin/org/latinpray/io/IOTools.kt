@@ -23,6 +23,7 @@ import okio.buffer
 import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.loc.getLanguage
 
 val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
 
@@ -64,6 +65,11 @@ suspend fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): Mu
 
     val langs = listAssetsInDirectory("assets/prayers/")
     langs.forEach { lang ->
+        if (!lang.endsWith("_tr")) {
+            config.allPrayerLangs[lang] = getLanguage(lang).name
+        }
+        if (lang != config.prayerLang && lang != config.secondLang
+            && lang != config.prayerLang + "_tr" &&  lang != config.secondLang + "_tr") return@forEach
         //println("Loading prayers for $lang")
         val prs = listAssetsInDirectory("assets/prayers/$lang/")
         var i = 1
@@ -81,9 +87,6 @@ suspend fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): Mu
             }
             if (lang == basicPrayer.lang) {
                 prayer.langs[lang] = basicPrayer
-                if (!lang.endsWith("_tr")) {
-                    config.allPrayerLangs[basicPrayer.lang] = basicPrayer.language
-                }
             }
         }
     }
