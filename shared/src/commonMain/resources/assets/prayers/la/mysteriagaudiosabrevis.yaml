@@ -1,4 +1,4 @@
-title: Mystéria Gaudiósa
+title: Mysteria Gaudiosi
 lang: la
 language: Latina
 tags:
@@ -6,8 +6,18 @@ tags:
   - Beata Virgo Maria
   - Hide
 lines:
-  - 1\. Annuntiatiónem Beátæ Maríæ Vírginis
-  - 2\. Visitatiónem Beátæ Maríæ Vírginis
-  - 3\. Nativitátem Dómini nostri Iesu Christi
-  - 4\. Oblatiónem Dómini nostri Iesu Christi
-  - 5\. Inventiónem Dómini nostri Iesu Christi in templo
+  - | 
+    1\. Primum Mysterium Gaudiosum:
+    __Annuntiatiónem Beátæ Maríæ Vírginis__
+  - |
+    2\. Secundum Mysterium Gaudiosum: 
+    __Visitatiónem Beátæ Maríæ Vírginis__
+  - |
+    3\. Tertium Mysterium Gaudiosum: 
+    __Nativitátem Dómini nostri Iesu Christi__
+  - |
+    4\. Quartum Mysterium Gaudiosum: 
+    __Oblatiónem Dómini nostri Iesu Christi__
+  - |
+    5\. Quintum Mysterium Gaudiosum: 
+    __Inventiónem Dómini nostri Iesu Christi in templo__
