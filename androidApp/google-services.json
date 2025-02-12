@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1019800562068",
+    "project_id": "just4dev-6b9e1",
+    "storage_bucket": "just4dev-6b9e1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019800562068:android:95cc07fd55cf5ed7e7c781",
+        "android_client_info": {
+          "package_name": "org.latinpray.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCksZszMGtQMFAHHt85zB0O1BA2Gd-RKVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
