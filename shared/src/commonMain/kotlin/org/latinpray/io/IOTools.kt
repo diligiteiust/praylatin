@@ -28,7 +28,7 @@ import org.latinpray.loc.getLanguage
 val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
 
 suspend fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
-    var yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
+    val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
     //println("Yaml content: $assetsFile")
     val allsubs = pattern.findAll(yamlContent)
     for (sub in allsubs) {
@@ -37,15 +37,21 @@ suspend fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPraye
         if (!config.substitutions.containsKey(token)) {
             config.addSubstitution(token, "")
         }
-        val substitution = config.substitutions[token] ?: ""
-        val newpattern = Regex("\\$${token}\\b")
-        yamlContent = yamlContent.replace(newpattern, substitution)
     }
     val yaml = Yaml(configuration = Yaml.default.configuration.copy(
         strictMode = false,
         polymorphismStyle = PolymorphismStyle.Property
     ))
-    return yaml.decodeFromString<BasicPrayer>(yamlContent)
+    val prayer = yaml.decodeFromString<BasicPrayer>(yamlContent)
+    for (sub in allsubs) {
+        val token = sub.value.substring(1)
+        val substitution = config.substitutions[token] ?: ""
+        val newpattern = Regex("\\$${token}\\b")
+        for ((index, line) in prayer.lines.withIndex()) {
+            prayer.lines[index] = line?.replace(newpattern, substitution)
+        }
+    }
+    return prayer
 }
 
 fun readFileFromAssets(assetsFile: String): String {

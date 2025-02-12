@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.plugin.compose)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -65,6 +66,8 @@ android {
         implementation(libs.androidx.compose.material)
         implementation(libs.androidx.compose.foundation)
         debugImplementation(libs.androidx.compose.ui.tooling)
+        implementation(platform(libs.firebase.bom))
+        implementation(libs.firebase.analytics)
     }
     bundle {}
 }

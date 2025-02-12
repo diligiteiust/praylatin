@@ -30,7 +30,7 @@ data class BasicPrayer(
     val title: String,
     val lang: String,
     val language: String,
-    val lines: List<String?>,
+    val lines: MutableList<String?>,
     val dates: List<String>? = null,
     val tags: Set<String>? = null,
     val links: List<Link>? = null,

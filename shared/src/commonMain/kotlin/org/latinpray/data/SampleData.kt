@@ -19,7 +19,7 @@ val avemaryjaLa = BasicPrayer(
     title = "Ave Maryja",
     lang = "la",
     language = "Latina",
-    lines = listOf(
+    lines = mutableListOf(
         "Ave Maria, gratia plena,",
         "Dominus tecum.",
         "Benedicta tu in mulieribus,",
@@ -33,7 +33,7 @@ val avemaryjaPl = BasicPrayer(
     title = "Zdrowaś Maryjo",
     lang = "pl",
     language = "Polski",
-    lines = listOf(
+    lines = mutableListOf(
         "Zdrowaś Maryjo, łaski pełna",
         "Pan z Tobą",
         "Błogosławionaś Ty między niewiastami",
@@ -48,7 +48,7 @@ val paternosterLa = BasicPrayer(
     title = "Pater Noster",
     lang = "la",
     language = "Latine",
-    lines = listOf(
+    lines = mutableListOf(
         "Pater Noster,",
         "qui es in caelis,",
         "sanctificetur nomen tuum.",
@@ -66,7 +66,7 @@ val paternosterPl = BasicPrayer(
     title = "Ojcze nasz",
     lang = "pl",
     language = "Polski",
-    lines = listOf(
+    lines = mutableListOf(
         "Ojcze nasz,",
         "któryś jest w niebie,",
         "święć się imię Twoje,",
