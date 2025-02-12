@@ -146,7 +146,7 @@ fun SettingsScreen(
                         }
                     }
                 )
-                val secondLang = config.allPrayerLangs
+                val secondLang = config.allPrayerLangs.toMutableMap()
                 secondLang["off"] = stringResource(Res.string.off_option)
                 LangSelection(
                     title = stringResource(Res.string.settings_second_lang),
