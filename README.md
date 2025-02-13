@@ -8,10 +8,8 @@
 
 | --- | --- |
 | <img src="assets/appstore-qr-code.png" alt="AppStore QR Code" width="122"/> | <img src="assets/gplay-qr-code.png" alt="AppStore QR Code" width="122"/> |
-| <a href="https://apple.co/4geZxUH" style="display: inline-block;"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1736812800" alt="Download on the App Store" style="width: 122px; height: 41px; vertical-align: middle; object-fit: contain;" /></a> | <a href="https://play.google.com/apps/testing/org.latinpray.android" style="display: inline-block;"><img src="assets/GetItOnGooglePlay.png" alt="Start testing on the Google Play Store" style="width: 122px; height: 41px; vertical-align: middle; object-fit: contain;" /></a> |
-| [iOS Developer Version](https://testflight.apple.com/join/uHWvtmXe) | [Android Developer Version](https://groups.google.com/g/praylatin)<br/> |
-
-App for Android devices is in testing phase. You can start testing by joining [praylatin@googlegroups.com group](https://groups.google.com/g/praylatin) and visiting link above.
+| <a href="https://apple.co/4geZxUH" style="display: inline-block;"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1736812800" alt="Download on the App Store" style="width: 122px; height: 41px; vertical-align: middle; object-fit: contain;" /></a> | <a href="https://play.google.com/store/apps/details?id=org.latinpray.android" style="display: inline-block;"><img src="assets/GetItOnGooglePlay.png" alt="Start testing on the Google Play Store" style="width: 122px; height: 41px; vertical-align: middle; object-fit: contain;" /></a> |
+| [iOS Developer Version](https://testflight.apple.com/join/uHWvtmXe) | [Android Developer Version](https://play.google.com/store/apps/details?id=org.latinpray.android)<br/> |
 
 </div>
 
