@@ -118,13 +118,15 @@ fun LangSelection(
                 value = text,
                 onValueChange = {
                     text = it
-                    langs[selectedLang] = it
+                    langs[selectedLang] = text
                     onItemSelected(selectedLang)
                                 },
                 readOnly = false,
                 minLines = 3,
                 maxLines = 3,
-                modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 32.dp, top = 8.dp, bottom = 64.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 32.dp, end = 32.dp, top = 8.dp, bottom = 64.dp)
             )
         }
     }

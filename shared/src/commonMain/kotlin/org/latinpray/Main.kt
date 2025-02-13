@@ -72,6 +72,7 @@ fun loadLocalizedContent(file: String, lang: String): String {
 }
 
 suspend fun reloadPrayers(config: Config): MutableList<Prayer> {
+    println("Reloading prayers...")
     return prayersList(mutableListOf<Prayer>(), config).sortedBy { prayer ->
         prayer.langs[config.prayerLang]?.title
     }.toMutableList()
@@ -147,6 +148,7 @@ fun Main() {
     val uiFontFactor = if (getPlatform().isTablet()) TABLET_UI_FONT_FACTOR else 1.0f
     val headlineFontFactor = if (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
     val contentFontFactor = if (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
+    var reloadPrayersFlag = false
 
     AppTheme(
         uiFontFactor = uiFontFactor * fontScale,
@@ -202,7 +204,17 @@ fun Main() {
                                 //animatedContentScope = this,
                                 sharedTransitionScope = sharedTransitionScope,
                                 config = defConfig,
-                                goBack = { navController.popBackStack() },
+                                goBack = {
+                                    if (reloadPrayersFlag) {
+                                        reloadPrayersFlag = false
+                                        scope.launch {
+                                            println("Reloading prayers...")
+                                            prayers = reloadPrayers(defConfig)
+                                            currentPrayer = prayers.first()
+                                        }
+                                    }
+                                    navController.popBackStack()
+                                         },
                                 uiLangChange = { config ->
                                     defConfig = config
                                     lang = defConfig.uiLang
@@ -214,10 +226,9 @@ fun Main() {
                                         loadLocalizedContent("assets/about.md", defConfig.uiLang)
                                 },
                                 reloadPrayers = { config ->
-                                    scope.launch {
-                                        prayers = reloadPrayers(config)
-                                        currentPrayer = prayers.first()
-                                    }
+                                    defConfig = config
+                                    reloadPrayersFlag = true
+                                    println("Reload prayers flag set to true...")
                                 }
                             )
                         }
