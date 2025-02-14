@@ -90,17 +90,13 @@ fun PrayersListScreen(
             if (config.dailyPrayers.isNotEmpty()) {
                 gp.add(dailyPrayersStr)
                 config.dailyPrayers.forEach { prayer ->
-                    gp.add(
-                        prayers.first { it.name == prayer }
-                    )
+                    prayers.firstOrNull { it.name == prayer }?.let { gp.add(it) }
                 }
             }
             if (config.favorites.isNotEmpty()) {
                 gp.add(favoritePrayersStr)
                 config.favorites.forEach { prayer ->
-                    gp.add(
-                        prayers.first { it.name == prayer }
-                    )
+                    prayers.firstOrNull { it.name == prayer }?.let { gp.add(it) }
                 }
             }
             tags.sorted().forEach { tag ->
