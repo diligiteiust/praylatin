@@ -194,7 +194,7 @@ fun Main() {
                                 config = defConfig,
                                 prayers = prayers,
                                 //animatedContentScope = this,
-                                sharedTransitionScope = sharedTransitionScope,
+                                //sharedTransitionScope = sharedTransitionScope,
                                 goBack = { navController.popBackStack() }
                             )
                         }
@@ -202,7 +202,7 @@ fun Main() {
                             SettingsScreen(
                                 title = stringResource(Res.string.settings_screen_title),
                                 //animatedContentScope = this,
-                                sharedTransitionScope = sharedTransitionScope,
+                                //sharedTransitionScope = sharedTransitionScope,
                                 config = defConfig,
                                 goBack = {
                                     if (reloadPrayersFlag) {

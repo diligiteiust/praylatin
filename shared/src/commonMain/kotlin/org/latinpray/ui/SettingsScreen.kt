@@ -16,7 +16,6 @@
 package org.latinpray.ui
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -66,132 +65,125 @@ fun SettingsScreen(
     uiLangChange: (config: Config) -> Unit,
     reloadPrayers: (config: Config) -> Unit,
     config: Config,
-//    animatedContentScope: AnimatedContentScope,
-    sharedTransitionScope: SharedTransitionScope
 ) {
-    val (fraction, setFraction) = remember { mutableStateOf(0.25f) }
+    val (fraction) = remember { mutableStateOf(0.25f) }
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
-    with(sharedTransitionScope) {
-        if (sharedTransitionScope.isTransitionActive.not()) {
-            setFraction(0f)
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.systemBars),
+            //verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .windowInsetsPadding(WindowInsets.systemBars),
-                //verticalAlignment = Alignment.CenterVertically
+            Box(modifier = Modifier.size(50.dp)
+                .align(Alignment.CenterStart)
+                .padding(10.dp)
+                .alpha(fraction)
+                //.alpha(alpha = if (fraction <= 0) 1f else 0f)
+                .background(
+                    color = MaterialTheme.colorScheme.onBackground,
+                    shape = RoundedCornerShape(50)
+                ).shadow(elevation = 16.dp).padding(5.dp).clickable {
+                    goBack()
+                }
             ) {
-                Box(modifier = Modifier.size(50.dp)
-                    .align(Alignment.CenterStart)
-                    .padding(10.dp)
-                    .alpha(fraction)
-                    //.alpha(alpha = if (fraction <= 0) 1f else 0f)
-                    .background(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        shape = RoundedCornerShape(50)
-                    ).shadow(elevation = 16.dp).padding(5.dp).clickable {
-                        goBack()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = "Go back",
-                        tint = MaterialTheme.colorScheme.background,
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
-            }
-
-            Column (
-                modifier = Modifier.fillMaxSize().weight(1f).verticalScroll(scrollState),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                LangSelection(
-                    title = stringResource(Res.string.settings_ui_lang),
-                    langs = config.allUIlangs,
-                    selectedItem = config.uiLang,
-                    onItemSelected = { lang ->
-                        if (lang != config.uiLang) {
-                            scope.launch {
-                                config.saveUILang(lang)
-                                uiLangChange(config)
-                            }
-                        }
-                    }
-                )
-                LangSelection(
-                    title = stringResource(Res.string.settings_prayer_lang),
-                    langs = config.allPrayerLangs,
-                    selectedItem = config.prayerLang,
-                    onItemSelected = { lang ->
-                        scope.launch {
-                            config.savePrayerLang(lang)
-                            reloadPrayers(config)
-                        }
-                    }
-                )
-                val secondLang = config.allPrayerLangs.toMutableMap()
-                secondLang["off"] = stringResource(Res.string.off_option)
-                LangSelection(
-                    title = stringResource(Res.string.settings_second_lang),
-                    langs = secondLang,
-                    selectedItem = config.secondLang,
-                    onItemSelected = { lang ->
-                        scope.launch {
-                            config.saveSecondLang(lang)
-                            reloadPrayers(config)
-                        }
-                    }
-                )
-                LangSelection(
-                    title = stringResource(Res.string.settings_prefer_translation),
-                    langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
-                    selectedItem = if (config.preferTranslation) "on" else "off",
-                    onItemSelected = { lang ->
-                        scope.launch {
-                            config.savePreferTranslation(lang == "on")
-                        }
-                    }
-                )
-                LangSelection(
-                    title = stringResource(Res.string.settings_grouping),
-                    langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
-                    selectedItem = if (config.grouping) "on" else "off",
-                    onItemSelected = { lang ->
-                        scope.launch {
-                            config.saveGrouping(lang == "on")
-                        }
-                    }
-                )
-                LangSelection(
-                    title = stringResource(Res.string.settings_substitutions),
-                    langs = config.substitutions,
-                    selectedItem = config.substitutions.keys.firstOrNull() ?: "",
-                    onItemSelected = { lang ->
-                        scope.launch {
-                            config.saveSubstitutions()
-                            reloadPrayers(config)
-                        }
-                    },
-                    true
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = "Go back",
+                    tint = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.size(30.dp)
                 )
             }
+
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            }
+        }
+
+        Column (
+            modifier = Modifier.fillMaxSize().weight(1f).verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            LangSelection(
+                title = stringResource(Res.string.settings_ui_lang),
+                langs = config.allUIlangs,
+                selectedItem = config.uiLang,
+                onItemSelected = { lang ->
+                    if (lang != config.uiLang) {
+                        scope.launch {
+                            config.saveUILang(lang)
+                            uiLangChange(config)
+                        }
+                    }
+                }
+            )
+            LangSelection(
+                title = stringResource(Res.string.settings_prayer_lang),
+                langs = config.allPrayerLangs,
+                selectedItem = config.prayerLang,
+                onItemSelected = { lang ->
+                    scope.launch {
+                        config.savePrayerLang(lang)
+                        reloadPrayers(config)
+                    }
+                }
+            )
+            val secondLang = config.allPrayerLangs.toMutableMap()
+            secondLang["off"] = stringResource(Res.string.off_option)
+            LangSelection(
+                title = stringResource(Res.string.settings_second_lang),
+                langs = secondLang,
+                selectedItem = config.secondLang,
+                onItemSelected = { lang ->
+                    scope.launch {
+                        config.saveSecondLang(lang)
+                        reloadPrayers(config)
+                    }
+                }
+            )
+            LangSelection(
+                title = stringResource(Res.string.settings_prefer_translation),
+                langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
+                selectedItem = if (config.preferTranslation) "on" else "off",
+                onItemSelected = { lang ->
+                    scope.launch {
+                        config.savePreferTranslation(lang == "on")
+                    }
+                }
+            )
+            LangSelection(
+                title = stringResource(Res.string.settings_grouping),
+                langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
+                selectedItem = if (config.grouping) "on" else "off",
+                onItemSelected = { lang ->
+                    scope.launch {
+                        config.saveGrouping(lang == "on")
+                    }
+                }
+            )
+            LangSelection(
+                title = stringResource(Res.string.settings_substitutions),
+                langs = config.substitutions,
+                selectedItem = config.substitutions.keys.firstOrNull() ?: "",
+                onItemSelected = { lang ->
+                    scope.launch {
+                        config.saveSubstitutions()
+                        reloadPrayers(config)
+                    }
+                },
+                true
+            )
         }
     }
 }

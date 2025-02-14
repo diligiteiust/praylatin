@@ -40,7 +40,7 @@ data class Config (
     @Transient val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
     @Transient val allUIlangs: MutableMap<String, String> =
         mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski", "es" to "Español")
-    @Transient val substitutions = mutableMapOf<String, String>(
+    @Transient val substitutions = mutableMapOf(
         "patrons" to "my saint patrons..."
     )
 

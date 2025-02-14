@@ -54,6 +54,7 @@ const val QUOTE = ">"
 val MULTI_REGEX = Regex("[0-9]+x")
 
 fun preparePrayer(
+    firstLang: Boolean,
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
@@ -67,14 +68,14 @@ fun preparePrayer(
     var lang1 = prayer.langs[config.prayerLang]
     // If content for the primary language is not found,
     // we use content for secondary language as primary
-    if (lang1 == null) {
+    if (lang1 == null || !firstLang) {
         lang1 = prayer.langs[config.secondLang]
     } else {
         lang2 = prayer.langs[config.secondLang]
     }
     // If prefered translation is enabled, we try to find content with translation
     // instead of the standard content
-    if (config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
+    if (!firstLang && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
         lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
     }
 
@@ -113,7 +114,7 @@ fun preparePrayer(
             }
             val subprayer = prayers.find { p -> p.name == file }
             result += if (subprayer != null) {
-                preparePrayer(subprayer, config, prayers,
+                preparePrayer(firstLang, subprayer, config, prayers,
                     indent + (if (list)  "" else INDENT), false, list, t)
             } else {
                 "$indent *$it* not found\n\n"
@@ -217,12 +218,14 @@ val customParagraphComponent: MarkdownComponent = {
 
 @Composable
 fun PrayerDetails(
+    firstLang: Boolean,
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
 ) {
     val scrollState = rememberScrollState()
-    val content: String = remember(prayer, config) { preparePrayer(prayer, config, prayers) }
+    val content: String = remember(firstLang, prayer, config) { preparePrayer(firstLang, prayer, config, prayers) }
+
     Markdown(
         content = content,
         padding = markdownPadding(
