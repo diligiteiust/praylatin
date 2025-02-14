@@ -12,5 +12,5 @@ xcuserdata
 /.run/
 /iosApp/Configuration/Versions.xcconfig
 /gradle.properties-e
-/androidApp/release/androidApp-release.aab
 /androidApp/debug/
+/androidApp/release/
