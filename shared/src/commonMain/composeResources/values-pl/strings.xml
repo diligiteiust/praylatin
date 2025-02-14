@@ -27,4 +27,6 @@
     <string name="settings_substitutions">Zamienniki</string>
     <string name="off_option">Wył</string>
     <string name="on_option">Wł</string>
+    <string name="daily_prayers">Codzienne</string>
+    <string name="favorite_prayers">Ulubione</string>
 </resources>

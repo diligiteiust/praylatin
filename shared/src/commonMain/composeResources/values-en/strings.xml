@@ -27,4 +27,6 @@
     <string name="settings_substitutions">Substitutions</string>
     <string name="off_option">Off</string>
     <string name="on_option">On</string>
+    <string name="daily_prayers">Daily</string>
+    <string name="favorite_prayers">Favorite</string>
 </resources>

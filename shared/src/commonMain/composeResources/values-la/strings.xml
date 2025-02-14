@@ -27,4 +27,6 @@
     <string name="settings_substitutions">Substitutiones</string>
     <string name="off_option">Abstineo</string>
     <string name="on_option">Accende</string>
+    <string name="daily_prayers">Cotidie</string>
+    <string name="favorite_prayers">Favorite</string>
 </resources>

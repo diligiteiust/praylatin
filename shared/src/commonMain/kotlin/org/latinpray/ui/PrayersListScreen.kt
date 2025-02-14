@@ -45,9 +45,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.HIDE_TAG
 import org.latinpray.data.Prayer
+import org.latinpray.shared.Res
+import org.latinpray.shared.daily_prayers
+import org.latinpray.shared.favorite_prayers
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -63,6 +67,8 @@ fun PrayersListScreen(
 ) {
     val (fraction) = remember { mutableStateOf(0.50f) }
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val dailyPrayersStr = stringResource(Res.string.daily_prayers)
+    val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
     val groupedPrayers: MutableList<Any> = remember(prayers, config) {
         val gp = mutableListOf<Any>()
         if (config.grouping) {
@@ -81,6 +87,22 @@ fun PrayersListScreen(
                 }
             }
             tags.remove(HIDE_TAG)
+            if (config.dailyPrayers.isNotEmpty()) {
+                gp.add(dailyPrayersStr)
+                config.dailyPrayers.forEach { prayer ->
+                    gp.add(
+                        prayers.first { it.name == prayer }
+                    )
+                }
+            }
+            if (config.favorites.isNotEmpty()) {
+                gp.add(favoritePrayersStr)
+                config.favorites.forEach { prayer ->
+                    gp.add(
+                        prayers.first { it.name == prayer }
+                    )
+                }
+            }
             tags.sorted().forEach { tag ->
                 gp.add(tag)
                 prayers.forEach { prayer ->

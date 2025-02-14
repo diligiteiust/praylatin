@@ -43,6 +43,8 @@ data class Config (
     @Transient val substitutions = mutableMapOf(
         "patrons" to "my saint patrons..."
     )
+    @Transient val dailyPrayers: MutableList<String> = mutableListOf()
+    @Transient val favorites: MutableList<String> = mutableListOf()
 
     @Transient private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
     @Transient private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
@@ -52,6 +54,8 @@ data class Config (
     @Transient private val FONT_SCALE_PROP_KEY = floatPreferencesKey("fontScale")
     @Transient private val DONATION_PROP_KEY = stringPreferencesKey("donation")
     @Transient private val SUBS_PROP_KEY = stringPreferencesKey("substitutions")
+    @Transient private val DAILY_PROP_KEY = stringPreferencesKey("dailyPrayers")
+    @Transient private val FAVORITES_PROP_KEY = stringPreferencesKey("favorites")
 
     @Transient
     var dataStore: DataStore<Preferences>? = null
@@ -76,6 +80,8 @@ data class Config (
         //println("Loaded font scale $fontScale")
         donation = getDonation()
         loadSubstitutions()
+        loadDailyPrayers()
+        loadFavorites()
     }
 
     private suspend fun loadSubstitutions() {
@@ -88,6 +94,26 @@ data class Config (
                 it[stringPreferencesKey(k)] ?: ""
             }.first()
             substitutions[k] = v
+        }
+    }
+
+    private suspend fun loadDailyPrayers() {
+        val daily = dataStore!!.data.map {
+            it[DAILY_PROP_KEY] ?: ""
+        }.first()
+        daily.split(',').forEach {
+            if (it.isEmpty() || dailyPrayers.contains(it)) return@forEach
+            dailyPrayers.add(it)
+        }
+    }
+
+    private suspend fun loadFavorites() {
+        val favs = dataStore!!.data.map {
+            it[FAVORITES_PROP_KEY] ?: ""
+        }.first()
+        favs.split(',').forEach {
+            if (it.isEmpty() || favorites.contains(it)) return@forEach
+            favorites.add(it)
         }
     }
 
@@ -139,6 +165,8 @@ data class Config (
         saveFontScale(fontScale)
         saveDonation(donation)
         saveSubstitutions()
+        saveDailyPrayers()
+        saveFavorites()
     }
 
     suspend fun saveDonation(donation: String?) {
@@ -207,7 +235,52 @@ data class Config (
         dataStore?.edit {
             it[SUBS_PROP_KEY] = subst
         }
+    }
 
+    suspend fun saveDailyPrayers() {
+        var daily = ""
+        dailyPrayers.forEach {
+            daily += "$it,"
+        }
+        dataStore?.edit {
+            it[DAILY_PROP_KEY] = daily
+        }
+    }
+
+    suspend fun addDailyPrayer(prayer: String) {
+        if (dailyPrayers.contains(prayer)) return
+        dailyPrayers.add(prayer)
+        println("Saving daily prayer $prayer")
+        println("Daily prayers: $dailyPrayers")
+        saveDailyPrayers()
+    }
+
+    suspend fun removeDailyPrayer(prayer: String) {
+        dailyPrayers.remove(prayer)
+        println("Removing daily prayer $prayer")
+        println("Daily prayers: $dailyPrayers")
+        saveDailyPrayers()
+    }
+
+    suspend fun saveFavorites() {
+        var favs = ""
+        favorites.forEach {
+            favs += "$it,"
+        }
+        dataStore?.edit {
+            it[FAVORITES_PROP_KEY] = favs
+        }
+    }
+
+    suspend fun addFavorite(prayer: String) {
+        if (favorites.contains(prayer)) return
+        favorites.add(prayer)
+        saveFavorites()
+    }
+
+    suspend fun removeFavorite(prayer: String) {
+        favorites.remove(prayer)
+        saveFavorites()
     }
 
     suspend fun addSubstitution(token: String, value: String) {

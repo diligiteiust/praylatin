@@ -27,4 +27,6 @@
     <string name="settings_substitutions">Sustituciones</string>
     <string name="off_option">Apagado</string>
     <string name="on_option">Encender</string>
+    <string name="daily_prayers">Diaria</string>
+    <string name="favorite_prayers">Favorito</string>
 </resources>

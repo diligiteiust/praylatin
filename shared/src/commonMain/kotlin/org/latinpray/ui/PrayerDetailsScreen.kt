@@ -42,11 +42,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
@@ -66,8 +68,9 @@ fun PrayerDetailsScreen(
 ) {
     val (fraction) = remember { mutableStateOf(0.25f) }
     var firstLang by remember { mutableStateOf(true) }
-    var daily by remember { mutableStateOf(false) }
-    var favorite by remember { mutableStateOf(false) }
+    var daily by remember { mutableStateOf(config.dailyPrayers.contains(prayer.name)) }
+    var favorite by remember { mutableStateOf(config.favorites.contains(prayer.name)) }
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -129,6 +132,9 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
+                        scope.launch {
+                            config.addDailyPrayer(prayer.name)
+                        }
                     } else {
                         Icon(
                             painter = painterResource(Res.drawable.calendar_add_on),
@@ -136,6 +142,9 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
+                        scope.launch {
+                            config.removeDailyPrayer(prayer.name)
+                        }
                     }
                 }
                 IconToggleButton(
@@ -151,6 +160,9 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
+                        scope.launch {
+                            config.addFavorite(prayer.name)
+                        }
                     } else {
                         Icon(
                             painter = painterResource(Res.drawable.bookmark_add),
@@ -158,6 +170,9 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
+                        scope.launch {
+                            config.removeFavorite(prayer.name)
+                        }
                     }
                 }
             }
