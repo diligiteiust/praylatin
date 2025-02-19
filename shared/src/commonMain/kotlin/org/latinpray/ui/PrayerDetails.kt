@@ -226,6 +226,8 @@ fun PrayerDetails(
     val scrollState = rememberScrollState()
     val content: String = remember(firstLang, prayer, config) { preparePrayer(firstLang, prayer, config, prayers) }
 
+    val margins = (if (getPlatform().isTablet())   32.dp  else  8.dp)
+
     Markdown(
         content = content,
         padding = markdownPadding(
@@ -244,7 +246,7 @@ fun PrayerDetails(
             h3 = MaterialTheme.typography.titleSmall,
             link = MaterialTheme.typography.labelMedium
         ),
-        modifier = Modifier.fillMaxSize().padding(4.dp)
+        modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
             .background(color = MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState),
         components = markdownComponents(
