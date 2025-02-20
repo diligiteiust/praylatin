@@ -178,6 +178,7 @@ fun PrayersListScreen(
                 when (item) {
                     is String -> {
                         Text(
+                            modifier = Modifier.padding(start = 8.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
                             text = item,
                             style = MaterialTheme.typography.headlineLarge,
                             color = MaterialTheme.colorScheme.onBackground,

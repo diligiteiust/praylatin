@@ -184,7 +184,7 @@ fun PrayerDetailsScreen(
             //verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Text(

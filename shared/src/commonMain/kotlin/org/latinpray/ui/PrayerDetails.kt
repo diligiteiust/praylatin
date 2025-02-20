@@ -16,6 +16,7 @@
 package org.latinpray.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -226,33 +227,35 @@ fun PrayerDetails(
     val scrollState = rememberScrollState()
     val content: String = remember(firstLang, prayer, config) { preparePrayer(firstLang, prayer, config, prayers) }
 
-    val margins = (if (getPlatform().isTablet())   32.dp  else  8.dp)
+    BoxWithConstraints (modifier = Modifier.fillMaxSize()){
+        val margins = maxWidth * 0.04f
 
-    Markdown(
-        content = content,
-        padding = markdownPadding(
-            block = 1.dp,
-            //list = 0.dp,
-        ),
-        colors = markdownColor(
-            text = MaterialTheme.colorScheme.onBackground,
-            linkText = MaterialTheme.colorScheme.onTertiary,
-        ),
-        typography = markdownTypography(
-            text = MaterialTheme.typography.bodySmall,
-            paragraph = MaterialTheme.typography.bodyMedium,
-            quote = MaterialTheme.typography.bodySmall,
-            h2 = MaterialTheme.typography.titleMedium,
-            h3 = MaterialTheme.typography.titleSmall,
-            link = MaterialTheme.typography.labelMedium
-        ),
-        modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
-            .background(color = MaterialTheme.colorScheme.background)
-            .verticalScroll(scrollState),
-        components = markdownComponents(
-            paragraph = customParagraphComponent,
-        ),
-    )
+        Markdown(
+            content = content,
+            padding = markdownPadding(
+                block = 1.dp,
+                //list = 0.dp,
+            ),
+            colors = markdownColor(
+                text = MaterialTheme.colorScheme.onBackground,
+                linkText = MaterialTheme.colorScheme.onTertiary,
+            ),
+            typography = markdownTypography(
+                text = MaterialTheme.typography.bodySmall,
+                paragraph = MaterialTheme.typography.bodyMedium,
+                quote = MaterialTheme.typography.bodySmall,
+                h2 = MaterialTheme.typography.titleMedium,
+                h3 = MaterialTheme.typography.titleSmall,
+                link = MaterialTheme.typography.labelMedium
+            ),
+            modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
+                .background(color = MaterialTheme.colorScheme.background)
+                .verticalScroll(scrollState),
+            components = markdownComponents(
+                paragraph = customParagraphComponent,
+            ),
+        )
+    }
 
 //    if (prayer.langs[config.secondLang]?.notes != null) {
 //        Markdown(
