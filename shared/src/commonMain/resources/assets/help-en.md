@@ -1,5 +1,5 @@
 __If you have any suggestions__ for improvements, new features or to correct mistakes, 
-please open a ticket on the [project development site](https://just-4.dev/LatinPray/~issues) 
+please open a ticket on the [project development site](https://diligiteiustitiam.world/LatinPray/~issues) 
 or send an email to address: [devel@praylatin.app](mailto:devel@praylatin.app).
 <p>
 __To submit a new prayer or translation__ please check the 

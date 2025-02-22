@@ -1,5 +1,5 @@
 __Jeśli masz jakieś sugestie__ jak ulepszyć aplikację, pomysły na nowe funkcje, lub
-poprawki błędów, otwórz nowe zadanie na [stronie projektu](https://just-4.dev/LatinPray/~issues)
+poprawki błędów, otwórz nowe zadanie na [stronie projektu](https://diligiteiustitiam.world/LatinPray/~issues)
 lub wyślij email na adres: [devel@praylatin.app](mailto:devel@praylatin.app).
 <p>
 __Aby dodać nową modlitwę lub tłumaczenie__ proszę przeczytać informacje na
