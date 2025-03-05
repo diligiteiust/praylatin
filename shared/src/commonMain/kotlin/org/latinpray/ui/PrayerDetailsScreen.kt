@@ -37,7 +37,6 @@ import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
 import androidx.compose.material.icons.automirrored.outlined.Notes
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -178,23 +177,6 @@ fun PrayerDetailsScreen(
             }
         }
 
-        Box(
-            modifier = Modifier.fillMaxWidth()
-                //.windowInsetsPadding(WindowInsets.systemBars),
-            //verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                Text(
-                    text = prayer.langs[config.prayerLang]?.title ?:
-                    (prayer.langs[config.secondLang]?.title ?: "No title"),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
         PrayerDetails(
             firstLang = firstLang,
             prayer = prayer,

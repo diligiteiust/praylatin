@@ -40,7 +40,9 @@ data class BasicPrayer(
 data class Prayer(
     val id: Int,
     val name: String,
-    val langs: MutableMap<String, BasicPrayer>
+    val langs: MutableMap<String, BasicPrayer>,
+    var prevPrayer: Prayer? = null,
+    var nextPrayer: Prayer? = null
 )
 
 val HIDE_TAG = "Hide"

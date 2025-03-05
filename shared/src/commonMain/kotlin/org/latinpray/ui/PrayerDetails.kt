@@ -16,14 +16,31 @@
 package org.latinpray.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -53,6 +70,14 @@ const val EMBEDDED_INDENT = "\t\t\t\t\t\t"
 const val EMPTY_LINE = "^^^"
 const val QUOTE = ">"
 val MULTI_REGEX = Regex("[0-9]+x")
+
+fun getPrayerTitle(firstLang: Boolean, prayer: Prayer, config: Config): String? {
+    var pr = prayer.langs[config.prayerLang]
+    if (pr == null || !firstLang) {
+        pr = prayer.langs[config.secondLang]
+    }
+    return pr?.title
+}
 
 fun preparePrayer(
     firstLang: Boolean,
@@ -225,36 +250,113 @@ fun PrayerDetails(
     prayers: MutableList<Prayer>,
 ) {
     val scrollState = rememberScrollState()
-    val content: String = remember(firstLang, prayer, config) { preparePrayer(firstLang, prayer, config, prayers) }
+    var changed by remember { mutableStateOf(false) }
+    var currentPrayer by remember { mutableStateOf( prayer) }
+    key(changed) {
+        val content = preparePrayer(firstLang, currentPrayer, config, prayers)
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                //.windowInsetsPadding(WindowInsets.systemBars),
+                //verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    Text(
+                        text = getPrayerTitle(firstLang, currentPrayer, config) ?: "No title",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            }
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                val margins = maxWidth * 0.04f
 
-    BoxWithConstraints (modifier = Modifier.fillMaxSize()){
-        val margins = maxWidth * 0.04f
+                Markdown(
+                    content = content,
+                    padding = markdownPadding(
+                        block = 1.dp,
+                        //list = 0.dp,
+                    ),
+                    colors = markdownColor(
+                        text = MaterialTheme.colorScheme.onBackground,
+                        linkText = MaterialTheme.colorScheme.onTertiary,
+                    ),
+                    typography = markdownTypography(
+                        text = MaterialTheme.typography.bodySmall,
+                        paragraph = MaterialTheme.typography.bodyMedium,
+                        quote = MaterialTheme.typography.bodySmall,
+                        h2 = MaterialTheme.typography.titleMedium,
+                        h3 = MaterialTheme.typography.titleSmall,
+                        link = MaterialTheme.typography.labelMedium
+                    ),
+                    modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
+                        .background(color = MaterialTheme.colorScheme.background)
+                        .verticalScroll(scrollState),
+                    components = markdownComponents(
+                        paragraph = customParagraphComponent,
+                    ),
+                )
 
-        Markdown(
-            content = content,
-            padding = markdownPadding(
-                block = 1.dp,
-                //list = 0.dp,
-            ),
-            colors = markdownColor(
-                text = MaterialTheme.colorScheme.onBackground,
-                linkText = MaterialTheme.colorScheme.onTertiary,
-            ),
-            typography = markdownTypography(
-                text = MaterialTheme.typography.bodySmall,
-                paragraph = MaterialTheme.typography.bodyMedium,
-                quote = MaterialTheme.typography.bodySmall,
-                h2 = MaterialTheme.typography.titleMedium,
-                h3 = MaterialTheme.typography.titleSmall,
-                link = MaterialTheme.typography.labelMedium
-            ),
-            modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
-                .background(color = MaterialTheme.colorScheme.background)
-                .verticalScroll(scrollState),
-            components = markdownComponents(
-                paragraph = customParagraphComponent,
-            ),
-        )
+            }
+            if (currentPrayer.prevPrayer != null || currentPrayer.nextPrayer != null) {
+                Row() {
+                    if (currentPrayer.prevPrayer != null) {
+                        TextButton(
+                            onClick = {
+                                currentPrayer = currentPrayer.prevPrayer!!
+                                changed = !changed
+                                //content = preparePrayer(firstLang, currentPrayer, config, prayers)
+                                println("Previous prayer: ${currentPrayer.name}")
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
+                                contentDescription = "Previous prayer",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                            Text(
+                                text = getPrayerTitle(
+                                    firstLang,
+                                    currentPrayer.prevPrayer!!,
+                                    config
+                                ) ?: "Previous prayer"
+                            )
+                        }
+                    }
+                    if (currentPrayer.nextPrayer != null) {
+                        Spacer(Modifier.weight(1f))
+                        TextButton(
+                            onClick = {
+                                currentPrayer = currentPrayer.nextPrayer!!
+                                changed = !changed
+                                //content = preparePrayer(firstLang, currentPrayer, config, prayers)
+                                println("Next prayer: ${currentPrayer.name}")
+                            }
+                        ) {
+                            Text(
+                                text = getPrayerTitle(
+                                    firstLang,
+                                    currentPrayer.nextPrayer!!,
+                                    config
+                                ) ?: "Next prayer"
+                            )
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = "Next prayer",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
 //    if (prayer.langs[config.secondLang]?.notes != null) {

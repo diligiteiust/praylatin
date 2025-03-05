@@ -89,8 +89,16 @@ fun PrayersListScreen(
             tags.remove(HIDE_TAG)
             if (config.dailyPrayers.isNotEmpty()) {
                 gp.add(dailyPrayersStr)
+                var lastPr: Prayer? = null
                 config.dailyPrayers.forEach { prayer ->
-                    prayers.firstOrNull { it.name == prayer }?.let { gp.add(it) }
+                    prayers.firstOrNull { it.name == prayer }?.let {
+                        gp.add(it)
+                        if (lastPr != null) {
+                            lastPr!!.nextPrayer = it
+                            it.prevPrayer = lastPr
+                        }
+                        lastPr = it
+                    }
                 }
             }
             if (config.favorites.isNotEmpty()) {
