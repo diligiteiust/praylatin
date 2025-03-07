@@ -19,16 +19,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,29 +64,46 @@ fun LangSelection(
             text = title,
             color = MaterialTheme.colorScheme.onBackground,
         )
-        OutlinedTextField(
-            value = (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
-            colors = OutlinedTextFieldDefaults.colors(
-//                focusedBorderColor = MaterialTheme.colorScheme.secondary,
-//                unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
-//                disabledBorderColor = MaterialTheme.colorScheme.secondary,
-//                focusedTextColor = MaterialTheme.colorScheme.secondary,
-//                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-//                disabledTextColor = MaterialTheme.colorScheme.secondary,
-//                cursorColor = MaterialTheme.colorScheme.secondary,
-            ),
-            onValueChange = { },
-            readOnly = true,
-            trailingIcon = {
-                IconButton(onClick = { expanded = true }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = "Dropdown",
-                        tint = MaterialTheme.colorScheme.secondary
-                        )
-                }
-            }
-        )
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.width(200.dp),
+            shape = RectangleShape
+        ) {
+            Text(
+                text =  (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
+            )
+            Spacer(Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "Dropdown",
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
+//        Box (modifier = Modifier.clickable { expanded = true }) {
+//            OutlinedTextField(
+//                value = (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
+//                colors = OutlinedTextFieldDefaults.colors(
+////                focusedBorderColor = MaterialTheme.colorScheme.secondary,
+////                unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
+////                disabledBorderColor = MaterialTheme.colorScheme.secondary,
+////                focusedTextColor = MaterialTheme.colorScheme.secondary,
+////                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+////                disabledTextColor = MaterialTheme.colorScheme.secondary,
+////                cursorColor = MaterialTheme.colorScheme.secondary,
+//                ),
+//                onValueChange = { },
+//                readOnly = true,
+//                trailingIcon = {
+//                    //IconButton(onClick = { expanded = true }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.ArrowDropDown,
+//                            contentDescription = "Dropdown",
+//                            tint = MaterialTheme.colorScheme.secondary
+//                        )
+//                    //}
+//                }
+//            )
+//        }
 
         DropdownMenu(
             expanded = expanded,
