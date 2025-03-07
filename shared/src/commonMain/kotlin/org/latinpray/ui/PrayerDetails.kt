@@ -39,12 +39,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
@@ -55,6 +59,7 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownPadding
 import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
+import kotlinx.coroutines.launch
 import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
@@ -70,13 +75,24 @@ const val EMBEDDED_INDENT = "\t\t\t\t\t\t"
 const val EMPTY_LINE = "^^^"
 const val QUOTE = ">"
 val MULTI_REGEX = Regex("[0-9]+x")
+var MAX_LEN = 15
 
-fun getPrayerTitle(firstLang: Boolean, prayer: Prayer, config: Config): String? {
+@Composable
+fun DpToPx(dp: Dp): Float {
+    val density = LocalDensity.current.density
+    return dp.value * density
+}
+
+fun getPrayerTitle(firstLang: Boolean, prayer: Prayer, config: Config, maxLen: Int = 100): String {
     var pr = prayer.langs[config.prayerLang]
     if (pr == null || !firstLang) {
         pr = prayer.langs[config.secondLang]
     }
-    return pr?.title
+    var result = pr?.title ?: ""
+    if (result.length > maxLen) {
+        result = result.substring(0, maxLen) + "..."
+    }
+    return result
 }
 
 fun preparePrayer(
@@ -249,7 +265,13 @@ fun PrayerDetails(
     config: Config,
     prayers: MutableList<Prayer>,
 ) {
+    val textMeasurer = rememberTextMeasurer()
+    val textStyle = MaterialTheme.typography.labelLarge
+    val text = "A"
+    val textLayoutResult = textMeasurer.measure(text, textStyle)
+    val textWidth = textLayoutResult.size.width
     val scrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope()
     var changed by remember { mutableStateOf(false) }
     var currentPrayer by remember { mutableStateOf( prayer) }
     key(changed) {
@@ -267,7 +289,7 @@ fun PrayerDetails(
                     contentAlignment = Alignment.TopCenter
                 ) {
                     Text(
-                        text = getPrayerTitle(firstLang, currentPrayer, config) ?: "No title",
+                        text = getPrayerTitle(firstLang, currentPrayer, config),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -275,6 +297,7 @@ fun PrayerDetails(
             }
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 val margins = maxWidth * 0.04f
+                MAX_LEN = ((DpToPx(maxWidth) / textWidth) / 2.3).toInt()
 
                 Markdown(
                     content = content,
@@ -310,8 +333,11 @@ fun PrayerDetails(
                             onClick = {
                                 currentPrayer = currentPrayer.prevPrayer!!
                                 changed = !changed
+                                coroutineScope.launch {
+                                    scrollState.scrollTo(0)
+                                }
                                 //content = preparePrayer(firstLang, currentPrayer, config, prayers)
-                                println("Previous prayer: ${currentPrayer.name}")
+                                //println("Previous prayer: ${currentPrayer.name}")
                             }
                         ) {
                             Icon(
@@ -324,8 +350,9 @@ fun PrayerDetails(
                                 text = getPrayerTitle(
                                     firstLang,
                                     currentPrayer.prevPrayer!!,
-                                    config
-                                ) ?: "Previous prayer"
+                                    config,
+                                    MAX_LEN
+                                )
                             )
                         }
                     }
@@ -335,16 +362,20 @@ fun PrayerDetails(
                             onClick = {
                                 currentPrayer = currentPrayer.nextPrayer!!
                                 changed = !changed
+                                coroutineScope.launch {
+                                    scrollState.scrollTo(0)
+                                }
                                 //content = preparePrayer(firstLang, currentPrayer, config, prayers)
-                                println("Next prayer: ${currentPrayer.name}")
+                                //println("Next prayer: ${currentPrayer.name}")
                             }
                         ) {
                             Text(
                                 text = getPrayerTitle(
                                     firstLang,
                                     currentPrayer.nextPrayer!!,
-                                    config
-                                ) ?: "Next prayer"
+                                    config,
+                                    MAX_LEN
+                                )
                             )
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
