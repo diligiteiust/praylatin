@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -64,21 +65,22 @@ fun LangSelection(
             text = title,
             color = MaterialTheme.colorScheme.onBackground,
         )
-        OutlinedButton(
-            onClick = { expanded = true },
-            modifier = Modifier.width(200.dp),
-            shape = RectangleShape
-        ) {
-            Text(
-                text =  (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
-            )
-            Spacer(Modifier.weight(1f))
-            Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
-                contentDescription = "Dropdown",
-                tint = MaterialTheme.colorScheme.secondary
-            )
-        }
+        Box {
+            OutlinedButton(
+                onClick = { expanded = true },
+                modifier = Modifier.width(200.dp),
+                shape = RectangleShape
+            ) {
+                Text(
+                    text = (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
+                )
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    imageVector = Icons.Filled.ArrowDropDown,
+                    contentDescription = "Dropdown",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
 //        Box (modifier = Modifier.clickable { expanded = true }) {
 //            OutlinedTextField(
 //                value = (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
@@ -105,30 +107,31 @@ fun LangSelection(
 //            )
 //        }
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            //modifier = Modifier.background(MaterialTheme.colorScheme.onBackground),
-        ) {
-            langs.forEach { item ->
-                DropdownMenuItem(
-                    onClick = {
-                        if (!withInput) {
-                            onItemSelected(item.key)
-                        }
-                        expanded = false
-                        selectedLang = item.key
-                        text = item.value
-                    },
-                    text = {
-                        Text(
-                            text = (if (withInput) item.key else item.value),
-                            color = if (item.key == selectedLang)
-                                MaterialTheme.colorScheme.tertiary else
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                //modifier = Modifier.background(MaterialTheme.colorScheme.onBackground),
+            ) {
+                langs.forEach { item ->
+                    DropdownMenuItem(
+                        onClick = {
+                            if (!withInput) {
+                                onItemSelected(item.key)
+                            }
+                            expanded = false
+                            selectedLang = item.key
+                            text = item.value
+                        },
+                        text = {
+                            Text(
+                                text = (if (withInput) item.key else item.value),
+                                color = if (item.key == selectedLang)
+                                    MaterialTheme.colorScheme.tertiary else
                                     MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                )
+                            )
+                        }
+                    )
+                }
             }
         }
         if (withInput) {
