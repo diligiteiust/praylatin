@@ -1,0 +1,5 @@
+version: 39
+imports:
+- projectPath: HomeQNAP
+  revision: '1.4'
+  accessTokenSecret: internal
