@@ -1,4 +1,8 @@
 version: 39
+properties:
+- name: parent
+  value: /
+  archived: false
 imports:
 - projectPath: HomeQNAP
   revision: '1.4'
