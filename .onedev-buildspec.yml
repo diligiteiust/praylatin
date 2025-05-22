@@ -5,5 +5,5 @@ properties:
   archived: false
 imports:
 - projectPath: HomeQNAP
-  revision: '1.4'
+  revision: main
   accessTokenSecret: internal
