@@ -1,0 +1,9 @@
+version: 39
+properties:
+- name: parent
+  value: /
+  archived: false
+imports:
+- projectPath: HomeQNAP
+  revision: main
+  accessTokenSecret: internal
