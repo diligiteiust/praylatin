@@ -40,8 +40,6 @@ import org.latinpray.data.privacy
 import org.latinpray.data.sampleConfig
 import org.latinpray.data.samplePrayers
 import org.latinpray.data.terms
-import org.latinpray.io.getDataStore
-import org.latinpray.io.keyValueStorePath
 import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
 import org.latinpray.io.readFileFromAssets
@@ -105,9 +103,11 @@ fun Main() {
             defConfig.preferTranslation,
             defConfig.grouping
         )
-        dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
+        dsConfig.loadConfigProps()
+//        dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
+//        defConfig = dsConfig
+//        defConfig.dataStore = getDataStore { keyValueStorePath() }
         defConfig = dsConfig
-        defConfig.dataStore = getDataStore { keyValueStorePath() }
         if (lang != defConfig.uiLang) {
             lang = defConfig.uiLang
             getPlatform().changeLang(lang)

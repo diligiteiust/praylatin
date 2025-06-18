@@ -50,6 +50,8 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.mikepenz.markdown.annotator.annotatorSettings
+import com.mikepenz.markdown.annotator.buildMarkdownAnnotatedString
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.compose.components.MarkdownComponent
@@ -58,10 +60,10 @@ import com.mikepenz.markdown.compose.elements.MarkdownText
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownPadding
-import com.mikepenz.markdown.utils.buildMarkdownAnnotatedString
 import kotlinx.coroutines.launch
 import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
+import org.latinpray.data.Link
 import org.latinpray.data.Prayer
 import org.latinpray.getPlatform
 
@@ -181,18 +183,18 @@ fun preparePrayer(
     }
 
     if (extras) {
-        if (lang1?.links != null && lang1.links!!.isNotEmpty()) {
-            lang1.links!!.forEach { link ->
-                if (link is org.latinpray.data.Link.Youtube) {
+        if (lang1?.links != null && lang1.links.isNotEmpty()) {
+            lang1.links.forEach { link ->
+                if (link is Link.Youtube) {
                     val url_title = link.title ?: "Listen on YouTube"
                     val yt_link = "[$url_title](${link.url})"
                     result += "^^^\n\n$yt_link\n\n"
                 }
             }
         }
-        if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
+        if (lang2?.notes != null && lang2.notes.isNotEmpty()) {
             result += "^^^\n\n__Notes:__\n\n" + lang2.notes
-        } else if (lang2 == null && lang1?.notes != null && lang1.notes!!.isNotEmpty()) {
+        } else if (lang2 == null && lang1?.notes != null && lang1.notes.isNotEmpty()) {
             result += "^^^\n\n__Notes:__\n\n" + lang1.notes
         }
     }
@@ -206,7 +208,10 @@ val customParagraphComponent: MarkdownComponent = {
     var styledText = buildAnnotatedString {
         pushStyle(mainStyle)
         //println("Children size: ${it.node.children.size}")
-        buildMarkdownAnnotatedString(it.content, it.node)
+        buildMarkdownAnnotatedString(
+            it.content, it.node,
+            annotatorSettings = annotatorSettings()
+        )
         pop()
     }
 
@@ -306,7 +311,7 @@ fun PrayerDetails(
                         //list = 0.dp,
                     ),
                     colors = markdownColor(
-                        text = MaterialTheme.colorScheme.onBackground,
+                        //text = MaterialTheme.colorScheme.onBackground,
                         linkText = MaterialTheme.colorScheme.onTertiary,
                     ),
                     typography = markdownTypography(

@@ -67,11 +67,15 @@ kotlin {
             implementation(libs.androidx.datastore.core)
             implementation(libs.androidx.datastore.pref)
             implementation(libs.markdown.renderer)
+            implementation(libs.markdown.renderer.m2)
+            implementation(libs.markdown.renderer.m3)
             // Add the purchases-kmp dependencies.
             implementation(libs.purchases.core)
             implementation(libs.purchases.datetime)   // Optional
             implementation(libs.purchases.either)     // Optional
             implementation(libs.purchases.result)     // Optional
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

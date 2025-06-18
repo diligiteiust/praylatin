@@ -15,14 +15,10 @@
 
 package org.latinpray.data
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import com.russhwolf.settings.Settings
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -58,14 +54,12 @@ data class Config (
     @Transient private val FAVORITES_PROP_KEY = stringPreferencesKey("favorites")
 
     @Transient
-    var dataStore: DataStore<Preferences>? = null
+    val settings: Settings = Settings()
+    //var dataStore: DataStore<Preferences>? = null
 
-    suspend fun loadConfigProps(ds: DataStore<Preferences>) {
+    //suspend fun loadConfigProps(ds: DataStore<Preferences>) {
+    suspend fun loadConfigProps() {
         //println("Loading config props")
-        dataStore = ds
-        if (dataStore == null) {
-            println("DataStore is null")
-        }
         prayerLang = getPrayerLang()
         //println("Loaded prayer lang $prayerLang")
         uiLang = getUILang()
@@ -85,22 +79,25 @@ data class Config (
     }
 
     private suspend fun loadSubstitutions() {
-        val subs = dataStore!!.data.map {
-            it[SUBS_PROP_KEY] ?: ""
-        }.first()
+//        val subs = dataStore!!.data.map {
+//            it[SUBS_PROP_KEY] ?: ""
+//        }.first()
+        val subs = settings.getString(SUBS_PROP_KEY.name, "")
         subs.split(',').forEach { k ->
             if (k.isEmpty()) return@forEach
-            val v = dataStore!!.data.map {
-                it[stringPreferencesKey(k)] ?: ""
-            }.first()
+//            val v = dataStore!!.data.map {
+//                it[stringPreferencesKey(k)] ?: ""
+//            }.first()
+            val v = settings.getString(k, "")
             substitutions[k] = v
         }
     }
 
     private suspend fun loadDailyPrayers() {
-        val daily = dataStore!!.data.map {
-            it[DAILY_PROP_KEY] ?: ""
-        }.first()
+//        val daily = dataStore!!.data.map {
+//            it[DAILY_PROP_KEY] ?: ""
+//        }.first()
+        val daily = settings.getString(DAILY_PROP_KEY.name, "")
         daily.split(',').forEach {
             if (it.isEmpty() || dailyPrayers.contains(it)) return@forEach
             dailyPrayers.add(it)
@@ -108,9 +105,10 @@ data class Config (
     }
 
     private suspend fun loadFavorites() {
-        val favs = dataStore!!.data.map {
-            it[FAVORITES_PROP_KEY] ?: ""
-        }.first()
+//        val favs = dataStore!!.data.map {
+//            it[FAVORITES_PROP_KEY] ?: ""
+//        }.first()
+        val favs = settings.getString(FAVORITES_PROP_KEY.name, "")
         favs.split(',').forEach {
             if (it.isEmpty() || favorites.contains(it)) return@forEach
             favorites.add(it)
@@ -118,39 +116,46 @@ data class Config (
     }
 
     private suspend fun getDonation(): String? =
-        dataStore!!.data.map {
-            it[DONATION_PROP_KEY]
-        }.first()
+        settings.getStringOrNull(DONATION_PROP_KEY.name)
+//        dataStore!!.data.map {
+//            it[DONATION_PROP_KEY]
+//        }.first()
 
     private suspend fun getPrayerLang(): String =
-        dataStore!!.data.map {
-            it[PRAYERLANG_PROP_KEY] ?: prayerLang
-        }.first()
+        settings.getString(PRAYERLANG_PROP_KEY.name, prayerLang)
+//        dataStore!!.data.map {
+//            it[PRAYERLANG_PROP_KEY] ?: prayerLang
+//        }.first()
 
     private suspend fun getUILang(): String =
-        dataStore!!.data.map {
-            it[UILANF_PROP_KEY] ?: uiLang
-        }.first()
+        settings.getString(UILANF_PROP_KEY.name, uiLang)
+//        dataStore!!.data.map {
+//            it[UILANF_PROP_KEY] ?: uiLang
+//        }.first()
 
     private suspend fun getSecondLang(): String =
-        dataStore!!.data.map {
-            it[SECONDLANG_PROP_KEY] ?: secondLang
-        }.first()
+        settings.getString(SECONDLANG_PROP_KEY.name, secondLang)
+//        dataStore!!.data.map {
+//            it[SECONDLANG_PROP_KEY] ?: secondLang
+//        }.first()
 
     private suspend fun getPreferTranslation(): Boolean =
-        dataStore!!.data.map {
-            it[PREFER_TRANSLATION_PROP_KEY] ?: preferTranslation
-        }.first()
+        settings.getBoolean(PREFER_TRANSLATION_PROP_KEY.name, preferTranslation)
+//        dataStore!!.data.map {
+//            it[PREFER_TRANSLATION_PROP_KEY] ?: preferTranslation
+//        }.first()
 
     private suspend fun getGrouping(): Boolean =
-        dataStore!!.data.map {
-            it[GROUPING_PROP_KEY] ?: grouping
-        }.first()
+        settings.getBoolean(GROUPING_PROP_KEY.name, grouping)
+//        dataStore!!.data.map {
+//            it[GROUPING_PROP_KEY] ?: grouping
+//        }.first()
 
     private suspend fun getFontScale(): Float =
-        dataStore!!.data.map {
-            it[FONT_SCALE_PROP_KEY] ?: fontScale
-        }.first()
+        settings.getFloat(FONT_SCALE_PROP_KEY.name, fontScale)
+//        dataStore!!.data.map {
+//            it[FONT_SCALE_PROP_KEY] ?: fontScale
+//        }.first()
 
     suspend fun saveConfig(
         uiLang: String,
@@ -171,70 +176,79 @@ data class Config (
 
     suspend fun saveDonation(donation: String?) {
         this.donation = donation
-        dataStore?.edit {
-            it[DONATION_PROP_KEY] = donation ?: ""
-        }
+        settings.putString(DONATION_PROP_KEY.name, donation ?: "")
+//        dataStore?.edit {
+//            it[DONATION_PROP_KEY] = donation ?: ""
+//        }
     }
 
     suspend fun saveUILang(lang: String) {
         uiLang = lang
-        dataStore?.edit {
-            it[UILANF_PROP_KEY] = uiLang
-        }
+        settings.putString(UILANF_PROP_KEY.name, uiLang)
+//        dataStore?.edit {
+//            it[UILANF_PROP_KEY] = uiLang
+//        }
     }
 
     suspend fun savePrayerLang(lang: String) {
         prayerLang = lang
-        dataStore?.edit {
-            it[PRAYERLANG_PROP_KEY] = prayerLang
-            //println("Saved prayer lang $prayerLang")
-        }
+        settings.putString(PRAYERLANG_PROP_KEY.name, prayerLang)
+//        dataStore?.edit {
+//            it[PRAYERLANG_PROP_KEY] = prayerLang
+//            //println("Saved prayer lang $prayerLang")
+//        }
     }
 
     suspend fun saveSecondLang(lang: String) {
-        if (dataStore == null) {
-            println("DataStore is null")
-        }
+//        if (dataStore == null) {
+//            println("DataStore is null")
+//        }
         //println("Saving second lang $lang")
         secondLang = lang
-        dataStore?.edit {
-            it[SECONDLANG_PROP_KEY] = secondLang
-            //println("Saved second lang $secondLang")
-        }
+        settings.putString(SECONDLANG_PROP_KEY.name, secondLang)
+//        dataStore?.edit {
+//            it[SECONDLANG_PROP_KEY] = secondLang
+//            //println("Saved second lang $secondLang")
+//        }
     }
 
     suspend fun savePreferTranslation(pref: Boolean) {
         preferTranslation = pref
-        dataStore?.edit {
-            it[PREFER_TRANSLATION_PROP_KEY] = preferTranslation
-        }
+        settings.putBoolean(PREFER_TRANSLATION_PROP_KEY.name, preferTranslation)
+//        dataStore?.edit {
+//            it[PREFER_TRANSLATION_PROP_KEY] = preferTranslation
+//        }
     }
 
     suspend fun saveGrouping(pref: Boolean) {
         grouping = pref
-        dataStore?.edit {
-            it[GROUPING_PROP_KEY] = grouping
-        }
+        settings.putBoolean(GROUPING_PROP_KEY.name, grouping)
+//        dataStore?.edit {
+//            it[GROUPING_PROP_KEY] = grouping
+//        }
     }
 
     suspend fun saveFontScale(scale: Float) {
         fontScale = scale
-        dataStore?.edit {
-            it[FONT_SCALE_PROP_KEY] = fontScale
-        }
+        settings.putFloat(FONT_SCALE_PROP_KEY.name, fontScale)
+//        dataStore?.edit {
+//            it[FONT_SCALE_PROP_KEY] = fontScale
+//        }
     }
 
     suspend fun saveSubstitutions() {
         var subst = ""
         substitutions.forEach { (k, v) ->
             subst += "$k,"
-            dataStore?.edit {
-                it[stringPreferencesKey(k)] = v
-            }
+            settings.putString(k, v)
+//            dataStore?.edit {
+//                it[stringPreferencesKey(k)] = v
+//            }
         }
-        dataStore?.edit {
-            it[SUBS_PROP_KEY] = subst
-        }
+        settings.putString(SUBS_PROP_KEY.name, subst)
+//        dataStore?.edit {
+//            it[SUBS_PROP_KEY] = subst
+//        }
     }
 
     suspend fun saveDailyPrayers() {
@@ -242,9 +256,10 @@ data class Config (
         dailyPrayers.forEach {
             daily += "$it,"
         }
-        dataStore?.edit {
-            it[DAILY_PROP_KEY] = daily
-        }
+        settings.putString(DAILY_PROP_KEY.name, daily)
+//        dataStore?.edit {
+//            it[DAILY_PROP_KEY] = daily
+//        }
     }
 
     suspend fun addDailyPrayer(prayer: String) {
@@ -267,9 +282,10 @@ data class Config (
         favorites.forEach {
             favs += "$it,"
         }
-        dataStore?.edit {
-            it[FAVORITES_PROP_KEY] = favs
-        }
+        settings.putString(FAVORITES_PROP_KEY.name, favs)
+//        dataStore?.edit {
+//            it[FAVORITES_PROP_KEY] = favs
+//        }
     }
 
     suspend fun addFavorite(prayer: String) {
