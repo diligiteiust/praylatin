@@ -29,4 +29,5 @@
     <string name="on_option">Encender</string>
     <string name="daily_prayers">Diaria</string>
     <string name="favorite_prayers">Favorito</string>
+    <string name="shared_prayer_lists">Shared prayers</string>
 </resources>

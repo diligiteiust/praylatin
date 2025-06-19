@@ -20,6 +20,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,15 +31,18 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -56,6 +60,8 @@ import org.latinpray.shared.settings_prefer_translation
 import org.latinpray.shared.settings_second_lang
 import org.latinpray.shared.settings_substitutions
 import org.latinpray.shared.settings_ui_lang
+import org.latinpray.shared.shared_prayer_lists
+import org.latinpray.sharedPrefsSupported
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -69,6 +75,7 @@ fun SettingsScreen(
     val (fraction) = remember { mutableStateOf(0.25f) }
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    var sharedPrefsChecked by remember { mutableStateOf(config.sharedPrefs) }
 
     Column(
         modifier = Modifier
@@ -172,6 +179,23 @@ fun SettingsScreen(
                     }
                 }
             )
+            if (sharedPrefsSupported()) {
+                Row {
+                    Text(
+                        text = stringResource(Res.string.shared_prayer_lists),
+                        modifier = Modifier.padding(16.dp)
+                    )
+                    Checkbox(
+                        checked = sharedPrefsChecked,
+                        onCheckedChange = {
+                            scope.launch {
+                                config.saveSharedPrefs(it)
+                                sharedPrefsChecked = it
+                            }
+                        }
+                    )
+                }
+            }
             LangSelection(
                 title = stringResource(Res.string.settings_substitutions),
                 langs = config.substitutions,

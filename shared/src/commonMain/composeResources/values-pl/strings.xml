@@ -29,4 +29,5 @@
     <string name="on_option">Wł</string>
     <string name="daily_prayers">Codzienne</string>
     <string name="favorite_prayers">Ulubione</string>
+    <string name="shared_prayer_lists">Synchronizacja modlitw</string>
 </resources>
