@@ -21,6 +21,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.russhwolf.settings.Settings
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import org.latinpray.createSettings
 
 @Serializable
 data class Config (
@@ -54,7 +55,7 @@ data class Config (
     @Transient private val FAVORITES_PROP_KEY = stringPreferencesKey("favorites")
 
     @Transient
-    val settings: Settings = Settings()
+    val settings: Settings = createSettings()
     //var dataStore: DataStore<Preferences>? = null
 
     //suspend fun loadConfigProps(ds: DataStore<Preferences>) {

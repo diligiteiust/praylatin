@@ -18,7 +18,10 @@ package org.latinpray
 import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.NSUbiquitousKeyValueStoreSettings
 import platform.Foundation.NSBundle
+import platform.Foundation.NSUbiquitousKeyValueStore
 import platform.Foundation.NSUserDefaults
 import platform.UIKit.UIDevice
 import platform.UIKit.UIUserInterfaceIdiomPad
@@ -50,3 +53,8 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatformPriv(): Platform = IOSPlatform()
+
+actual fun createSettings(): Settings {
+    val delegate: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.defaultStore
+    return NSUbiquitousKeyValueStoreSettings(delegate)
+}

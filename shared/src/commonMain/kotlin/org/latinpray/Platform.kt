@@ -15,6 +15,7 @@
 
 package org.latinpray
 
+import com.russhwolf.settings.Settings
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.SynchronizedObject
 import kotlinx.coroutines.internal.synchronized
@@ -33,6 +34,8 @@ interface Platform {
 }
 
 expect fun getPlatformPriv(): Platform
+
+expect fun createSettings(): Settings
 
 private lateinit var platform: Platform
 
