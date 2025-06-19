@@ -37,6 +37,8 @@ expect fun getPlatformPriv(): Platform
 
 expect fun createSettings(): Settings
 
+expect fun sharedPrefsSupported(): Boolean
+
 private lateinit var platform: Platform
 
 @OptIn(InternalCoroutinesApi::class)

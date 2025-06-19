@@ -54,6 +54,8 @@ class IOSPlatform: Platform {
 
 actual fun getPlatformPriv(): Platform = IOSPlatform()
 
+actual fun sharedPrefsSupported(): Boolean = true
+
 actual fun createSettings(): Settings {
     val delegate: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.defaultStore
     return NSUbiquitousKeyValueStoreSettings(delegate)

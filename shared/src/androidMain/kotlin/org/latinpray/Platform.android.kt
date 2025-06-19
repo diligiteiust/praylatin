@@ -67,6 +67,9 @@ class AndroidPlatform : Platform {
 
 actual fun getPlatformPriv(): Platform = AndroidPlatform()
 
+actual fun sharedPrefsSupported(): Boolean = false
+
+
 actual fun createSettings(): Settings {
     val delegate: SharedPreferences = AndroidInjector.application.getSharedPreferences("settings", Context.MODE_PRIVATE)
     return SharedPreferencesSettings(delegate)
