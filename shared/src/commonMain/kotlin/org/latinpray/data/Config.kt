@@ -247,8 +247,8 @@ data class Config (
                 println("SHARED_INITIALIZED_PROP_KEY already set")
             } else {
                 println("SHARED_INITIALIZED_PROP_KEY not set")
+                copySharedPrefs()
             }
-            copySharedPrefs()
             sharedSettings.putBoolean(SHARED_INITIALIZED_PROP_KEY.name, true)
         }
     }
