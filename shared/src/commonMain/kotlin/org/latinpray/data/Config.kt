@@ -73,7 +73,8 @@ data class Config (
     //var dataStore: DataStore<Preferences>? = null
 
     //suspend fun loadConfigProps(ds: DataStore<Preferences>) {
-    suspend fun loadConfigProps() {
+    fun loadConfigProps() {
+        sharedPrefs = getSharedPrefs()
         //println("Loading config props")
         prayerLang = getPrayerLang()
         //println("Loaded prayer lang $prayerLang")
@@ -88,62 +89,81 @@ data class Config (
         fontScale = getFontScale()
         //println("Loaded font scale $fontScale")
         donation = getDonation()
-        sharedPrefs = getSharedPrefs()
         loadSubstitutions()
         loadDailyPrayers()
         loadFavorites()
     }
 
-    private suspend fun getPref(key: String, def: String): String {
-        return if (sharedPrefs && sharedPrefsSet.contains(key)) {
-            sharedSettings.getString(key, def)
+    private fun getPref(key: String, def: String): String {
+        println("Getting pref $key")
+        var result: String
+        if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            result = sharedSettings.getString(key, def)
+            println("Got pref $key from shared prefs: $result")
         } else {
-            localSettings.getString(key, def)
+            result = localSettings.getString(key, def)
+            println("Got pref $key from local settings: $result")
         }
+        return result
     }
 
-    private suspend fun getPref(key: String, def: Boolean): Boolean {
+    private fun getPref(key: String, def: Boolean): Boolean {
+        println("Getting pref $key")
         return if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            println("Got pref $key from shared prefs")
             sharedSettings.getBoolean(key, def)
         } else {
+            println("Got pref $key from local settings")
             localSettings.getBoolean(key, def)
         }
     }
 
-    private suspend fun getPref(key: String, def: Float): Float {
+    private fun getPref(key: String, def: Float): Float {
+        println("Getting pref $key")
         return if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            println("Got pref $key from shared prefs")
             sharedSettings.getFloat(key, def)
         } else {
+            println("Got pref $key from local settings")
             localSettings.getFloat(key, def)
         }
     }
 
-    private suspend fun setPref(key: String, def: String) {
+    private fun setPref(key: String, def: String) {
+        println("Setting pref $key")
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            println("Setting pref $key in shared prefs")
             sharedSettings.putString(key, def)
         } else {
+            println("Setting pref $key in local settings")
             localSettings.putString(key, def)
         }
     }
 
-    private suspend fun setPref(key: String, def: Boolean) {
+    private fun setPref(key: String, def: Boolean) {
+        println("Setting pref $key")
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            println("Setting pref $key in shared prefs")
             sharedSettings.putBoolean(key, def)
         } else {
+            println("Setting pref $key in local settings")
             localSettings.putBoolean(key, def)
         }
     }
 
-    private suspend fun setPref(key: String, def: Float) {
+    private fun setPref(key: String, def: Float) {
+        println("Setting pref $key")
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            println("Setting pref $key in shared prefs")
             sharedSettings.putFloat(key, def)
         } else {
+            println("Setting pref $key in local settings")
             localSettings.putFloat(key, def)
         }
     }
 
 
-    private suspend fun loadSubstitutions() {
+    private fun loadSubstitutions() {
         val subs = getPref(SUBS_PROP_KEY.name, "")
         subs.split(',').forEach { k ->
             if (k.isEmpty()) return@forEach
@@ -153,7 +173,7 @@ data class Config (
         }
     }
 
-    private suspend fun loadDailyPrayers() {
+    private fun loadDailyPrayers() {
         val daily = getPref(DAILY_PROP_KEY.name, "")
         daily.split(',').forEach {
             if (it.isEmpty() || dailyPrayers.contains(it)) return@forEach
@@ -161,7 +181,7 @@ data class Config (
         }
     }
 
-    private suspend fun loadFavorites() {
+    private fun loadFavorites() {
         val favs = getPref(FAVORITES_PROP_KEY.name, "")
         favs.split(',').forEach {
             if (it.isEmpty() || favorites.contains(it)) return@forEach
@@ -169,37 +189,38 @@ data class Config (
         }
     }
 
-    private suspend fun getDonation(): String? {
+    private fun getDonation(): String? {
         val result = getPref(DONATION_PROP_KEY.name, "")
         return result.ifEmpty { null }
     }
 
-    private suspend fun getSharedPrefs(): Boolean =
+    private fun getSharedPrefs(): Boolean =
         getPref(SHARED_PREFS_PROP_KEY.name, sharedPrefs)
 
-    private suspend fun getPrayerLang(): String =
+    private fun getPrayerLang(): String =
         getPref(PRAYERLANG_PROP_KEY.name, prayerLang)
 
-    private suspend fun getUILang(): String =
+    private fun getUILang(): String =
         getPref(UILANF_PROP_KEY.name, uiLang)
 
-    private suspend fun getSecondLang(): String =
+    private fun getSecondLang(): String =
         getPref(SECONDLANG_PROP_KEY.name, secondLang)
 
-    private suspend fun getPreferTranslation(): Boolean =
+    private fun getPreferTranslation(): Boolean =
         getPref(PREFER_TRANSLATION_PROP_KEY.name, preferTranslation)
 
-    private suspend fun getGrouping(): Boolean =
+    private fun getGrouping(): Boolean =
         getPref(GROUPING_PROP_KEY.name, grouping)
 
-    private suspend fun getFontScale(): Float =
+    private fun getFontScale(): Float =
         getPref(FONT_SCALE_PROP_KEY.name, fontScale)
 
     suspend fun saveConfig(
-        uiLang: String,
-        prayerLang: String,
-        secondLang: String
+        uiLang: String = this.uiLang,
+        prayerLang: String = this.prayerLang,
+        secondLang: String = this.secondLang
     ) {
+        saveSharedPrefs(sharedPrefs)
         saveUILang(uiLang)
         savePrayerLang(prayerLang)
         saveSecondLang(secondLang)
@@ -210,7 +231,6 @@ data class Config (
         saveSubstitutions()
         saveDailyPrayers()
         saveFavorites()
-        saveSharedPrefs(sharedPrefs)
     }
 
     suspend fun saveDonation(donation: String?) {
@@ -222,7 +242,12 @@ data class Config (
         val copyRequired = (!sharedPrefs && pref)
         sharedPrefs = pref
         setPref(SHARED_PREFS_PROP_KEY.name, sharedPrefs)
-        if (copyRequired && sharedSettings.getBoolean(SHARED_INITIALIZED_PROP_KEY.name, false)) {
+        if (copyRequired) {
+            if (sharedSettings.getBoolean(SHARED_INITIALIZED_PROP_KEY.name, false)) {
+                println("SHARED_INITIALIZED_PROP_KEY already set")
+            } else {
+                println("SHARED_INITIALIZED_PROP_KEY not set")
+            }
             copySharedPrefs()
             sharedSettings.putBoolean(SHARED_INITIALIZED_PROP_KEY.name, true)
         }
@@ -234,11 +259,13 @@ data class Config (
 //        FAVORITES_PROP_KEY.name,
 //        PRAYERLANG_PROP_KEY.name,
 //        SECONDLANG_PROP_KEY.name
-        saveSubstitutions()
-        saveDailyPrayers()
-        saveFavorites()
-        savePrayerLang(prayerLang)
-        saveSecondLang(secondLang)
+        println("Copying shared prefs")
+        saveConfig()
+//        saveSubstitutions()
+//        saveDailyPrayers()
+//        saveFavorites()
+//        savePrayerLang(prayerLang)
+//        saveSecondLang(secondLang)
     }
 
     suspend fun saveUILang(lang: String) {

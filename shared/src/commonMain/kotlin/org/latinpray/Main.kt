@@ -79,12 +79,15 @@ suspend fun reloadPrayers(config: Config): MutableList<Prayer> {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Main() {
+    println("Main")
     // Initialize platform-specific data
     getPlatform()
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
 
-    var defConfig by remember { mutableStateOf(sampleConfig) }
+    val defConfig: Config = readConfigFromAssets("assets/config.yaml")
+    println("Loaded config from yaml")
+    //var defConfig by remember { mutableStateOf(sampleConfig) }
     var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var currentPrayer = prayers.first()
     var helpContent by remember { mutableStateOf("") }
@@ -92,27 +95,37 @@ fun Main() {
     var lang: String by remember { mutableStateOf(defConfig.uiLang) }
     var fontScale by remember { mutableStateOf(defConfig.fontScale) }
 
+    //defConfig = readConfigFromAssets("assets/config.yaml")
+    defConfig.loadConfigProps()
+    println("Loaded config from datastore ${defConfig.prayerLang}")
+    if (lang != defConfig.uiLang) {
+        lang = defConfig.uiLang
+        getPlatform().changeLang(lang)
+    }
+    fontScale = defConfig.fontScale
+
     scope.launch {
+        println("Main scope launched")
         //println("Loading config from yaml...")
-        defConfig = readConfigFromAssets("assets/config.yaml")
-        //println("Loaded config from yaml")
-        val dsConfig = Config(
-            defConfig.uiLang,
-            defConfig.prayerLang,
-            defConfig.secondLang,
-            defConfig.preferTranslation,
-            defConfig.grouping
-        )
-        dsConfig.loadConfigProps()
-//        dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
+//        defConfig = readConfigFromAssets("assets/config.yaml")
+//        //println("Loaded config from yaml")
+//        val dsConfig = Config(
+//            defConfig.uiLang,
+//            defConfig.prayerLang,
+//            defConfig.secondLang,
+//            defConfig.preferTranslation,
+//            defConfig.grouping
+//        )
+//        dsConfig.loadConfigProps()
+////        dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
+////        defConfig = dsConfig
+////        defConfig.dataStore = getDataStore { keyValueStorePath() }
 //        defConfig = dsConfig
-//        defConfig.dataStore = getDataStore { keyValueStorePath() }
-        defConfig = dsConfig
-        if (lang != defConfig.uiLang) {
-            lang = defConfig.uiLang
-            getPlatform().changeLang(lang)
-        }
-        fontScale = defConfig.fontScale
+//        if (lang != defConfig.uiLang) {
+//            lang = defConfig.uiLang
+//            getPlatform().changeLang(lang)
+//        }
+//        fontScale = defConfig.fontScale
         //println("Loaded config from datastore ${defConfig.prayerLang}")
         //println("Loading prayers...")
         helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
@@ -216,7 +229,7 @@ fun Main() {
                                     navController.popBackStack()
                                          },
                                 uiLangChange = { config ->
-                                    defConfig = config
+                                    //defConfig = config
                                     lang = defConfig.uiLang
                                     getPlatform().changeLang(lang)
                                     println("New lang: $lang")
@@ -226,7 +239,7 @@ fun Main() {
                                         loadLocalizedContent("assets/about.md", defConfig.uiLang)
                                 },
                                 reloadPrayers = { config ->
-                                    defConfig = config
+                                    //defConfig = config
                                     reloadPrayersFlag = true
                                     println("Reload prayers flag set to true...")
                                 }
