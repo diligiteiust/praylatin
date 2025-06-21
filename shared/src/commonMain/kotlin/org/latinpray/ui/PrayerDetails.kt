@@ -25,9 +25,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
@@ -35,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -54,11 +57,14 @@ import com.mikepenz.markdown.annotator.annotatorSettings
 import com.mikepenz.markdown.annotator.buildMarkdownAnnotatedString
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
 import com.mikepenz.markdown.compose.Markdown
+import com.mikepenz.markdown.compose.MarkdownElement
 import com.mikepenz.markdown.compose.components.MarkdownComponent
+import com.mikepenz.markdown.compose.components.MarkdownComponents
 import com.mikepenz.markdown.compose.components.markdownComponents
 import com.mikepenz.markdown.compose.elements.MarkdownText
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
+import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
 import kotlinx.coroutines.launch
 import org.latinpray.data.BasicPrayer
@@ -264,21 +270,49 @@ val customParagraphComponent: MarkdownComponent = {
 }
 
 @Composable
+fun MyMarkdownSuccess(
+    state: State.Success,
+    components: MarkdownComponents,
+    modifier: Modifier = Modifier,
+    scrollState: LazyListState,
+) {
+    LazyColumn(modifier = modifier, state = scrollState) {
+        items(items = state.node.children) { node ->
+            MarkdownElement(node, components, state.content, skipLinkDefinition = state.linksLookedUp)
+        }
+    }
+
+}
+
+@Composable
 fun PrayerDetails(
     firstLang: Boolean,
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
+    endReachedCallback: () -> Unit
 ) {
     val textMeasurer = rememberTextMeasurer()
     val textStyle = MaterialTheme.typography.labelLarge
     val text = "A"
     val textLayoutResult = textMeasurer.measure(text, textStyle)
     val textWidth = textLayoutResult.size.width
-    val scrollState = rememberScrollState()
+    val scrollState = rememberLazyListState()
+    var endProcessed by remember { mutableStateOf(false) }
+    val endReached by remember {
+        derivedStateOf {
+            !endProcessed && scrollState.layoutInfo.totalItemsCount > 0 && !scrollState.canScrollForward
+        }
+    }
     val coroutineScope = rememberCoroutineScope()
     var changed by remember { mutableStateOf(false) }
     var currentPrayer by remember { mutableStateOf( prayer) }
+
+    if (endReached) {
+        endProcessed = true
+        endReachedCallback()
+    }
+
     key(changed) {
         val content = preparePrayer(firstLang, currentPrayer, config, prayers)
         Column(
@@ -286,8 +320,6 @@ fun PrayerDetails(
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
-                //.windowInsetsPadding(WindowInsets.systemBars),
-                //verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
@@ -308,10 +340,8 @@ fun PrayerDetails(
                     content = content,
                     padding = markdownPadding(
                         block = 1.dp,
-                        //list = 0.dp,
                     ),
                     colors = markdownColor(
-                        //text = MaterialTheme.colorScheme.onBackground,
                         linkText = MaterialTheme.colorScheme.onTertiary,
                     ),
                     typography = markdownTypography(
@@ -323,11 +353,14 @@ fun PrayerDetails(
                         link = MaterialTheme.typography.labelMedium
                     ),
                     modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
-                        .background(color = MaterialTheme.colorScheme.background)
-                        .verticalScroll(scrollState),
+                        .background(color = MaterialTheme.colorScheme.background),
+                        //.verticalScroll(scrollState),
                     components = markdownComponents(
                         paragraph = customParagraphComponent,
                     ),
+                    success = @Composable  { state, components, modifier ->
+                        MyMarkdownSuccess(state, components, modifier, scrollState)
+                    },
                 )
 
             }
@@ -339,10 +372,8 @@ fun PrayerDetails(
                                 currentPrayer = currentPrayer.prevPrayer!!
                                 changed = !changed
                                 coroutineScope.launch {
-                                    scrollState.scrollTo(0)
+                                    scrollState.scrollToItem(0)
                                 }
-                                //content = preparePrayer(firstLang, currentPrayer, config, prayers)
-                                //println("Previous prayer: ${currentPrayer.name}")
                             }
                         ) {
                             Icon(
@@ -368,10 +399,8 @@ fun PrayerDetails(
                                 currentPrayer = currentPrayer.nextPrayer!!
                                 changed = !changed
                                 coroutineScope.launch {
-                                    scrollState.scrollTo(0)
+                                    scrollState.scrollToItem(0)
                                 }
-                                //content = preparePrayer(firstLang, currentPrayer, config, prayers)
-                                //println("Next prayer: ${currentPrayer.name}")
                             }
                         ) {
                             Text(
@@ -394,13 +423,5 @@ fun PrayerDetails(
             }
         }
     }
-
-//    if (prayer.langs[config.secondLang]?.notes != null) {
-//        Markdown(
-//            content = prayer.langs[config.secondLang]?.notes ?: "",
-//            colors = markdownColor(text = Color.Red),
-//            typography = markdownTypography(text = MaterialTheme.typography.bodySmall),
-//        )
-//    }
 
 }

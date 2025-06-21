@@ -29,14 +29,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconToggleButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
 import androidx.compose.material.icons.automirrored.outlined.Notes
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -70,6 +71,8 @@ fun PrayerDetailsScreen(
     var daily by remember { mutableStateOf(config.dailyPrayers.contains(prayer.name)) }
     var favorite by remember { mutableStateOf(config.favorites.contains(prayer.name)) }
     val scope = rememberCoroutineScope()
+    var totalNum by remember { mutableStateOf(0) }
+    var inrowNum by remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -82,7 +85,7 @@ fun PrayerDetailsScreen(
             modifier = Modifier.fillMaxWidth().padding(10.dp).alpha(fraction),
             contentAlignment = Alignment.TopCenter
         ) {
-            Row() {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(
                     onClick = {
                         goBack()
@@ -94,6 +97,9 @@ fun PrayerDetailsScreen(
                         tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(30.dp)
                     )
+                }
+                if (config.showNumbers) {
+                    Text(modifier = Modifier.padding(horizontal = 16.dp), text = "$totalNum / $inrowNum")
                 }
                 Spacer(Modifier.weight(1f))
                 IconToggleButton(
@@ -122,6 +128,13 @@ fun PrayerDetailsScreen(
                     checked = daily,
                     onCheckedChange = {
                         daily = it
+                        scope.launch {
+                            if (daily) {
+                                config.addDailyPrayer(prayer.name)
+                            } else {
+                                config.removeDailyPrayer(prayer.name)
+                            }
+                        }
                     }
                 ) {
                     if (daily) {
@@ -131,9 +144,6 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
-                        scope.launch {
-                            config.addDailyPrayer(prayer.name)
-                        }
                     } else {
                         Icon(
                             painter = painterResource(Res.drawable.calendar_add_on),
@@ -141,15 +151,19 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
-                        scope.launch {
-                            config.removeDailyPrayer(prayer.name)
-                        }
                     }
                 }
                 IconToggleButton(
                     checked = favorite,
                     onCheckedChange = {
                         favorite = it
+                        scope.launch {
+                            if (favorite) {
+                                config.addFavorite(prayer.name)
+                            } else {
+                                config.removeFavorite(prayer.name)
+                            }
+                        }
                     }
                 ) {
                     if (favorite) {
@@ -159,9 +173,6 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
-                        scope.launch {
-                            config.addFavorite(prayer.name)
-                        }
                     } else {
                         Icon(
                             painter = painterResource(Res.drawable.bookmark_add),
@@ -169,9 +180,6 @@ fun PrayerDetailsScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)
                         )
-                        scope.launch {
-                            config.removeFavorite(prayer.name)
-                        }
                     }
                 }
             }
@@ -182,6 +190,10 @@ fun PrayerDetailsScreen(
             prayer = prayer,
             config = config,
             prayers = prayers,
+            endReachedCallback = {
+                totalNum++
+                inrowNum++
+            }
         )
     }
 }

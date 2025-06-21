@@ -33,7 +33,8 @@ data class Config (
     var grouping: Boolean,
     var fontScale: Float = 1.0f,
     var donation: String? = null,
-    var sharedPrefs: Boolean = false
+    var sharedPrefs: Boolean = false,
+    var showNumbers: Boolean = true
 ) {
 
     @Transient val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
@@ -57,6 +58,8 @@ data class Config (
     @Transient private val FAVORITES_PROP_KEY = stringPreferencesKey("favorites")
     @Transient private val SHARED_PREFS_PROP_KEY = stringPreferencesKey("sharedPrefs")
     @Transient private val SHARED_INITIALIZED_PROP_KEY = booleanPreferencesKey("initialized")
+    @Transient private val SHOW_NUMBERS_PROP_KEY = booleanPreferencesKey("showNumbers")
+
     @Transient private val sharedPrefsSet: MutableSet<String> = mutableSetOf(
         SUBS_PROP_KEY.name,
         DAILY_PROP_KEY.name,
@@ -90,6 +93,7 @@ data class Config (
         fontScale = getFontScale()
         //println("Loaded font scale $fontScale")
         donation = getDonation()
+        showNumbers = getShowNumbers()
         loadSubstitutions()
         loadDailyPrayers()
         loadFavorites()
@@ -215,6 +219,9 @@ data class Config (
     private fun getSharedPrefs(): Boolean =
         getPref(SHARED_PREFS_PROP_KEY.name, sharedPrefs)
 
+    private fun getShowNumbers(): Boolean =
+        getPref(SHOW_NUMBERS_PROP_KEY.name, showNumbers)
+
     private fun getPrayerLang(): String =
         getPref(PRAYERLANG_PROP_KEY.name, prayerLang)
 
@@ -246,12 +253,13 @@ data class Config (
         saveGrouping(grouping)
         saveFontScale(fontScale)
         saveDonation(donation)
+        saveShowNumbers(showNumbers)
         saveSubstitutions()
         saveDailyPrayers()
         saveFavorites()
     }
 
-    suspend fun saveDonation(donation: String?) {
+    fun saveDonation(donation: String?) {
         this.donation = donation
         setPref(DONATION_PROP_KEY.name, donation ?: "")
     }
@@ -291,37 +299,42 @@ data class Config (
 //        saveSecondLang(secondLang)
     }
 
-    suspend fun saveUILang(lang: String) {
+    fun saveUILang(lang: String) {
         uiLang = lang
         setPref(UILANF_PROP_KEY.name, uiLang)
     }
 
-    suspend fun savePrayerLang(lang: String) {
+    fun savePrayerLang(lang: String) {
         prayerLang = lang
         setPref(PRAYERLANG_PROP_KEY.name, prayerLang)
     }
 
-    suspend fun saveSecondLang(lang: String) {
+    fun saveSecondLang(lang: String) {
         secondLang = lang
         setPref(SECONDLANG_PROP_KEY.name, secondLang)
     }
 
-    suspend fun savePreferTranslation(pref: Boolean) {
+    fun savePreferTranslation(pref: Boolean) {
         preferTranslation = pref
         setPref(PREFER_TRANSLATION_PROP_KEY.name, preferTranslation)
     }
 
-    suspend fun saveGrouping(pref: Boolean) {
+    fun saveGrouping(pref: Boolean) {
         grouping = pref
         setPref(GROUPING_PROP_KEY.name, grouping)
     }
 
-    suspend fun saveFontScale(scale: Float) {
+    fun saveShowNumbers(pref: Boolean) {
+        showNumbers = pref
+        setPref(SHOW_NUMBERS_PROP_KEY.name, showNumbers)
+    }
+
+    fun saveFontScale(scale: Float) {
         fontScale = scale
         setPref(FONT_SCALE_PROP_KEY.name, fontScale)
     }
 
-    suspend fun saveSubstitutions() {
+    fun saveSubstitutions() {
         var subst = ""
         substitutions.forEach { (k, v) ->
             subst += "$k,"
@@ -330,7 +343,7 @@ data class Config (
         setPref(SUBS_PROP_KEY.name, subst)
     }
 
-    suspend fun saveDailyPrayers() {
+    fun saveDailyPrayers() {
         var daily = ""
         dailyPrayers.forEach {
             daily += "$it,"
@@ -338,7 +351,7 @@ data class Config (
         setPref(DAILY_PROP_KEY.name, daily)
     }
 
-    suspend fun addDailyPrayer(prayer: String) {
+    fun addDailyPrayer(prayer: String) {
         if (dailyPrayers.contains(prayer)) return
         dailyPrayers.add(prayer)
         println("Saving daily prayer $prayer")
@@ -346,14 +359,14 @@ data class Config (
         saveDailyPrayers()
     }
 
-    suspend fun removeDailyPrayer(prayer: String) {
+    fun removeDailyPrayer(prayer: String) {
         dailyPrayers.remove(prayer)
         println("Removing daily prayer $prayer")
         println("Daily prayers: $dailyPrayers")
         saveDailyPrayers()
     }
 
-    suspend fun saveFavorites() {
+    fun saveFavorites() {
         var favs = ""
         favorites.forEach {
             favs += "$it,"
@@ -361,18 +374,18 @@ data class Config (
         setPref(FAVORITES_PROP_KEY.name, favs)
     }
 
-    suspend fun addFavorite(prayer: String) {
+    fun addFavorite(prayer: String) {
         if (favorites.contains(prayer)) return
         favorites.add(prayer)
         saveFavorites()
     }
 
-    suspend fun removeFavorite(prayer: String) {
+    fun removeFavorite(prayer: String) {
         favorites.remove(prayer)
         saveFavorites()
     }
 
-    suspend fun addSubstitution(token: String, value: String) {
+    fun addSubstitution(token: String, value: String) {
         substitutions[token] = value
         saveSubstitutions()
     }
