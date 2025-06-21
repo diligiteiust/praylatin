@@ -18,9 +18,11 @@ package org.latinpray.ui
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +37,12 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.OfflineShare
+import androidx.compose.material.icons.automirrored.filled.Redo
+import androidx.compose.material.icons.automirrored.filled.Undo
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,6 +84,8 @@ fun SettingsScreen(
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     var sharedPrefsChecked by remember { mutableStateOf(config.sharedPrefs) }
+    var groupingChecked by remember { mutableStateOf(config.grouping) }
+    var preferTranslationChecked by remember { mutableStateOf(config.preferTranslation) }
 
     Column(
         modifier = Modifier
@@ -120,7 +130,8 @@ fun SettingsScreen(
 
         Column (
             modifier = Modifier.fillMaxSize().weight(1f).verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
             LangSelection(
                 title = stringResource(Res.string.settings_ui_lang),
@@ -159,38 +170,75 @@ fun SettingsScreen(
                     }
                 }
             )
-            LangSelection(
-                title = stringResource(Res.string.settings_prefer_translation),
-                langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
-                selectedItem = if (config.preferTranslation) "on" else "off",
-                onItemSelected = { lang ->
-                    scope.launch {
-                        config.savePreferTranslation(lang == "on")
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding( horizontal = 32.dp)
+            )  {
+                Text(
+                    text = stringResource(Res.string.settings_prefer_translation),
+                )
+                Spacer(Modifier.weight(1f))
+                Checkbox(
+                    checked = preferTranslationChecked,
+                    onCheckedChange = {
+                        scope.launch {
+                            config.savePreferTranslation(it)
+                            preferTranslationChecked = it
+                        }
                     }
-                }
-            )
-            LangSelection(
-                title = stringResource(Res.string.settings_grouping),
-                langs = mutableMapOf("on" to stringResource(Res.string.on_option), "off" to stringResource(Res.string.off_option)),
-                selectedItem = if (config.grouping) "on" else "off",
-                onItemSelected = { lang ->
-                    scope.launch {
-                        config.saveGrouping(lang == "on")
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding( horizontal = 32.dp)
+            )  {
+                Text(
+                    text = stringResource(Res.string.settings_grouping),
+                )
+                Spacer(Modifier.weight(1f))
+                Checkbox(
+                    checked = groupingChecked,
+                    onCheckedChange = {
+                        scope.launch {
+                            config.saveGrouping(it)
+                            groupingChecked = it
+                        }
                     }
-                }
-            )
+                )
+            }
             if (sharedPrefsSupported()) {
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding( horizontal = 32.dp)
+                )  {
+                    IconButton(
+                        onClick = {
+                            sharedPrefsChecked = false
+                            scope.launch {
+                                config.saveSharedPrefs(false)
+                                config.resetSharedPrefs()
+                                reloadPrayers(config)
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ExitToApp,
+                            contentDescription = "Reset Prayers Share",
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
                     Text(
                         text = stringResource(Res.string.shared_prayer_lists),
-                        modifier = Modifier.padding(16.dp)
                     )
+                    Spacer(Modifier.weight(1f))
                     Checkbox(
                         checked = sharedPrefsChecked,
                         onCheckedChange = {
                             scope.launch {
                                 config.saveSharedPrefs(it)
                                 sharedPrefsChecked = it
+                                reloadPrayers(config)
                             }
                         }
                     )

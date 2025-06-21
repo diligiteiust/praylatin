@@ -20,6 +20,7 @@ import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.NSUbiquitousKeyValueStoreSettings
+import com.russhwolf.settings.ObservableSettings
 import platform.Foundation.NSBundle
 import platform.Foundation.NSUbiquitousKeyValueStore
 import platform.Foundation.NSUserDefaults
@@ -56,7 +57,7 @@ actual fun getPlatformPriv(): Platform = IOSPlatform()
 
 actual fun sharedPrefsSupported(): Boolean = true
 
-actual fun createSettings(): Settings {
+actual fun createSettings(): ObservableSettings {
     val delegate: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.defaultStore
     return NSUbiquitousKeyValueStoreSettings(delegate)
 }

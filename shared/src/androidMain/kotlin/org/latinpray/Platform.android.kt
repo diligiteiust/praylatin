@@ -23,6 +23,7 @@ import android.content.res.Configuration
 import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
+import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 import java.util.Locale
@@ -70,7 +71,7 @@ actual fun getPlatformPriv(): Platform = AndroidPlatform()
 actual fun sharedPrefsSupported(): Boolean = false
 
 
-actual fun createSettings(): Settings {
+actual fun createSettings(): ObservableSettings {
     val delegate: SharedPreferences = AndroidInjector.application.getSharedPreferences("settings", Context.MODE_PRIVATE)
     return SharedPreferencesSettings(delegate)
 }

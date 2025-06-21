@@ -18,12 +18,11 @@ package org.latinpray.data
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.latinpray.createSettings
-import org.latinpray.io.configStoreFileName
-import org.latinpray.io.getDataStore
 
 @Serializable
 data class Config (
@@ -69,7 +68,9 @@ data class Config (
     @Transient
     val localSettings: Settings = Settings()
     @Transient
-    val sharedSettings: Settings = createSettings()
+    val sharedSettings: ObservableSettings = createSettings()
+    @Transient
+    var prayersChangedCallback: () -> Unit = {}
     //var dataStore: DataStore<Preferences>? = null
 
     //suspend fun loadConfigProps(ds: DataStore<Preferences>) {
@@ -106,6 +107,23 @@ data class Config (
         }
         return result
     }
+
+    fun externalModification() {
+        println("External modification")
+        loadConfigProps()
+        prayersChangedCallback()
+    }
+
+    fun setPrayersChangedCallback(prayersChangeListener: () -> Unit) {
+        println("Setting prayers changed callback")
+        prayersChangedCallback = prayersChangeListener
+        sharedSettings.addStringListener(DAILY_PROP_KEY.name, "true") { externalModification() }
+        sharedSettings.addStringListener(SUBS_PROP_KEY.name, "true") { externalModification() }
+        sharedSettings.addStringListener(FAVORITES_PROP_KEY.name, "true") { externalModification() }
+        sharedSettings.addStringListener(PRAYERLANG_PROP_KEY.name, "true") { externalModification() }
+        sharedSettings.addStringListener(SECONDLANG_PROP_KEY.name, "true") { externalModification() }
+    }
+
 
     private fun getPref(key: String, def: Boolean): Boolean {
         println("Getting pref $key")
@@ -251,6 +269,11 @@ data class Config (
             }
             sharedSettings.putBoolean(SHARED_INITIALIZED_PROP_KEY.name, true)
         }
+    }
+
+    suspend fun resetSharedPrefs() {
+        saveSharedPrefs(false)
+        sharedSettings.clear()
     }
 
     suspend fun copySharedPrefs() {

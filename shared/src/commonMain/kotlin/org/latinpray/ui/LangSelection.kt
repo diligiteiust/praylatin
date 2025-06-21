@@ -57,13 +57,12 @@ fun LangSelection(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
         Text(
-            modifier = Modifier.padding(vertical = 8.dp),
             text = title,
             color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(
+            modifier = Modifier.padding(vertical = 8.dp)
         )
         Box {
             OutlinedButton(
@@ -81,32 +80,6 @@ fun LangSelection(
                     tint = MaterialTheme.colorScheme.secondary
                 )
             }
-//        Box (modifier = Modifier.clickable { expanded = true }) {
-//            OutlinedTextField(
-//                value = (if (withInput) selectedLang else langs[selectedLang]) ?: "none",
-//                colors = OutlinedTextFieldDefaults.colors(
-////                focusedBorderColor = MaterialTheme.colorScheme.secondary,
-////                unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
-////                disabledBorderColor = MaterialTheme.colorScheme.secondary,
-////                focusedTextColor = MaterialTheme.colorScheme.secondary,
-////                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-////                disabledTextColor = MaterialTheme.colorScheme.secondary,
-////                cursorColor = MaterialTheme.colorScheme.secondary,
-//                ),
-//                onValueChange = { },
-//                readOnly = true,
-//                trailingIcon = {
-//                    //IconButton(onClick = { expanded = true }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.ArrowDropDown,
-//                            contentDescription = "Dropdown",
-//                            tint = MaterialTheme.colorScheme.secondary
-//                        )
-//                    //}
-//                }
-//            )
-//        }
-
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },

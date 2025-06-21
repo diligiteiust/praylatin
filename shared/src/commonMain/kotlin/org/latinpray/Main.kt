@@ -87,9 +87,16 @@ fun Main() {
 
     val defConfig: Config = readConfigFromAssets("assets/config.yaml")
     println("Loaded config from yaml")
-    //var defConfig by remember { mutableStateOf(sampleConfig) }
     var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var currentPrayer = prayers.first()
+    defConfig.setPrayersChangedCallback(prayersChangeListener = {
+        scope.launch {
+            println("Prayers changed")
+            prayers = reloadPrayers(defConfig)
+            currentPrayer = prayers.first()
+        }
+    }
+    )
     var helpContent by remember { mutableStateOf("") }
     var aboutContent by remember { mutableStateOf("") }
     var lang: String by remember { mutableStateOf(defConfig.uiLang) }
@@ -218,15 +225,15 @@ fun Main() {
                                 //sharedTransitionScope = sharedTransitionScope,
                                 config = defConfig,
                                 goBack = {
-                                    if (reloadPrayersFlag) {
-                                        reloadPrayersFlag = false
-                                        scope.launch {
-                                            println("Reloading prayers...")
-                                            prayers = reloadPrayers(defConfig)
-                                            currentPrayer = prayers.first()
-                                        }
-                                    }
-                                    navController.popBackStack()
+                                            if (reloadPrayersFlag) {
+                                                reloadPrayersFlag = false
+                                                scope.launch {
+                                                    println("Reloading prayers...")
+                                                    prayers = reloadPrayers(defConfig)
+                                                    currentPrayer = prayers.first()
+                                                }
+                                            }
+                                            navController.popBackStack()
                                          },
                                 uiLangChange = { config ->
                                     //defConfig = config
