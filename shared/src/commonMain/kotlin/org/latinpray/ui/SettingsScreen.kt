@@ -33,15 +33,11 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.automirrored.filled.OfflineShare
-import androidx.compose.material.icons.automirrored.filled.Redo
-import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -61,7 +57,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.shared.Res
 import org.latinpray.shared.off_option
-import org.latinpray.shared.on_option
 import org.latinpray.shared.settings_grouping
 import org.latinpray.shared.settings_prayer_lang
 import org.latinpray.shared.settings_prefer_translation
@@ -69,6 +64,7 @@ import org.latinpray.shared.settings_second_lang
 import org.latinpray.shared.settings_substitutions
 import org.latinpray.shared.settings_ui_lang
 import org.latinpray.shared.shared_prayer_lists
+import org.latinpray.shared.show_numbers
 import org.latinpray.sharedPrefsSupported
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -86,6 +82,7 @@ fun SettingsScreen(
     var sharedPrefsChecked by remember { mutableStateOf(config.sharedPrefs) }
     var groupingChecked by remember { mutableStateOf(config.grouping) }
     var preferTranslationChecked by remember { mutableStateOf(config.preferTranslation) }
+    var showNumbersChecked by remember { mutableStateOf(config.showNumbers) }
 
     Column(
         modifier = Modifier
@@ -206,28 +203,29 @@ fun SettingsScreen(
                     }
                 )
             }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding( horizontal = 32.dp)
+            )  {
+                Text(
+                    text = stringResource(Res.string.show_numbers),
+                )
+                Spacer(Modifier.weight(1f))
+                Checkbox(
+                    checked = showNumbersChecked,
+                    onCheckedChange = {
+                        scope.launch {
+                            config.saveShowNumbers(it)
+                            showNumbersChecked = it
+                        }
+                    }
+                )
+            }
             if (sharedPrefsSupported()) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding( horizontal = 32.dp)
                 )  {
-                    IconButton(
-                        onClick = {
-                            sharedPrefsChecked = false
-                            scope.launch {
-                                config.saveSharedPrefs(false)
-                                config.resetSharedPrefs()
-                                reloadPrayers(config)
-                            }
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.ExitToApp,
-                            contentDescription = "Reset Prayers Share",
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
                     Text(
                         text = stringResource(Res.string.shared_prayer_lists),
                     )
@@ -256,6 +254,33 @@ fun SettingsScreen(
                 },
                 true
             )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding( horizontal = 32.dp)
+            )  {
+                Text(
+                    text = "Reset shared data",
+                    color = MaterialTheme.colorScheme.error
+                )
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    onClick = {
+                        sharedPrefsChecked = false
+                        scope.launch {
+                            config.saveSharedPrefs(false)
+                            config.resetSharedPrefs()
+                            reloadPrayers(config)
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ExitToApp,
+                        contentDescription = "Reset Prayers Share",
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+            }
         }
     }
 }

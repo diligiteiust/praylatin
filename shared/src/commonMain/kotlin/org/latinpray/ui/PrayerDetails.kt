@@ -342,7 +342,7 @@ fun PrayerDetails(
                         block = 1.dp,
                     ),
                     colors = markdownColor(
-                        linkText = MaterialTheme.colorScheme.onTertiary,
+                        //linkText = MaterialTheme.colorScheme.onTertiary,
                     ),
                     typography = markdownTypography(
                         text = MaterialTheme.typography.bodySmall,
@@ -379,7 +379,8 @@ fun PrayerDetails(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
                                 contentDescription = "Previous prayer",
-                                tint = MaterialTheme.colorScheme.onBackground,
+                                //tint = MaterialTheme.colorScheme.onBackground,
+                                tint =  MaterialTheme.colorScheme.onTertiary,
                                 modifier = Modifier.size(30.dp)
                             )
                             Text(
@@ -388,7 +389,8 @@ fun PrayerDetails(
                                     currentPrayer.prevPrayer!!,
                                     config,
                                     MAX_LEN
-                                )
+                                ),
+                                color =  MaterialTheme.colorScheme.onTertiary
                             )
                         }
                     }
@@ -409,12 +411,14 @@ fun PrayerDetails(
                                     currentPrayer.nextPrayer!!,
                                     config,
                                     MAX_LEN
-                                )
+                                ),
+                                color =  MaterialTheme.colorScheme.onTertiary
                             )
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
                                 contentDescription = "Next prayer",
-                                tint = MaterialTheme.colorScheme.onBackground,
+                                tint = MaterialTheme.colorScheme.onTertiary,
+                                //tint = Blue50,
                                 modifier = Modifier.size(30.dp)
                             )
                         }

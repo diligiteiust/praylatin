@@ -34,33 +34,52 @@ data class Config (
     var fontScale: Float = 1.0f,
     var donation: String? = null,
     var sharedPrefs: Boolean = false,
-    var showNumbers: Boolean = true
+    var showNumbers: Boolean = false
 ) {
 
-    @Transient val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
-    @Transient val allUIlangs: MutableMap<String, String> =
+    @Transient
+    val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
+    @Transient
+    val allUIlangs: MutableMap<String, String> =
         mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski", "es" to "Español")
-    @Transient val substitutions = mutableMapOf(
+    @Transient
+    val substitutions = mutableMapOf(
         "patrons" to "my saint patrons..."
     )
-    @Transient val dailyPrayers: MutableList<String> = mutableListOf()
-    @Transient val favorites: MutableList<String> = mutableListOf()
+    @Transient
+    val dailyPrayers: MutableList<String> = mutableListOf()
+    @Transient
+    val favorites: MutableList<String> = mutableListOf()
 
-    @Transient private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
-    @Transient private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
-    @Transient private val SECONDLANG_PROP_KEY = stringPreferencesKey("secondLang")
-    @Transient private val PREFER_TRANSLATION_PROP_KEY = booleanPreferencesKey("preferTranslation")
-    @Transient private val GROUPING_PROP_KEY = booleanPreferencesKey("grouping")
-    @Transient private val FONT_SCALE_PROP_KEY = floatPreferencesKey("fontScale")
-    @Transient private val DONATION_PROP_KEY = stringPreferencesKey("donation")
-    @Transient private val SUBS_PROP_KEY = stringPreferencesKey("substitutions")
-    @Transient private val DAILY_PROP_KEY = stringPreferencesKey("dailyPrayers")
-    @Transient private val FAVORITES_PROP_KEY = stringPreferencesKey("favorites")
-    @Transient private val SHARED_PREFS_PROP_KEY = stringPreferencesKey("sharedPrefs")
-    @Transient private val SHARED_INITIALIZED_PROP_KEY = booleanPreferencesKey("initialized")
-    @Transient private val SHOW_NUMBERS_PROP_KEY = booleanPreferencesKey("showNumbers")
+    @Transient
+    private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
+    @Transient
+    private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
+    @Transient
+    private val SECONDLANG_PROP_KEY = stringPreferencesKey("secondLang")
+    @Transient
+    private val PREFER_TRANSLATION_PROP_KEY = booleanPreferencesKey("preferTranslation")
+    @Transient
+    private val GROUPING_PROP_KEY = booleanPreferencesKey("grouping")
+    @Transient
+    private val FONT_SCALE_PROP_KEY = floatPreferencesKey("fontScale")
+    @Transient
+    private val DONATION_PROP_KEY = stringPreferencesKey("donation")
+    @Transient
+    private val SUBS_PROP_KEY = stringPreferencesKey("substitutions")
+    @Transient
+    private val DAILY_PROP_KEY = stringPreferencesKey("dailyPrayers")
+    @Transient
+    private val FAVORITES_PROP_KEY = stringPreferencesKey("favorites")
+    @Transient
+    private val SHARED_PREFS_PROP_KEY = stringPreferencesKey("sharedPrefs")
+    @Transient
+    private val SHARED_INITIALIZED_PROP_KEY = booleanPreferencesKey("initialized")
+    @Transient
+    private val SHOW_NUMBERS_PROP_KEY = booleanPreferencesKey("showNumbers")
 
-    @Transient private val sharedPrefsSet: MutableSet<String> = mutableSetOf(
+    @Transient
+    private val sharedPrefsSet: MutableSet<String> = mutableSetOf(
         SUBS_PROP_KEY.name,
         DAILY_PROP_KEY.name,
         FAVORITES_PROP_KEY.name,
@@ -70,8 +89,10 @@ data class Config (
 
     @Transient
     val localSettings: Settings = Settings()
+
     @Transient
     val sharedSettings: ObservableSettings = createSettings()
+
     @Transient
     var prayersChangedCallback: () -> Unit = {}
     //var dataStore: DataStore<Preferences>? = null
@@ -105,6 +126,8 @@ data class Config (
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
             result = sharedSettings.getString(key, def)
             println("Got pref $key from shared prefs: $result")
+            // Make copy of shared data in local settings
+            localSettings.putString(key, result)
         } else {
             result = localSettings.getString(key, def)
             println("Got pref $key from local settings: $result")
@@ -124,73 +147,99 @@ data class Config (
         sharedSettings.addStringListener(DAILY_PROP_KEY.name, "true") { externalModification() }
         sharedSettings.addStringListener(SUBS_PROP_KEY.name, "true") { externalModification() }
         sharedSettings.addStringListener(FAVORITES_PROP_KEY.name, "true") { externalModification() }
-        sharedSettings.addStringListener(PRAYERLANG_PROP_KEY.name, "true") { externalModification() }
-        sharedSettings.addStringListener(SECONDLANG_PROP_KEY.name, "true") { externalModification() }
+        sharedSettings.addStringListener(
+            PRAYERLANG_PROP_KEY.name,
+            "true"
+        ) { externalModification() }
+        sharedSettings.addStringListener(
+            SECONDLANG_PROP_KEY.name,
+            "true"
+        ) { externalModification() }
     }
 
 
     private fun getPref(key: String, def: Boolean): Boolean {
         println("Getting pref $key")
-        return if (sharedPrefs && sharedPrefsSet.contains(key)) {
-            println("Got pref $key from shared prefs")
-            sharedSettings.getBoolean(key, def)
+        var result: Boolean
+        if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            result = sharedSettings.getBoolean(key, def)
+            println("Got pref $key from shared prefs: $result")
+            // Make copy of shared data in local settings
+            localSettings.putBoolean(key, result)
         } else {
             println("Got pref $key from local settings")
-            localSettings.getBoolean(key, def)
+            result = localSettings.getBoolean(key, def)
         }
+        return result
     }
 
     private fun getPref(key: String, def: Float): Float {
         println("Getting pref $key")
-        return if (sharedPrefs && sharedPrefsSet.contains(key)) {
+        var result: Float
+        if (sharedPrefs && sharedPrefsSet.contains(key)) {
+            result = sharedSettings.getFloat(key, def)
             println("Got pref $key from shared prefs")
-            sharedSettings.getFloat(key, def)
+            // Make copy of shared data in local settings
+            localSettings.putFloat(key, result)
         } else {
             println("Got pref $key from local settings")
-            localSettings.getFloat(key, def)
+            result = localSettings.getFloat(key, def)
         }
+        return result
+    }
+
+    private fun getFromSharedPrefs(k: String): String {
+        var result: String
+        if (sharedPrefs) {
+            result = sharedSettings.getString(k, "")
+            // Make copy in local storage
+            localSettings.putString(k, result)
+        } else {
+            result = localSettings.getString(k, "")
+        }
+        return result
     }
 
     private fun setPref(key: String, def: String) {
         println("Setting pref $key")
+        println("Setting pref $key in local settings")
+        localSettings.putString(key, def)
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
             println("Setting pref $key in shared prefs")
             sharedSettings.putString(key, def)
-        } else {
-            println("Setting pref $key in local settings")
-            localSettings.putString(key, def)
         }
     }
 
     private fun setPref(key: String, def: Boolean) {
         println("Setting pref $key")
+        println("Setting pref $key in local settings")
+        localSettings.putBoolean(key, def)
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
             println("Setting pref $key in shared prefs")
             sharedSettings.putBoolean(key, def)
-        } else {
-            println("Setting pref $key in local settings")
-            localSettings.putBoolean(key, def)
         }
     }
 
     private fun setPref(key: String, def: Float) {
         println("Setting pref $key")
+        println("Setting pref $key in local settings")
+        localSettings.putFloat(key, def)
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
             println("Setting pref $key in shared prefs")
             sharedSettings.putFloat(key, def)
-        } else {
-            println("Setting pref $key in local settings")
-            localSettings.putFloat(key, def)
         }
     }
 
+    private fun putToSharedPrefs(key: String, def: String) {
+        localSettings.putString(key, def)
+        if (sharedPrefs) sharedSettings.putString(key, def)
+    }
 
     private fun loadSubstitutions() {
         val subs = getPref(SUBS_PROP_KEY.name, "")
         subs.split(',').forEach { k ->
             if (k.isEmpty()) return@forEach
-            val v = if (sharedPrefs) sharedSettings.getString(k, "") else
-                localSettings.getString(k, "")
+            val v = getFromSharedPrefs(k)
             substitutions[k] = v
         }
     }
@@ -285,18 +334,8 @@ data class Config (
     }
 
     suspend fun copySharedPrefs() {
-//        SUBS_PROP_KEY.name,
-//        DAILY_PROP_KEY.name,
-//        FAVORITES_PROP_KEY.name,
-//        PRAYERLANG_PROP_KEY.name,
-//        SECONDLANG_PROP_KEY.name
         println("Copying shared prefs")
         saveConfig()
-//        saveSubstitutions()
-//        saveDailyPrayers()
-//        saveFavorites()
-//        savePrayerLang(prayerLang)
-//        saveSecondLang(secondLang)
     }
 
     fun saveUILang(lang: String) {
@@ -338,7 +377,7 @@ data class Config (
         var subst = ""
         substitutions.forEach { (k, v) ->
             subst += "$k,"
-            if (sharedPrefs) sharedSettings.putString(k, v) else localSettings.putString(k, v)
+            putToSharedPrefs(k, v)
         }
         setPref(SUBS_PROP_KEY.name, subst)
     }

@@ -30,4 +30,5 @@
     <string name="daily_prayers">Diaria</string>
     <string name="favorite_prayers">Favorito</string>
     <string name="shared_prayer_lists">Shared prayers</string>
+    <string name="show_numbers">Show numbers</string>
 </resources>

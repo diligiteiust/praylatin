@@ -31,7 +31,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
@@ -120,7 +120,8 @@ fun AboutScreen(
                 ),
                 colors = markdownColor(
                     text = MaterialTheme.colorScheme.onBackground,
-                    linkText = MaterialTheme.colorScheme.onTertiary,
+
+//                    linkText = MaterialTheme.colorScheme.onTertiary,
                 ),
                 typography = markdownTypography(
                     text = MaterialTheme.typography.bodySmall,
