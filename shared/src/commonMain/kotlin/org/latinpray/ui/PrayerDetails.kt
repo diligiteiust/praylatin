@@ -37,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -312,7 +313,9 @@ fun PrayerDetails(
 
     if (endReached) {
         endProcessed = true
-        endReachedCallback()
+        LaunchedEffect(scrollState) {
+            endReachedCallback()
+        }
     }
 
     key(changed) {
@@ -387,6 +390,7 @@ fun PrayerDetails(
 
             }
             if (currentPrayer.prevPrayer != null || currentPrayer.nextPrayer != null) {
+                val navColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.5f)
                 Row() {
                     if (currentPrayer.prevPrayer != null) {
                         TextButton(
@@ -402,7 +406,7 @@ fun PrayerDetails(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBackIos,
                                 contentDescription = "Previous prayer",
                                 //tint = MaterialTheme.colorScheme.onBackground,
-                                tint =  MaterialTheme.colorScheme.onTertiary,
+                                tint = navColor,
                                 modifier = Modifier.size(30.dp)
                             )
                             Text(
@@ -412,7 +416,7 @@ fun PrayerDetails(
                                     config,
                                     MAX_LEN
                                 ),
-                                color =  MaterialTheme.colorScheme.onTertiary
+                                color = navColor
                             )
                         }
                     }
@@ -434,13 +438,12 @@ fun PrayerDetails(
                                     config,
                                     MAX_LEN
                                 ),
-                                color =  MaterialTheme.colorScheme.onTertiary
+                                color =  navColor
                             )
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
                                 contentDescription = "Next prayer",
-                                tint = MaterialTheme.colorScheme.onTertiary,
-                                //tint = Blue50,
+                                tint = navColor,
                                 modifier = Modifier.size(30.dp)
                             )
                         }

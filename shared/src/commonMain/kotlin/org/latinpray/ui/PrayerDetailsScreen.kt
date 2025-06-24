@@ -402,8 +402,10 @@ fun PrayerDetailsScreen(
             config = config,
             prayers = prayers,
             endReachedCallback = {
-                config.incPrayerNum(prayer.name)
+                config.incPrayerNum(prayer.name, prayerIntentions)
                 val prayerNums = config.loadPrayerNums(prayer.name)
+                prayerIntentions = config.loadIntentions(prayer.name)
+                currentIntention = prayerIntentions.find { it.currentIntention }
                 totalNum = prayerNums.totalNum
                 inrowNum = prayerNums.inrowNum
             },
