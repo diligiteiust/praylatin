@@ -89,6 +89,9 @@ data class Config (
     private val SHOW_NUMBERS_PROP_KEY = booleanPreferencesKey("showNumbers")
     @Transient
     private val PRAYER_NUM_KEY = stringPreferencesKey("_num")
+    @Transient
+    private val INTENTIONS_KEY = stringPreferencesKey("_inten")
+
 
     @Transient
     private val sharedPrefsSet: MutableSet<String> = mutableSetOf(
@@ -450,18 +453,18 @@ data class Config (
             val prayer_num_arr = prayer_num.split(',')
             if (prayer_num_arr.size > 0) {
                 last_date = LocalDate.parse(prayer_num_arr[0])
-                println("last_date parsed: " + last_date.toString())
+                //println("last_date parsed: " + last_date.toString())
             }
             if (prayer_num_arr.size > 1) {
                 totalNum = prayer_num_arr[1].toInt()
-                println("totalNum: " + totalNum.toString())
+                //println("totalNum: " + totalNum.toString())
             }
             if (prayer_num_arr.size > 2) {
                 inrowNum = prayer_num_arr[2].toInt()
-                println("inrowNum: " + inrowNum.toString())
+                //println("inrowNum: " + inrowNum.toString())
             }
         }
-        println("last_date: " + last_date.toString())
+        //println("last_date: " + last_date.toString())
         return PrayerNums(last_date, totalNum, inrowNum)
     }
 
@@ -479,6 +482,7 @@ data class Config (
     }
 
     fun incPrayerNum(prayer: String, intentions: List<PrayerIntention>) {
+        //println("Incrementing prayer num for $prayer")
         val prayerNums = loadPrayerNums(prayer)
         val totalNum = prayerNums.totalNum + 1
         val inrowNum = inrowNumIncrement(prayerNums.lastRecorded, prayerNums.inrowNum)
@@ -490,26 +494,64 @@ data class Config (
         }
         putToSharedPrefs(prayer + PRAYER_NUM_KEY.name, "$curr_date,$totalNum,$inrowNum")
 
+        //println("Incrementing nums for current intention")
         val currentIntention = intentions.find { it.currentIntention }
+        //println("Current intention: ${currentIntention?.toPropsString()}")
         if (currentIntention != null) {
+            //currentIntention.inrowNum = inrowNumIncrement(LocalDate(year = 1970, monthNumber = 2, dayOfMonth = 27), currentIntention.inrowNum, false)
             currentIntention.inrowNum = inrowNumIncrement(prayerNums.lastRecorded, currentIntention.inrowNum, false)
             if (currentIntention.days <= 1) {
                 currentIntention.totalNum += 1
             } else {
-                if (currentIntention.inrowNum >= currentIntention.days) {
+                if (currentIntention.inrowNum > currentIntention.days) {
                     currentIntention.totalNum += 1
+                    currentIntention.inrowNum = 1
                 }
             }
+            //println("Saving current intention: ${currentIntention.toPropsString()}")
+            saveIntention(prayer, currentIntention)
         }
     }
 
     fun loadIntentions(prayer: String): List<PrayerIntention> {
         val intentions = mutableListOf<PrayerIntention>()
+        val inten = getFromSharedPrefs(prayer + INTENTIONS_KEY.name)
+        if (inten.isEmpty()) return intentions
+        //println("Intentions: $inten")
+        val inten_arr = inten.split(',')
+        for (i in 0 until inten_arr.size) {
+            //println("Intention: $i")
+            if (inten_arr[i].isEmpty()) continue
+            //println("Intention: ${inten_arr[i]}")
+            val inten_props = getFromSharedPrefs(prayer + inten_arr[i])
+            //println("Intention props: $inten_props")
+            if (inten_props.isEmpty()) continue
+            try {
+                val intention = PrayerIntention.fromPropsString(inten_props)
+                intentions.add(intention)
+            } catch (e: Exception) {
+                println("Error loading intention: $inten_props -- $e")
+            }
+        }
         return intentions
     }
 
-    fun saveIntentions(prayer: String, intentions: List<PrayerIntention>) {
+    fun saveIntention(prayer: String, intention: PrayerIntention) {
+        //println("Saving intention: ${intention.toPropsString()}")
+        putToSharedPrefs(prayer + intention.id.toString(), intention.toPropsString())
+    }
 
+    fun saveIntentions(prayer: String, intentions: List<PrayerIntention>) {
+        var inten = ""
+        intentions.forEach {
+            inten += "${it.id},"
+        }
+        putToSharedPrefs(prayer + INTENTIONS_KEY.name, inten)
+        //println("Saving all intentions: $inten")
+        intentions.forEach {
+            //println("Saving intention: ${it.toPropsString()}")
+            saveIntention(prayer, it)
+        }
     }
 
 }

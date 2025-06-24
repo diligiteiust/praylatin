@@ -15,10 +15,41 @@
 
 package org.latinpray.data
 
-data class PrayerIntention(
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
+data class PrayerIntention @OptIn(ExperimentalUuidApi::class) constructor(
     var intention : String,
     var days : Int = 0,
     var active : Boolean = true,
     var currentIntention: Boolean = false,
     var totalNum : Int = 0,
-    var inrowNum : Int = 0)
+    var inrowNum : Int = 0,
+    val id : Int = Uuid.random().hashCode()
+) {
+
+    companion object {
+        fun fromPropsString(s: String): PrayerIntention {
+            val props = s.split(',')
+            var inten = ""
+            for (i in 6 until props.size) {
+                inten += props[i] + ","
+            }
+            inten = inten.substring(0, inten.length - 1)
+            return PrayerIntention(
+                intention = inten,
+                days = props[0].toInt(),
+                active = props[1].toBoolean(),
+                currentIntention = props[2].toBoolean(),
+                totalNum = props[3].toInt(),
+                inrowNum = props[4].toInt(),
+                id = props[5].toInt()
+            )
+        }
+    }
+
+    fun toPropsString(): String {
+        return "$days,$active,$currentIntention,$totalNum,$inrowNum,$id,$intention"
+    }
+
+}

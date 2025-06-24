@@ -351,7 +351,8 @@ fun PrayerDetails(
                             Text(
                                 text = intention.intention + nums,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.padding(horizontal = 32.dp)
                             )
                         }
                     }

@@ -252,8 +252,36 @@ fun PrayerDetailsScreen(
     var totalNum by remember { mutableStateOf(prayerNums.totalNum) }
     var inrowNum by remember { mutableStateOf(prayerNums.inrowNum) }
     var showDialog by remember { mutableStateOf(false) }
-    var prayerIntentions by remember { mutableStateOf(config.loadIntentions(prayer.name)) }
-    var currentIntention by remember { mutableStateOf(prayerIntentions.find { it.currentIntention }) }
+    val allIntentions = config.loadIntentions(prayer.name)
+    var prayerIntentions by remember { mutableStateOf(allIntentions) }
+    var currInten = allIntentions.find { it.currentIntention }
+    if (currInten != null && currInten.inrowNum >= currInten.days) {
+        val oldInten = currInten
+        //println("Current intention: ${currInten.toPropsString()}")
+        currInten.totalNum += 1
+        currInten.inrowNum = 0
+        if (allIntentions.size > 1) {
+            val idx = allIntentions.indexOf( currInten )
+            //println("Current intention index: $idx")
+            var nextInten: PrayerIntention
+            if (idx < allIntentions.size - 1) {
+                nextInten = allIntentions[idx + 1]
+            } else {
+                nextInten = allIntentions[0]
+            }
+            //println("Next intention: ${nextInten.toPropsString()}")
+            nextInten.currentIntention = true
+            currInten.currentIntention = false
+            scope.launch {
+                config.saveIntention(prayer.name, nextInten)
+            }
+            currInten = nextInten
+        }
+        scope.launch {
+            config.saveIntention(prayer.name, oldInten)
+        }
+    }
+    var currentIntention by remember { mutableStateOf(currInten) }
 
     if (showDialog) {
         IntentionsDialog(
