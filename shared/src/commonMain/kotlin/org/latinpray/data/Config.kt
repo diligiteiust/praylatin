@@ -482,4 +482,13 @@ data class Config (
         putToSharedPrefs(prayer + PRAYER_NUM_KEY.name, "$curr_date,$totalNum,$inrowNum")
     }
 
+    fun loadIntentions(prayer: String): List<PrayerIntention> {
+        val intentions = mutableListOf<PrayerIntention>()
+        return intentions
+    }
+
+    fun saveIntentions(prayer: String, intentions: List<PrayerIntention>) {
+
+    }
+
 }

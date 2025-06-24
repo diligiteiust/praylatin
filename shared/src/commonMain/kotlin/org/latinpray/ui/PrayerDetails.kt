@@ -71,6 +71,7 @@ import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Link
 import org.latinpray.data.Prayer
+import org.latinpray.data.PrayerIntention
 import org.latinpray.getPlatform
 
 const val INDENT = "%"
@@ -290,7 +291,8 @@ fun PrayerDetails(
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
-    endReachedCallback: () -> Unit
+    endReachedCallback: () -> Unit,
+    intention: PrayerIntention? = null
 ) {
     val textMeasurer = rememberTextMeasurer()
     val textStyle = MaterialTheme.typography.labelLarge
@@ -318,20 +320,40 @@ fun PrayerDetails(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+//            Box(
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
                 Box(
                     modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
                     contentAlignment = Alignment.TopCenter
                 ) {
-                    Text(
-                        text = getPrayerTitle(firstLang, currentPrayer, config),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = getPrayerTitle(firstLang, currentPrayer, config),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        if (intention != null) {
+                            var nums = ""
+                            if (config.showNumbers) {
+                                nums = intention.totalNum.toString() + " / "
+                            }
+                            if (intention.days > 1) {
+                                nums = nums + intention.inrowNum
+                            }
+                            if (nums.isNotEmpty()) nums = " (" + nums + ")"
+                            Text(
+                                text = intention.intention + nums,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
                 }
-            }
+//            }
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 val margins = maxWidth * 0.04f
                 MAX_LEN = ((DpToPx(maxWidth) / textWidth) / 2.3).toInt()

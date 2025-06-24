@@ -68,7 +68,7 @@ fun LangSelection(
             OutlinedButton(
                 onClick = { expanded = true },
                 modifier = Modifier.width(200.dp),
-                shape = RectangleShape
+                shape = RectangleShape,
             ) {
                 Text(
                     text = (if (withInput) selectedLang else langs[selectedLang]) ?: "none",

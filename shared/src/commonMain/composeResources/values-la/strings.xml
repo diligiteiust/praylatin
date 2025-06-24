@@ -31,4 +31,9 @@
     <string name="favorite_prayers">Favorite</string>
     <string name="shared_prayer_lists">Shared prayers</string>
     <string name="show_numbers">Show numbers</string>
+    <string name="intentions_title">Prayer intentions</string>
+    <string name="intention_text">Intention</string>
+    <string name="intention_days">Number of days</string>
+    <string name="intention_active">Active</string>
+    <string name="intention_add">Add intention</string>
 </resources>

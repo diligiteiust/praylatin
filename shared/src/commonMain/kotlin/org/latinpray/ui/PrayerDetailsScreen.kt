@@ -18,6 +18,8 @@ package org.latinpray.ui
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,18 +30,30 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
 import androidx.compose.material.icons.automirrored.outlined.Notes
+import androidx.compose.material.icons.filled.AutoStories
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,16 +61,179 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.data.PrayerIntention
 import org.latinpray.shared.Res
 import org.latinpray.shared.bookmark_add
 import org.latinpray.shared.bookmark_check
 import org.latinpray.shared.calendar_add_on
 import org.latinpray.shared.calendar_month
+import org.latinpray.shared.intention_active
+import org.latinpray.shared.intention_add
+import org.latinpray.shared.intention_days
+import org.latinpray.shared.intention_text
+import org.latinpray.shared.intentions_title
+import org.latinpray.theme.Gray300
+import org.latinpray.theme.Green300
+import org.latinpray.theme.Green900
+import org.latinpray.theme.Orange900
+
+@Composable
+fun IntentionsForm(item: PrayerIntention) {
+
+    var text by remember { mutableStateOf(item.intention) }
+    var days by remember { mutableStateOf(item.days) }
+    var active by remember { mutableStateOf(item.active) }
+
+    val color = if (item.currentIntention) Green300 else Gray300
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .border(1.dp, color = color, shape = MaterialTheme.shapes.medium),
+    ) {
+        Column (
+            modifier = Modifier.padding(8.dp),
+        ){
+            OutlinedTextField(
+                value = text,
+                onValueChange = {
+                    item.intention = it
+                    text = item.intention
+                },
+                readOnly = false,
+                minLines = 2,
+                maxLines = 2,
+                label = { Text( text = stringResource(Res.string.intention_text),
+                    style = MaterialTheme.typography.bodySmall) },
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+            Row() {
+                Column (
+                    modifier = Modifier.padding(end = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Text(
+                        text = stringResource(Res.string.intention_active),
+                    )
+                    Checkbox(
+                        checked = active,
+                        onCheckedChange = {
+                            item.active = it
+                            active = item.active
+                        }
+                    )
+                }
+                Spacer(Modifier.weight(1f))
+                OutlinedTextField(
+                    value = days.toString(),
+                    onValueChange = { newValue ->
+                        item.days = newValue.toIntOrNull() ?: 0
+                        days = item.days
+                    },
+                    readOnly = false,
+                    singleLine = true,
+                    modifier = Modifier.widthIn(min = 150.dp, max = 150.dp),
+                    label = { Text(stringResource(Res.string.intention_days)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun IntentionsDialog(
+    onDismissRequest : () -> Unit = {},
+    onOkRequest : (List<PrayerIntention>) -> Unit = {},
+    prayerIntentions: List<PrayerIntention> = emptyList()
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        val itemList = remember { mutableStateListOf<PrayerIntention>(*prayerIntentions.toTypedArray()) }
+
+        // Your form content here (e.g., TextFields, Buttons)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(8.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    //modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    text = stringResource(Res.string.intentions_title),
+                    textAlign = TextAlign.Center,
+                )
+                ElevatedButton(
+                    onClick = {
+                        val current = itemList.size == 0
+                        itemList.add(PrayerIntention("", 0, true, current))
+                    }
+                ) {
+                    Text(stringResource(Res.string.intention_add))
+                    Icon(
+                        imageVector = Icons.Outlined.Add,
+                        contentDescription = "Save",
+                        tint = Green900,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(itemList) { item ->
+                        // Your composable function to display the item
+                        IntentionsForm(item)
+                    }
+                }
+                Row(Modifier.padding(horizontal = 48.dp)) {
+                    IconButton(
+                        onClick = {
+                            onDismissRequest()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Cancel,
+                            contentDescription = "Cancel",
+                            tint = Orange900,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    IconButton(
+                        onClick = {
+                            onOkRequest(itemList.toList())
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Done,
+                            contentDescription = "Save",
+                            tint = Green900,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+}
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -74,6 +251,24 @@ fun PrayerDetailsScreen(
     val prayerNums = config.loadPrayerNums(prayer.name)
     var totalNum by remember { mutableStateOf(prayerNums.totalNum) }
     var inrowNum by remember { mutableStateOf(prayerNums.inrowNum) }
+    var showDialog by remember { mutableStateOf(false) }
+    var prayerIntentions by remember { mutableStateOf(config.loadIntentions(prayer.name)) }
+    var currentIntention by remember { mutableStateOf(prayerIntentions.find { it.currentIntention }) }
+
+    if (showDialog) {
+        IntentionsDialog(
+            onDismissRequest = { showDialog = false },
+            onOkRequest = {
+                showDialog = false
+                scope.launch {
+                    config.saveIntentions(prayer.name, it)
+                }
+                prayerIntentions = it
+                currentIntention = it.find { it.currentIntention }
+            },
+            prayerIntentions = prayerIntentions
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -86,7 +281,10 @@ fun PrayerDetailsScreen(
             modifier = Modifier.fillMaxWidth().padding(10.dp).alpha(fraction),
             contentAlignment = Alignment.TopCenter
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                 IconButton(
                     onClick = {
                         goBack()
@@ -100,9 +298,21 @@ fun PrayerDetailsScreen(
                     )
                 }
                 if (config.showNumbers) {
-                    Text(modifier = Modifier.padding(horizontal = 16.dp), text = "$totalNum / $inrowNum")
+                    Text(text = "$totalNum / $inrowNum")
                 }
                 Spacer(Modifier.weight(1f))
+                IconButton(
+                    onClick = {
+                        showDialog = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AutoStories,
+                        contentDescription = "Intentions",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
                 IconToggleButton(
                     checked = firstLang,
                     onCheckedChange = {
@@ -196,7 +406,8 @@ fun PrayerDetailsScreen(
                 val prayerNums = config.loadPrayerNums(prayer.name)
                 totalNum = prayerNums.totalNum
                 inrowNum = prayerNums.inrowNum
-            }
+            },
+            intention = currentIntention
         )
     }
 }

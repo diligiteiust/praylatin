@@ -37,7 +37,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -279,7 +279,7 @@ fun SettingsScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Default.ExitToApp,
+                        imageVector = Icons.Default.Delete,
                         contentDescription = "Reset Prayers Share",
                         tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier.size(30.dp)
