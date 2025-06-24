@@ -20,6 +20,12 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.latinpray.createSettings
@@ -77,6 +83,8 @@ data class Config (
     private val SHARED_INITIALIZED_PROP_KEY = booleanPreferencesKey("initialized")
     @Transient
     private val SHOW_NUMBERS_PROP_KEY = booleanPreferencesKey("showNumbers")
+    @Transient
+    private val PRAYER_NUM_KEY = stringPreferencesKey("_num")
 
     @Transient
     private val sharedPrefsSet: MutableSet<String> = mutableSetOf(
@@ -427,6 +435,51 @@ data class Config (
     fun addSubstitution(token: String, value: String) {
         substitutions[token] = value
         saveSubstitutions()
+    }
+
+    fun loadPrayerNums(prayer: String): PrayerNums {
+        val prayer_num = getFromSharedPrefs(prayer + PRAYER_NUM_KEY.name)
+        var last_date = LocalDate(1970, 1, 1)
+        var totalNum = 0
+        var inrowNum = 0
+        if (prayer_num.isNotEmpty()) {
+            val prayer_num_arr = prayer_num.split(',')
+            if (prayer_num_arr.size > 0) {
+                last_date = LocalDate.parse(prayer_num_arr[0])
+                println("last_date parsed: " + last_date.toString())
+            }
+            if (prayer_num_arr.size > 1) {
+                totalNum = prayer_num_arr[1].toInt()
+                println("totalNum: " + totalNum.toString())
+            }
+            if (prayer_num_arr.size > 2) {
+                inrowNum = prayer_num_arr[2].toInt()
+                println("inrowNum: " + inrowNum.toString())
+            }
+        }
+        println("last_date: " + last_date.toString())
+        return PrayerNums(last_date, totalNum, inrowNum)
+    }
+
+    val HOUR_IN_MILLIS = 3600000
+
+    fun inrowNumIncrement(last_date: LocalDate, inrowNum: Int): Int {
+        val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val curr_time_millis = Clock.System.now().toEpochMilliseconds()
+        val last_date_millis = last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+        if (curr_time_millis - last_date_millis > (HOUR_IN_MILLIS * 30)) {
+            return 1
+        }
+        if (curr_date == last_date) return inrowNum
+        return inrowNum + 1
+    }
+
+    fun incPrayerNum(prayer: String) {
+        val prayerNums = loadPrayerNums(prayer)
+        val totalNum = prayerNums.totalNum + 1
+        val inrowNum = inrowNumIncrement(prayerNums.lastRecorded, prayerNums.inrowNum)
+        val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        putToSharedPrefs(prayer + PRAYER_NUM_KEY.name, "$curr_date,$totalNum,$inrowNum")
     }
 
 }
