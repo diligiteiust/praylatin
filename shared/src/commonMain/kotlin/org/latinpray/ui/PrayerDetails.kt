@@ -293,6 +293,7 @@ fun PrayerDetails(
     config: Config,
     prayers: MutableList<Prayer>,
     endReachedCallback: (pr: Prayer) -> Unit,
+    prayerChangedCallback: (pr: Prayer) -> Unit,
     intention: PrayerIntention? = null
 ) {
     val textMeasurer = rememberTextMeasurer()
@@ -402,6 +403,7 @@ fun PrayerDetails(
                                     scrollState.scrollToItem(0)
                                     endProcessed = false
                                 }
+                                prayerChangedCallback(currentPrayer)
                             }
                         ) {
                             Icon(
@@ -432,6 +434,7 @@ fun PrayerDetails(
                                     scrollState.scrollToItem(0)
                                     endProcessed = false
                                 }
+                                prayerChangedCallback(currentPrayer)
                             }
                         ) {
                             Text(

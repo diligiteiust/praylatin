@@ -266,7 +266,7 @@ fun PrayerDetailsScreen(
     var daily by remember { mutableStateOf(config.dailyPrayers.contains(prayer.name)) }
     var favorite by remember { mutableStateOf(config.favorites.contains(prayer.name)) }
     val scope = rememberCoroutineScope()
-    val prayerNums = config.loadPrayerNums(prayer.name)
+    var prayerNums = config.loadPrayerNums(prayer.name)
     var totalNum by remember { mutableStateOf(prayerNums.totalNum) }
     var inrowNum by remember { mutableStateOf(prayerNums.inrowNum) }
     var showDialog by remember { mutableStateOf(false) }
@@ -452,14 +452,21 @@ fun PrayerDetailsScreen(
             prayers = prayers,
             endReachedCallback = { pr ->
                 config.incPrayerNum(pr.name, prayerIntentions)
-                val prayerNums = config.loadPrayerNums(pr.name)
+                prayerNums = config.loadPrayerNums(pr.name)
                 pr.lastPrayed = prayerNums.lastRecorded
                 prayerIntentions = config.loadIntentions(pr.name)
                 currentIntention = prayerIntentions.find { it.currentIntention }
                 totalNum = prayerNums.totalNum
                 inrowNum = prayerNums.inrowNum
             },
-            intention = currentIntention
+            intention = currentIntention,
+            prayerChangedCallback = { pr ->
+                prayerNums = config.loadPrayerNums(pr.name)
+                totalNum = prayerNums.totalNum
+                inrowNum = prayerNums.inrowNum
+                prayerIntentions = config.loadIntentions(pr.name)
+                currentIntention = prayerIntentions.find { it.currentIntention }
+            }
         )
     }
 }
