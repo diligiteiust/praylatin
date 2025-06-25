@@ -292,7 +292,7 @@ fun PrayerDetails(
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
-    endReachedCallback: () -> Unit,
+    endReachedCallback: (pr: Prayer) -> Unit,
     intention: PrayerIntention? = null
 ) {
     val textMeasurer = rememberTextMeasurer()
@@ -314,7 +314,7 @@ fun PrayerDetails(
     if (endReached) {
         endProcessed = true
         LaunchedEffect(scrollState) {
-            endReachedCallback()
+            endReachedCallback(currentPrayer)
         }
     }
 
@@ -400,6 +400,7 @@ fun PrayerDetails(
                                 changed = !changed
                                 coroutineScope.launch {
                                     scrollState.scrollToItem(0)
+                                    endProcessed = false
                                 }
                             }
                         ) {
@@ -429,6 +430,7 @@ fun PrayerDetails(
                                 changed = !changed
                                 coroutineScope.launch {
                                     scrollState.scrollToItem(0)
+                                    endProcessed = false
                                 }
                             }
                         ) {

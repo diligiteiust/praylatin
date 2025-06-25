@@ -15,6 +15,7 @@
 
 package org.latinpray.data
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -42,7 +43,8 @@ data class Prayer(
     val name: String,
     val langs: MutableMap<String, BasicPrayer>,
     var prevPrayer: Prayer? = null,
-    var nextPrayer: Prayer? = null
+    var nextPrayer: Prayer? = null,
+    var lastPrayed: LocalDate? = null
 )
 
 val HIDE_TAG = "Hide"

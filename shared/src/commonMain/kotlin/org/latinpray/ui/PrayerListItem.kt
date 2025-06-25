@@ -26,8 +26,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.theme.darken
 
 @Composable
 fun PrayerListItem(
@@ -46,12 +50,16 @@ fun PrayerListItem(
     if (subtitle == null || subtitle.isEmpty()) {
         pad = 6.dp
     }
+    val darker: Boolean = prayer.lastPrayed != null && prayer.lastPrayed == Clock.System.todayIn(TimeZone.currentSystemDefault())
     Card(
         modifier = Modifier
-            .padding(2.dp)
+            .padding(vertical = 2.dp, horizontal = 4.dp)
             .fillMaxWidth()
             .clickable { onClick(prayer) },
-        elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (darker) { MaterialTheme.colorScheme.surfaceVariant.darken() } else { MaterialTheme.colorScheme.surfaceVariant }
+        ),
     ) {
         Column(modifier = Modifier.padding(4.dp)) {
             Text(
