@@ -143,7 +143,7 @@ fun IntentionsForm(item: PrayerIntention) {
                     },
                     readOnly = false,
                     singleLine = true,
-                    modifier = Modifier.widthIn(min = 150.dp, max = 150.dp),
+                    modifier = Modifier.widthIn(min = 150.dp, max = 300.dp),
                     label = { Text(stringResource(Res.string.intention_days)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
@@ -235,6 +235,24 @@ fun IntentionsDialog(
 
 }
 
+fun findNextActiveIntention(curIntention: PrayerIntention, prayerIntentions: List<PrayerIntention>): PrayerIntention {
+    if (prayerIntentions.size > 1) {
+        var idx = prayerIntentions.indexOf( curIntention )
+        //println("Current intention index: $idx")
+        var nextInten: PrayerIntention
+        do {
+            if (idx < prayerIntentions.size - 1) {
+                idx += 1
+            } else {
+                idx = 0
+            }
+            nextInten = prayerIntentions[idx]
+        } while (!nextInten.active && nextInten != curIntention)
+        return nextInten
+    }
+    return curIntention
+}
+
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun PrayerDetailsScreen(
@@ -260,16 +278,8 @@ fun PrayerDetailsScreen(
         //println("Current intention: ${currInten.toPropsString()}")
         currInten.totalNum += 1
         currInten.inrowNum = 0
-        if (allIntentions.size > 1) {
-            val idx = allIntentions.indexOf( currInten )
-            //println("Current intention index: $idx")
-            var nextInten: PrayerIntention
-            if (idx < allIntentions.size - 1) {
-                nextInten = allIntentions[idx + 1]
-            } else {
-                nextInten = allIntentions[0]
-            }
-            //println("Next intention: ${nextInten.toPropsString()}")
+        val nextInten = findNextActiveIntention(currInten, allIntentions)
+        if (nextInten != currInten) {
             nextInten.currentIntention = true
             currInten.currentIntention = false
             scope.launch {
@@ -288,11 +298,22 @@ fun PrayerDetailsScreen(
             onDismissRequest = { showDialog = false },
             onOkRequest = {
                 showDialog = false
+                prayerIntentions = it
+                var intent = it.find { it.currentIntention }
+                if (intent != null && !intent.active) {
+                    intent.currentIntention = false
+                    val nextInten = findNextActiveIntention(intent, it)
+                    if (nextInten != intent) {
+                        nextInten.currentIntention = true
+                        intent = nextInten
+                    } else {
+                        intent = null
+                    }
+                }
                 scope.launch {
                     config.saveIntentions(prayer.name, it)
                 }
-                prayerIntentions = it
-                currentIntention = it.find { it.currentIntention }
+                currentIntention = intent
             },
             prayerIntentions = prayerIntentions
         )
