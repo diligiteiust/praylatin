@@ -469,12 +469,14 @@ data class Config (
     }
 
     val HOUR_IN_MILLIS = 3600000
+    val TWO_DAYS_AND_6_HOURS_IN_MILLIS = (24 * 2 + 6) * HOUR_IN_MILLIS
 
     fun inrowNumIncrement(last_date: LocalDate, inrowNum: Int, reset: Boolean = true): Int {
         val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val curr_time_millis = Clock.System.now().toEpochMilliseconds()
         val last_date_millis = last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
-        if (reset && (curr_time_millis - last_date_millis > (HOUR_IN_MILLIS * 30))) {
+        // Allows to say prayers until 6AM next day after the day on which the prayer should be said
+        if (reset && (curr_time_millis - last_date_millis > (TWO_DAYS_AND_6_HOURS_IN_MILLIS))) {
             return 1
         }
         if (curr_date == last_date) return inrowNum
