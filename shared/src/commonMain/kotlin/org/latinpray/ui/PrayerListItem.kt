@@ -31,6 +31,10 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.theme.Gray200
+import org.latinpray.theme.Gray600
+import org.latinpray.theme.Gray700
+import org.latinpray.theme.Gray900
 import org.latinpray.theme.darken
 
 @Composable
@@ -51,6 +55,8 @@ fun PrayerListItem(
         pad = 6.dp
     }
     val darker: Boolean = prayer.lastPrayed != null && prayer.lastPrayed == Clock.System.todayIn(TimeZone.currentSystemDefault())
+    val backgroundColor =  if (darker) { MaterialTheme.colorScheme.surfaceVariant.darken() } else { MaterialTheme.colorScheme.surfaceVariant }
+    val textColor = if (darker) { Gray600 } else { MaterialTheme.colorScheme.onBackground }
     Card(
         modifier = Modifier
             .padding(vertical = 2.dp, horizontal = 4.dp)
@@ -58,19 +64,22 @@ fun PrayerListItem(
             .clickable { onClick(prayer) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (darker) { MaterialTheme.colorScheme.surfaceVariant.darken() } else { MaterialTheme.colorScheme.surfaceVariant }
+            containerColor = backgroundColor
         ),
     ) {
         Column(modifier = Modifier.padding(4.dp)) {
             Text(
                 modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = pad, bottom = pad),
-                text = title ?: "No title", style = MaterialTheme.typography.headlineMedium
+                text = title ?: "No title", style = MaterialTheme.typography.headlineMedium,
+                color = textColor
             )
             //println("Rendering prayer ${prayer.name}")
             if (subtitle != null) {
                 Text(
                     modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = pad, bottom = pad),
-                    text = subtitle, style = MaterialTheme.typography.headlineSmall)
+                    text = subtitle, style = MaterialTheme.typography.headlineSmall,
+                    color = textColor
+                )
             }
         }
     }

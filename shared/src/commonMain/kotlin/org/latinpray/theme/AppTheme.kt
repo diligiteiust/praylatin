@@ -23,6 +23,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +35,10 @@ const val TABLET_UI_FONT_FACTOR = 1.1f
 const val TABLET_HEADLINE_FONT_FACTOR = 1.25f
 const val TABLET_CONTENT_FONT_FACTOR = 1.5f
 
+const val DARKEN_DARK_THEME_FACTOR = 0.8f
+const val DARKEN_LIGHT_THEME_FACTOR = 0.9f
+var darkenBy: Float = DARKEN_DARK_THEME_FACTOR
+
 @Composable
 fun AppTheme(
     uiFontFactor: Float = 1.0f,
@@ -42,6 +47,7 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    darkenBy = if (darkTheme) DARKEN_DARK_THEME_FACTOR else DARKEN_LIGHT_THEME_FACTOR
     val colors = if (darkTheme) {
         darkColorScheme(
 //            primary = Color(0xf0ebe0),
@@ -148,5 +154,14 @@ fun AppTheme(
         typography = typography,
         shapes = shapes,
         content = content,
+    )
+}
+
+fun Color.darken(): Color {
+    return copy(
+        red = red * darkenBy,
+        green = green * darkenBy,
+        blue = blue * darkenBy,
+        alpha = alpha
     )
 }

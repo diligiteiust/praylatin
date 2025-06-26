@@ -469,6 +469,10 @@ data class Config (
     }
 
     val HOUR_IN_MILLIS = 3600000
+
+    /* Allows to say prayers until 6AM next day after the day on which the prayer should be said.
+       Otherwise the inrowNum is reset.
+     */
     val TWO_DAYS_AND_6_HOURS_IN_MILLIS = (24 * 2 + 6) * HOUR_IN_MILLIS
 
     fun inrowNumIncrement(last_date: LocalDate, inrowNum: Int, reset: Boolean = true): Int {
@@ -501,6 +505,7 @@ data class Config (
         //println("Current intention: ${currentIntention?.toPropsString()}")
         if (currentIntention != null) {
             //currentIntention.inrowNum = inrowNumIncrement(LocalDate(year = 1970, monthNumber = 2, dayOfMonth = 27), currentIntention.inrowNum, false)
+            // For now novena, inrowNum is not reset if a day is missing.
             currentIntention.inrowNum = inrowNumIncrement(prayerNums.lastRecorded, currentIntention.inrowNum, false)
             if (currentIntention.days <= 1) {
                 currentIntention.totalNum += 1
