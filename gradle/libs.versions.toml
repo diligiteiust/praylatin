@@ -1,7 +1,7 @@
 [versions]
-agpVer = "8.11.0-rc02"
-firebaseBom = "33.15.0"
-kotlinVer = "2.1.21"
+agpVer = "8.11.0"
+firebaseBom = "33.16.0"
+kotlinVer = "2.2.0"
 composeVer = "1.8.3"
 #composeMaterial3Ver = "1.3.1"
 androidxActivityComposeVer = "1.10.1"
@@ -18,11 +18,11 @@ kamlVer = "0.82.0"
 kotlinSerialJsonVer = "1.8.1"
 #kotlinSerialYamlVer = "1.5.1"
 okioVer = "3.13.0"
-kotlinStdLibVer = "2.1.21"
+kotlinStdLibVer = "2.2.0"
 androidxDatastoreVer = "1.1.7"
 markdownVer="0.35.0"
-purchases-kmp = "1.8.3+13.36.0"
-google-services = "4.4.2"
+purchases-kmp = "1.8.5+13.38.1"
+google-services = "4.4.3"
 settingsVer = "1.4.0-SNAPSHOT"
 
 [libraries]
@@ -77,6 +77,7 @@ purchases-datetime = { module = "com.revenuecat.purchases:purchases-kmp-datetime
 purchases-either = { module = "com.revenuecat.purchases:purchases-kmp-either", version.ref = "purchases-kmp" }
 # Optional: adds suspending functions that return kotlin.Result to indicate success / failure.
 purchases-result = { module = "com.revenuecat.purchases:purchases-kmp-result", version.ref = "purchases-kmp" }
+
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settingsVer" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "settingsVer" }
 

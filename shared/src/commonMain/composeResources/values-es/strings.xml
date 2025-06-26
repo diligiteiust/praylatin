@@ -29,11 +29,11 @@
     <string name="on_option">Encender</string>
     <string name="daily_prayers">Diaria</string>
     <string name="favorite_prayers">Favorito</string>
-    <string name="shared_prayer_lists">Shared prayers</string>
-    <string name="show_numbers">Show numbers</string>
-    <string name="intentions_title">Prayer intentions</string>
-    <string name="intention_text">Intention</string>
-    <string name="intention_days">Number of days</string>
-    <string name="intention_active">Active</string>
-    <string name="intention_add">Add intention</string>
+    <string name="shared_prayer_lists">Oraciones compartidas</string>
+    <string name="show_numbers">Mostrar número</string>
+    <string name="intentions_title">Intenciones de oración</string>
+    <string name="intention_text">Intención</string>
+    <string name="intention_days">Número de días</string>
+    <string name="intention_active">Activo</string>
+    <string name="intention_add">Añadir intenciones</string>
 </resources>

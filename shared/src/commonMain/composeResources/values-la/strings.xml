@@ -16,24 +16,24 @@
 <resources>
     <string name="prayers_screen_title">Preces</string>
     <string name="prayer_details_screen_title">Oratio</string>
-    <string name="settings_screen_title">Occasus</string>
-    <string name="about_screen_title">De Applicatione</string>
+    <string name="settings_screen_title">Configurationes</string>
+    <string name="about_screen_title">De applicatione</string>
     <string name="help_screen_title">Auxilium</string>
     <string name="settings_ui_lang">Applicatione lingua</string>
     <string name="settings_prayer_lang">Oratio lingua</string>
     <string name="settings_second_lang">Secunda lingua</string>
-    <string name="settings_prefer_translation">Praefero translationem</string>
-    <string name="settings_grouping">Oratio adjunctio</string>
+    <string name="settings_prefer_translation">Praefero interpretationem</string>
+    <string name="settings_grouping">Coetus</string>
     <string name="settings_substitutions">Substitutiones</string>
-    <string name="off_option">Abstineo</string>
+    <string name="off_option">Exstinctus</string>
     <string name="on_option">Accende</string>
     <string name="daily_prayers">Cotidie</string>
-    <string name="favorite_prayers">Favorite</string>
-    <string name="shared_prayer_lists">Shared prayers</string>
-    <string name="show_numbers">Show numbers</string>
-    <string name="intentions_title">Prayer intentions</string>
-    <string name="intention_text">Intention</string>
-    <string name="intention_days">Number of days</string>
-    <string name="intention_active">Active</string>
-    <string name="intention_add">Add intention</string>
+    <string name="favorite_prayers">Dilectissimus</string>
+    <string name="shared_prayer_lists">Preces communes</string>
+    <string name="show_numbers">Numeros ostende</string>
+    <string name="intentions_title">Intentiones precum</string>
+    <string name="intention_text">Intentio</string>
+    <string name="intention_days">Numerus dierum</string>
+    <string name="intention_active">Activus</string>
+    <string name="intention_add">Intentiones addere</string>
 </resources>

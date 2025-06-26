@@ -110,26 +110,35 @@ data class Config (
 
     @Transient
     var prayersChangedCallback: () -> Unit = {}
+        set(value) {
+            field = value
+            println("Setting prayers changed callback")
+            sharedSettings.addStringListener(DAILY_PROP_KEY.name, "true") { externalModification() }
+            sharedSettings.addStringListener(SUBS_PROP_KEY.name, "true") { externalModification() }
+            sharedSettings.addStringListener(FAVORITES_PROP_KEY.name, "true") { externalModification() }
+            sharedSettings.addStringListener(PRAYERLANG_PROP_KEY.name, "true") { externalModification() }
+            sharedSettings.addStringListener(SECONDLANG_PROP_KEY.name, "true") { externalModification() }
+        }
     //var dataStore: DataStore<Preferences>? = null
 
     //suspend fun loadConfigProps(ds: DataStore<Preferences>) {
     fun loadConfigProps() {
-        sharedPrefs = getSharedPrefs()
+        sharedPrefs = getSharedPrefsPref()
         //println("Loading config props")
-        prayerLang = getPrayerLang()
+        prayerLang = getPrayerLangPref()
         //println("Loaded prayer lang $prayerLang")
         uiLang = getUILang()
         //println("Loaded ui lang $uiLang")
-        secondLang = getSecondLang()
+        secondLang = getSecondLangPref()
         //println("Loaded second lang $secondLang")
-        preferTranslation = getPreferTranslation()
+        preferTranslation = getPreferTranslationPref()
         //println("Loaded prefer translation $preferTranslation")
-        grouping = getGrouping()
+        grouping = getGroupingPref()
         //println("Loaded grouping $grouping")
-        fontScale = getFontScale()
+        fontScale = getFontScalePref()
         //println("Loaded font scale $fontScale")
-        donation = getDonation()
-        showNumbers = getShowNumbers()
+        donation = getDonationPref()
+        showNumbers = getShowNumbersPref()
         loadSubstitutions()
         loadDailyPrayers()
         loadFavorites()
@@ -156,21 +165,21 @@ data class Config (
         prayersChangedCallback()
     }
 
-    fun setPrayersChangedCallback(prayersChangeListener: () -> Unit) {
-        println("Setting prayers changed callback")
-        prayersChangedCallback = prayersChangeListener
-        sharedSettings.addStringListener(DAILY_PROP_KEY.name, "true") { externalModification() }
-        sharedSettings.addStringListener(SUBS_PROP_KEY.name, "true") { externalModification() }
-        sharedSettings.addStringListener(FAVORITES_PROP_KEY.name, "true") { externalModification() }
-        sharedSettings.addStringListener(
-            PRAYERLANG_PROP_KEY.name,
-            "true"
-        ) { externalModification() }
-        sharedSettings.addStringListener(
-            SECONDLANG_PROP_KEY.name,
-            "true"
-        ) { externalModification() }
-    }
+//    fun setPrayersChangedCallback(prayersChangeListener: () -> Unit) {
+//        println("Setting prayers changed callback")
+//        prayersChangedCallback = prayersChangeListener
+//        sharedSettings.addStringListener(DAILY_PROP_KEY.name, "true") { externalModification() }
+//        sharedSettings.addStringListener(SUBS_PROP_KEY.name, "true") { externalModification() }
+//        sharedSettings.addStringListener(FAVORITES_PROP_KEY.name, "true") { externalModification() }
+//        sharedSettings.addStringListener(
+//            PRAYERLANG_PROP_KEY.name,
+//            "true"
+//        ) { externalModification() }
+//        sharedSettings.addStringListener(
+//            SECONDLANG_PROP_KEY.name,
+//            "true"
+//        ) { externalModification() }
+//    }
 
 
     private fun getPref(key: String, def: Boolean): Boolean {
@@ -275,33 +284,33 @@ data class Config (
         }
     }
 
-    private fun getDonation(): String? {
+    private fun getDonationPref(): String? {
         val result = getPref(DONATION_PROP_KEY.name, "")
         return result.ifEmpty { null }
     }
 
-    private fun getSharedPrefs(): Boolean =
+    private fun getSharedPrefsPref(): Boolean =
         getPref(SHARED_PREFS_PROP_KEY.name, sharedPrefs)
 
-    private fun getShowNumbers(): Boolean =
+    private fun getShowNumbersPref(): Boolean =
         getPref(SHOW_NUMBERS_PROP_KEY.name, showNumbers)
 
-    private fun getPrayerLang(): String =
+    private fun getPrayerLangPref(): String =
         getPref(PRAYERLANG_PROP_KEY.name, prayerLang)
 
     private fun getUILang(): String =
         getPref(UILANF_PROP_KEY.name, uiLang)
 
-    private fun getSecondLang(): String =
+    private fun getSecondLangPref(): String =
         getPref(SECONDLANG_PROP_KEY.name, secondLang)
 
-    private fun getPreferTranslation(): Boolean =
+    private fun getPreferTranslationPref(): Boolean =
         getPref(PREFER_TRANSLATION_PROP_KEY.name, preferTranslation)
 
-    private fun getGrouping(): Boolean =
+    private fun getGroupingPref(): Boolean =
         getPref(GROUPING_PROP_KEY.name, grouping)
 
-    private fun getFontScale(): Float =
+    private fun getFontScalePref(): Float =
         getPref(FONT_SCALE_PROP_KEY.name, fontScale)
 
     suspend fun saveConfig(

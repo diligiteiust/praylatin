@@ -37,7 +37,6 @@ import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 import org.latinpray.data.offers
 import org.latinpray.data.privacy
-import org.latinpray.data.sampleConfig
 import org.latinpray.data.samplePrayers
 import org.latinpray.data.terms
 import org.latinpray.io.prayersList
@@ -64,7 +63,7 @@ fun loadLocalizedContent(file: String, lang: String): String {
     println("reading file: $f")
     try {
         return readFileFromAssets(f).replace('\n', ' ').replace("<p>", "\n   \n")
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         return readFileFromAssets(file).replace('\n', ' ').replace("<p>", "\n   \n")
     }
 }
@@ -89,14 +88,13 @@ fun Main() {
     println("Loaded config from yaml")
     var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var currentPrayer = prayers.first()
-    defConfig.setPrayersChangedCallback(prayersChangeListener = {
+    defConfig.prayersChangedCallback = {
         scope.launch {
             println("Prayers changed")
             prayers = reloadPrayers(defConfig)
             currentPrayer = prayers.first()
         }
     }
-    )
     var helpContent by remember { mutableStateOf("") }
     var aboutContent by remember { mutableStateOf("") }
     var lang: String by remember { mutableStateOf(defConfig.uiLang) }

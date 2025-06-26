@@ -19,10 +19,10 @@
     <string name="settings_screen_title">Settings</string>
     <string name="about_screen_title">About</string>
     <string name="help_screen_title">Help/Contribute</string>
-    <string name="settings_ui_lang">UI Language</string>
-    <string name="settings_prayer_lang">Prayer Language</string>
-    <string name="settings_second_lang">Second Language</string>
-    <string name="settings_prefer_translation">Prefer Translation</string>
+    <string name="settings_ui_lang">UI language</string>
+    <string name="settings_prayer_lang">Prayer language</string>
+    <string name="settings_second_lang">Second language</string>
+    <string name="settings_prefer_translation">Prefer translation</string>
     <string name="settings_grouping">Grouping</string>
     <string name="settings_substitutions">Substitutions</string>
     <string name="off_option">Off</string>
