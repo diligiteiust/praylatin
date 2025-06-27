@@ -15,7 +15,10 @@
 
 package org.latinpray.data
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -44,8 +47,16 @@ data class Prayer(
     val langs: MutableMap<String, BasicPrayer>,
     var prevPrayer: Prayer? = null,
     var nextPrayer: Prayer? = null,
-    var lastPrayed: LocalDate? = null
-)
+    var nums: PrayerNums = PrayerNums(
+        lastRecorded = LocalDate(1970, 1,1),
+        totalNum = 0,
+        inrowNum = 0
+    ),
+) {
+    fun prayedToday(): Boolean {
+        return nums.lastRecorded == Clock.System.todayIn(TimeZone.currentSystemDefault())
+    }
+}
 
 val HIDE_TAG = "Hide"
 

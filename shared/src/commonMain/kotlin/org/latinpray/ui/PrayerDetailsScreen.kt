@@ -266,11 +266,11 @@ fun PrayerDetailsScreen(
     var daily by remember { mutableStateOf(config.dailyPrayers.contains(prayer.name)) }
     var favorite by remember { mutableStateOf(config.favorites.contains(prayer.name)) }
     val scope = rememberCoroutineScope()
-    var prayerNums = config.loadPrayerNums(prayer.name)
+    var prayerNums = config.loadPrayerNums(prayer)
     var totalNum by remember { mutableStateOf(prayerNums.totalNum) }
     var inrowNum by remember { mutableStateOf(prayerNums.inrowNum) }
     var showDialog by remember { mutableStateOf(false) }
-    val allIntentions = config.loadIntentions(prayer.name)
+    val allIntentions = config.loadIntentions(prayer)
     var prayerIntentions by remember { mutableStateOf(allIntentions) }
     var currInten = allIntentions.find { it.currentIntention }
     if (currInten != null && currInten.inrowNum >= currInten.days) {
@@ -283,12 +283,12 @@ fun PrayerDetailsScreen(
             nextInten.currentIntention = true
             currInten.currentIntention = false
             scope.launch {
-                config.saveIntention(prayer.name, nextInten)
+                config.saveIntention(prayer, nextInten)
             }
             currInten = nextInten
         }
         scope.launch {
-            config.saveIntention(prayer.name, oldInten)
+            config.saveIntention(prayer, oldInten)
         }
     }
     var currentIntention by remember { mutableStateOf(currInten) }
@@ -311,7 +311,7 @@ fun PrayerDetailsScreen(
                     }
                 }
                 scope.launch {
-                    config.saveIntentions(prayer.name, it)
+                    config.saveIntentions(prayer, it)
                 }
                 currentIntention = intent
             },
@@ -451,20 +451,19 @@ fun PrayerDetailsScreen(
             config = config,
             prayers = prayers,
             endReachedCallback = { pr ->
-                config.incPrayerNum(pr.name, prayerIntentions)
-                prayerNums = config.loadPrayerNums(pr.name)
-                pr.lastPrayed = prayerNums.lastRecorded
-                prayerIntentions = config.loadIntentions(pr.name)
+                config.incPrayerNum(pr, prayerIntentions)
+                prayerNums = pr.nums
+                prayerIntentions = config.loadIntentions(pr)
                 currentIntention = prayerIntentions.find { it.currentIntention }
                 totalNum = prayerNums.totalNum
                 inrowNum = prayerNums.inrowNum
             },
             intention = currentIntention,
             prayerChangedCallback = { pr ->
-                prayerNums = config.loadPrayerNums(pr.name)
+                prayerNums = pr.nums
                 totalNum = prayerNums.totalNum
                 inrowNum = prayerNums.inrowNum
-                prayerIntentions = config.loadIntentions(pr.name)
+                prayerIntentions = config.loadIntentions(pr)
                 currentIntention = prayerIntentions.find { it.currentIntention }
             }
         )

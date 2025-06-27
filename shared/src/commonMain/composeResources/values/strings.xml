@@ -36,4 +36,5 @@
     <string name="intention_days">Number of days</string>
     <string name="intention_active">Active</string>
     <string name="intention_add">Add intention</string>
+    <string name="reset_shared_data">Reset shared data</string>
 </resources>

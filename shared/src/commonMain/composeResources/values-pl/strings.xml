@@ -36,4 +36,5 @@
     <string name="intention_days">Liczba dni</string>
     <string name="intention_active">Aktywna</string>
     <string name="intention_add">Dodaj intencję</string>
+    <string name="reset_shared_data">Usuń synchronizowane dane</string>
 </resources>

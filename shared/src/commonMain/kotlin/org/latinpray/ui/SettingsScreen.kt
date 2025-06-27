@@ -66,6 +66,7 @@ import org.latinpray.shared.settings_substitutions
 import org.latinpray.shared.settings_ui_lang
 import org.latinpray.shared.shared_prayer_lists
 import org.latinpray.shared.show_numbers
+import org.latinpray.shared.reset_shared_data
 import org.latinpray.sharedPrefsSupported
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -259,31 +260,33 @@ fun SettingsScreen(
                 },
                 true
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding( horizontal = 32.dp)
-            )  {
-                Text(
-                    text = "Reset shared data",
-                    color = MaterialTheme.colorScheme.error
-                )
-                Spacer(Modifier.weight(1f))
-                IconButton(
-                    onClick = {
-                        sharedPrefsChecked = false
-                        scope.launch {
-                            config.saveSharedPrefs(false)
-                            config.resetSharedPrefs()
-                            reloadPrayers(config)
-                        }
-                    }
+            if (sharedPrefsSupported()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 32.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Reset Prayers Share",
-                        tint = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.size(30.dp)
+                    Text(
+                        text = stringResource(Res.string.reset_shared_data),
+                        color = MaterialTheme.colorScheme.error
                     )
+                    Spacer(Modifier.weight(1f))
+                    IconButton(
+                        onClick = {
+                            sharedPrefsChecked = false
+                            scope.launch {
+                                config.saveSharedPrefs(false)
+                                config.resetSharedPrefs()
+                                reloadPrayers(config)
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = stringResource(Res.string.reset_shared_data),
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
                 }
             }
         }

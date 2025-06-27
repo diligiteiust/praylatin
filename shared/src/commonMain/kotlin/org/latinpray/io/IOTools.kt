@@ -27,7 +27,7 @@ import org.latinpray.loc.getLanguage
 
 val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
 
-suspend fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
+fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
     val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
     //println("Yaml content: $assetsFile")
     val allsubs = pattern.findAll(yamlContent)
@@ -62,7 +62,7 @@ fun readConfigFromAssets(assetsFile: String): Config {
     return Yaml.default.decodeFromString<Config>(readFileFromAssets(assetsFile))
 }
 
-suspend fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {
+fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {
     val prayers = emptyMap<String, Prayer>().toMutableMap()
     initialPrayers.forEach { prayer ->
         //println("initial prayer: ${prayer.name}")
@@ -89,6 +89,7 @@ suspend fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): Mu
             if (prayer == null) {
                 //println("Creating new prayer $name")
                 prayer = Prayer(i++, name, mutableMapOf(basicPrayer.lang to basicPrayer))
+                prayer.nums = config.loadPrayerNums(prayer)
                 prayers[name] = prayer
             }
             if (lang == basicPrayer.lang) {
