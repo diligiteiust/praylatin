@@ -26,6 +26,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -35,7 +36,7 @@ import kotlinx.serialization.Transient
 import org.latinpray.createSettings
 
 @Serializable
-data class Config (
+data class Config(
     var uiLang: String,
     var prayerLang: String,
     var secondLang: String,
@@ -49,46 +50,64 @@ data class Config (
 
     @Transient
     val allPrayerLangs: MutableMap<String, String> = mutableMapOf()
+
     @Transient
     val allUIlangs: MutableMap<String, String> =
         mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski", "es" to "Español")
+
     @Transient
     val substitutions = mutableMapOf(
         "patrons" to "my saint patrons..."
     )
+
     @Transient
     val dailyPrayers: MutableList<String> = mutableListOf()
+
     @Transient
     val favorites: MutableList<String> = mutableListOf()
 
     @Transient
     private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
+
     @Transient
     private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
+
     @Transient
     private val SECONDLANG_PROP_KEY = stringPreferencesKey("secondLang")
+
     @Transient
     private val PREFER_TRANSLATION_PROP_KEY = booleanPreferencesKey("preferTranslation")
+
     @Transient
     private val GROUPING_PROP_KEY = booleanPreferencesKey("grouping")
+
     @Transient
     private val FONT_SCALE_PROP_KEY = floatPreferencesKey("fontScale")
+
     @Transient
     private val DONATION_PROP_KEY = stringPreferencesKey("donation")
+
     @Transient
     private val SUBS_PROP_KEY = stringPreferencesKey("substitutions")
+
     @Transient
     private val DAILY_PROP_KEY = stringPreferencesKey("dailyPrayers")
+
     @Transient
     private val FAVORITES_PROP_KEY = stringPreferencesKey("favorites")
+
     @Transient
     private val SHARED_PREFS_PROP_KEY = stringPreferencesKey("sharedPrefs")
+
     @Transient
     private val SHARED_INITIALIZED_PROP_KEY = booleanPreferencesKey("initialized")
+
     @Transient
     private val SHOW_NUMBERS_PROP_KEY = booleanPreferencesKey("showNumbers")
+
     @Transient
     private val PRAYER_NUM_KEY = stringPreferencesKey("_num")
+
     @Transient
     private val INTENTIONS_KEY = stringPreferencesKey("_inten")
 
@@ -115,9 +134,18 @@ data class Config (
             println("Setting prayers changed callback")
             sharedSettings.addStringListener(DAILY_PROP_KEY.name, "true") { externalModification() }
             sharedSettings.addStringListener(SUBS_PROP_KEY.name, "true") { externalModification() }
-            sharedSettings.addStringListener(FAVORITES_PROP_KEY.name, "true") { externalModification() }
-            sharedSettings.addStringListener(PRAYERLANG_PROP_KEY.name, "true") { externalModification() }
-            sharedSettings.addStringListener(SECONDLANG_PROP_KEY.name, "true") { externalModification() }
+            sharedSettings.addStringListener(
+                FAVORITES_PROP_KEY.name,
+                "true"
+            ) { externalModification() }
+            sharedSettings.addStringListener(
+                PRAYERLANG_PROP_KEY.name,
+                "true"
+            ) { externalModification() }
+            sharedSettings.addStringListener(
+                SECONDLANG_PROP_KEY.name,
+                "true"
+            ) { externalModification() }
         }
     //var dataStore: DataStore<Preferences>? = null
 
@@ -467,11 +495,13 @@ data class Config (
        Otherwise the inrowNum is reset.
      */
     val TWO_DAYS_AND_6_HOURS_IN_MILLIS = (24 * 2 + 6) * HOUR_IN_MILLIS
+    //val DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS
 
     fun inrowNumIncrement(last_date: LocalDate, inrowNum: Int, reset: Boolean = true): Int {
         val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val curr_time_millis = Clock.System.now().toEpochMilliseconds()
-        val last_date_millis = last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+        val last_date_millis =
+            last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
         // Allows to say prayers until 6AM next day after the day on which the prayer should be said
         if (reset && (curr_time_millis - last_date_millis > (TWO_DAYS_AND_6_HOURS_IN_MILLIS))) {
             return 1
@@ -482,36 +512,40 @@ data class Config (
 
     fun incPrayerNum(prayer: Prayer, intentions: List<PrayerIntention>) {
         //println("Incrementing prayer num for $prayer")
-        val prayerNums = loadPrayerNums(prayer)
-        val totalNum = prayerNums.totalNum + 1
-        val inrowNum = inrowNumIncrement(prayerNums.lastRecorded, prayerNums.inrowNum)
+        //val prayerNums = loadPrayerNums(prayer)
+        //val lastRecorded = prayer.nums.lastRecorded
+        val totalNum = prayer.nums.totalNum + 1
+        val inrowNum = inrowNumIncrement(prayer.nums.lastRecorded, prayer.nums.inrowNum)
         var curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        if (inrowNum > 1) {
-            val instantLast: Instant = prayerNums.lastRecorded.atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
-            val instantDayLater: Instant = instantLast.plus(1, DateTimeUnit.DAY, TimeZone.currentSystemDefault())
+        if (inrowNum > 1 && prayer.nums.lastRecorded.daysUntil(curr_date) > 0) {
+            val instantLast: Instant =
+                prayer.nums.lastRecorded.atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
+            val instantDayLater: Instant =
+                instantLast.plus(1, DateTimeUnit.DAY, TimeZone.currentSystemDefault())
             curr_date = instantDayLater.toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+            //println("Incrementing nums for current intention")
+            val currentIntention = intentions.find { it.currentIntention }
+            //println("Current intention: ${currentIntention?.toPropsString()}")
+            if (currentIntention != null) {
+                //currentIntention.inrowNum = inrowNumIncrement(LocalDate(year = 1970, monthNumber = 2, dayOfMonth = 27), currentIntention.inrowNum, false)
+                // For now novena, inrowNum is not reset if a day is missing.
+                currentIntention.inrowNum =
+                    inrowNumIncrement(prayer.nums.lastRecorded, currentIntention.inrowNum, false)
+                if (currentIntention.days <= 1) {
+                    currentIntention.totalNum += 1
+                } else {
+                    if (currentIntention.inrowNum > currentIntention.days) {
+                        currentIntention.totalNum += 1
+                        currentIntention.inrowNum = 1
+                    }
+                }
+                //println("Saving current intention: ${currentIntention.toPropsString()}")
+                saveIntention(prayer, currentIntention)
+            }
         }
         putToSharedPrefs(prayer.name + PRAYER_NUM_KEY.name, "$curr_date,$totalNum,$inrowNum")
         prayer.nums = PrayerNums(curr_date, totalNum, inrowNum)
-
-        //println("Incrementing nums for current intention")
-        val currentIntention = intentions.find { it.currentIntention }
-        //println("Current intention: ${currentIntention?.toPropsString()}")
-        if (currentIntention != null) {
-            //currentIntention.inrowNum = inrowNumIncrement(LocalDate(year = 1970, monthNumber = 2, dayOfMonth = 27), currentIntention.inrowNum, false)
-            // For now novena, inrowNum is not reset if a day is missing.
-            currentIntention.inrowNum = inrowNumIncrement(prayerNums.lastRecorded, currentIntention.inrowNum, false)
-            if (currentIntention.days <= 1) {
-                currentIntention.totalNum += 1
-            } else {
-                if (currentIntention.inrowNum > currentIntention.days) {
-                    currentIntention.totalNum += 1
-                    currentIntention.inrowNum = 1
-                }
-            }
-            //println("Saving current intention: ${currentIntention.toPropsString()}")
-            saveIntention(prayer, currentIntention)
-        }
     }
 
     fun loadIntentions(prayer: Prayer): List<PrayerIntention> {
