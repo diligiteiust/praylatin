@@ -266,8 +266,14 @@ data class Config(
     }
 
     private fun putToSharedPrefs(key: String, def: String) {
+        println("Putting pref ${key}: $def in shared prefs")
         localSettings.putString(key, def)
-        if (sharedPrefs) sharedSettings.putString(key, def)
+        if (sharedPrefs) {
+            sharedSettings.putString(key, def)
+            println("Saved to shared pref ${key}: $def")
+            val value = getFromSharedPrefs(key)
+            println("Got from shared pref ${key}: $value")
+        }
     }
 
     private fun loadSubstitutions() {

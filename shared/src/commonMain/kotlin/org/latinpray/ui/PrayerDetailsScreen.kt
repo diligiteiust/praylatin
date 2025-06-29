@@ -453,10 +453,10 @@ fun PrayerDetailsScreen(
             endReachedCallback = { pr ->
                 println("End reached start: ${pr.name} - ${pr.nums}, ${currentIntention}")
                 config.incPrayerNum(pr, prayerIntentions)
-                prayerIntentions = config.loadIntentions(pr)
-                currentIntention = prayerIntentions.find { it.currentIntention }
                 totalNum = pr.nums.totalNum
                 inrowNum = pr.nums.inrowNum
+                prayerIntentions = config.loadIntentions(pr)
+                currentIntention = prayerIntentions.find { it.currentIntention }
                 println("End reached end: ${pr.name} - ${pr.nums}, ${currentIntention}")
             },
             intention = currentIntention,

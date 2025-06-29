@@ -35,9 +35,9 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.data.avemaria
 import org.latinpray.data.offers
 import org.latinpray.data.privacy
-import org.latinpray.data.samplePrayers
 import org.latinpray.data.terms
 import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
@@ -68,7 +68,7 @@ fun loadLocalizedContent(file: String, lang: String): String {
     }
 }
 
-suspend fun reloadPrayers(config: Config): MutableList<Prayer> {
+fun reloadPrayers(config: Config): MutableList<Prayer> {
     println("Reloading prayers...")
     return prayersList(mutableListOf<Prayer>(), config).sortedBy { prayer ->
         prayer.langs[config.prayerLang]?.title
@@ -86,8 +86,9 @@ fun Main() {
 
     val defConfig: Config = readConfigFromAssets("assets/config.yaml")
     println("Loaded config from yaml")
-    var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
-    var currentPrayer = prayers.first()
+    //var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
+    var prayers by remember { mutableStateOf(mutableListOf<Prayer>()) }
+    var currentPrayer: Prayer = avemaria
     defConfig.prayersChangedCallback = {
         scope.launch {
             println("Prayers changed")
