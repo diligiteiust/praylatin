@@ -266,13 +266,13 @@ data class Config(
     }
 
     private fun putToSharedPrefs(key: String, def: String) {
-        println("Putting pref ${key}: $def in shared prefs")
+        //println("Putting pref ${key}: $def in shared prefs")
         localSettings.putString(key, def)
         if (sharedPrefs) {
             sharedSettings.putString(key, def)
-            println("Saved to shared pref ${key}: $def")
-            val value = getFromSharedPrefs(key)
-            println("Got from shared pref ${key}: $value")
+            //println("Saved to shared pref ${key}: $def")
+            //val value = getFromSharedPrefs(key)
+            //println("Got from shared pref ${key}: $value")
         }
     }
 
@@ -360,9 +360,9 @@ data class Config(
         setPref(SHARED_PREFS_PROP_KEY.name, sharedPrefs)
         if (copyRequired) {
             if (sharedSettings.getBoolean(SHARED_INITIALIZED_PROP_KEY.name, false)) {
-                println("SHARED_INITIALIZED_PROP_KEY already set")
+                //println("SHARED_INITIALIZED_PROP_KEY already set")
             } else {
-                println("SHARED_INITIALIZED_PROP_KEY not set")
+                //println("SHARED_INITIALIZED_PROP_KEY not set")
                 copySharedPrefs()
             }
             sharedSettings.putBoolean(SHARED_INITIALIZED_PROP_KEY.name, true)
@@ -375,7 +375,7 @@ data class Config(
     }
 
     suspend fun copySharedPrefs() {
-        println("Copying shared prefs")
+        //println("Copying shared prefs")
         saveConfig()
     }
 

@@ -26,12 +26,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.shared.Res
+import org.latinpray.shared.daily_prayers
 import org.latinpray.theme.Gray600
 import org.latinpray.theme.darken
 
-data class PrayerItem(val prayer: Prayer, val darker: Boolean, val tag: String?)
+data class PrayerItem(val prayer: Prayer, var darker: Boolean, val tag: String?)
 
 @Composable
 fun PrayerListItem(
@@ -41,6 +44,7 @@ fun PrayerListItem(
 ) {
     val normalSurface =  MaterialTheme.colorScheme.surfaceVariant
     val darkerSurface = normalSurface.darken()
+    prayerItem.darker = prayerItem.prayer.prayedToday() && prayerItem.tag == stringResource(Res.string.daily_prayers)
     val backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface}
     val textColor = if (prayerItem.darker) { Gray600 } else { MaterialTheme.colorScheme.onBackground }
     var subtitle: String? = null
