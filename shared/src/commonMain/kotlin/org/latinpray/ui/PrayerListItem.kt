@@ -31,31 +31,34 @@ import org.latinpray.data.Prayer
 import org.latinpray.theme.Gray600
 import org.latinpray.theme.darken
 
+data class PrayerItem(val prayer: Prayer, val darker: Boolean, val tag: String?)
+
 @Composable
 fun PrayerListItem(
-    prayer: Prayer,
+    prayerItem: PrayerItem,
     onClick: (prayer: Prayer) -> Unit,
-    config: Config
+    config: Config,
 ) {
+    val normalSurface =  MaterialTheme.colorScheme.surfaceVariant
+    val darkerSurface = normalSurface.darken()
+    val backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface}
+    val textColor = if (prayerItem.darker) { Gray600 } else { MaterialTheme.colorScheme.onBackground }
     var subtitle: String? = null
-    var title = prayer.langs[config.prayerLang]?.title
+    var title = prayerItem.prayer.langs[config.prayerLang]?.title
     var pad = 2.dp
     if (title == null) {
-        title = prayer.langs[config.secondLang]?.title
+        title = prayerItem.prayer.langs[config.secondLang]?.title
     } else {
-        subtitle = prayer.langs[config.secondLang]?.title
+        subtitle = prayerItem.prayer.langs[config.secondLang]?.title
     }
     if (subtitle == null || subtitle.isEmpty()) {
         pad = 6.dp
     }
-    val darker: Boolean = prayer.prayedToday()
-    val backgroundColor =  if (darker) { MaterialTheme.colorScheme.surfaceVariant.darken() } else { MaterialTheme.colorScheme.surfaceVariant }
-    val textColor = if (darker) { Gray600 } else { MaterialTheme.colorScheme.onBackground }
     Card(
         modifier = Modifier
             .padding(vertical = 2.dp, horizontal = 4.dp)
             .fillMaxWidth()
-            .clickable { onClick(prayer) },
+            .clickable { onClick(prayerItem.prayer) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
             containerColor = backgroundColor

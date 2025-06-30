@@ -30,7 +30,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.MaterialTheme
@@ -92,7 +92,7 @@ fun PrayersListScreen(
                 var lastPr: Prayer? = null
                 config.dailyPrayers.forEach { prayer ->
                     prayers.firstOrNull { it.name == prayer }?.let {
-                        gp.add(it)
+                        gp.add(PrayerItem(it, it.prayedToday(), dailyPrayersStr))
                         if (lastPr != null) {
                             lastPr!!.nextPrayer = it
                             it.prevPrayer = lastPr
@@ -104,7 +104,9 @@ fun PrayersListScreen(
             if (config.favorites.isNotEmpty()) {
                 gp.add(favoritePrayersStr)
                 config.favorites.forEach { prayer ->
-                    prayers.firstOrNull { it.name == prayer }?.let { gp.add(it) }
+                    prayers.firstOrNull { it.name == prayer }?.let {
+                        gp.add(PrayerItem(it, false, favoritePrayersStr))
+                    }
                 }
             }
             tags.sorted().forEach { tag ->
@@ -115,7 +117,7 @@ fun PrayersListScreen(
                         && (prayer.langs[config.prayerLang]?.tags?.contains(tag) == true)
                         && (prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false)
                     ) {
-                        gp.add(prayer)
+                        gp.add(PrayerItem(prayer, false, tag))
                         //println("Added 1st prayer ${prayer.name} to group: $tag")
                     } else if ((prayer.langs[config.secondLang] != null)
                         && (prayer.langs[config.secondLang]?.tags?.contains(tag) == true)
@@ -193,11 +195,19 @@ fun PrayersListScreen(
                         )
                     }
 
+                    is PrayerItem -> {
+                        PrayerListItem(
+                            prayerItem = item,
+                            onClick = onClick,
+                            config = config,
+                        )
+                    }
+
                     is Prayer -> {
                         PrayerListItem(
-                            prayer = item,
+                            prayerItem = PrayerItem(item, false, null),
                             onClick = onClick,
-                            config = config
+                            config = config,
                         )
                         //println("Displaying prayer ${item.name}")
                     }
