@@ -347,7 +347,8 @@ fun PrayerDetails(
                                 nums = intention.totalNum.toString()
                             }
                             if (intention.days > 1) {
-                                nums = nums + " / " + intention.inrowNum
+                                if (nums.isNotEmpty()) nums += " / "
+                                nums = nums + intention.inrowNum
                             }
                             if (nums.isNotEmpty()) nums = " (" + nums + ")"
                             Text(
