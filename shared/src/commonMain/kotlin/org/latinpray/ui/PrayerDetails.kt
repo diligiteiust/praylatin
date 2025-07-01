@@ -42,7 +42,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -125,8 +124,10 @@ fun preparePrayer(
     }
     // If prefered translation is enabled, we try to find content with translation
     // instead of the standard content
-    if (!firstLang && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
+    //println ("firstLang: ${firstLang}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${prayer.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
+    if (firstLang && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
         lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
+        //println("Using translation for prayer: ${prayer.name} - ${lang2?.title}")
     }
 
     var result = ""
