@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
@@ -67,7 +66,6 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
-import kotlinx.coroutines.launch
 import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Link
@@ -276,8 +274,23 @@ fun MyMarkdownSuccess(
     state: State.Success,
     components: MarkdownComponents,
     modifier: Modifier = Modifier,
-    scrollState: LazyListState,
+    endReachedCallback: () -> Unit,
+    //scrollState: LazyListState,
 ) {
+    val scrollState = rememberLazyListState()
+    var endProcessed by remember { mutableStateOf(false) }
+    val endReached by remember {
+        derivedStateOf {
+            !endProcessed && scrollState.layoutInfo.totalItemsCount > 0 && !scrollState.canScrollForward
+        }
+    }
+    if (endReached) {
+        endProcessed = true
+        LaunchedEffect(scrollState) {
+            endReachedCallback()
+        }
+    }
+
     LazyColumn(modifier = modifier, state = scrollState) {
         items(items = state.node.children) { node ->
             MarkdownElement(node, components, state.content, skipLinkDefinition = state.linksLookedUp)
@@ -292,7 +305,7 @@ fun PrayerDetails(
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
-    endReachedCallback: (pr: Prayer) -> Unit,
+    endReachedCallback: () -> Unit,
     prayerChangedCallback: (pr: Prayer) -> Unit,
     intention: PrayerIntention? = null
 ) {
@@ -301,26 +314,14 @@ fun PrayerDetails(
     val text = "A"
     val textLayoutResult = textMeasurer.measure(text, textStyle)
     val textWidth = textLayoutResult.size.width
-    val scrollState = rememberLazyListState()
-    var endProcessed by remember { mutableStateOf(false) }
-    val endReached by remember {
-        derivedStateOf {
-            !endProcessed && scrollState.layoutInfo.totalItemsCount > 0 && !scrollState.canScrollForward
-        }
-    }
-    val coroutineScope = rememberCoroutineScope()
+    //val coroutineScope = rememberCoroutineScope()
     var changed by remember { mutableStateOf(false) }
-    var currentPrayer by remember { mutableStateOf( prayer) }
+    //var currentPrayer by remember { mutableStateOf( prayer) }
 
-    if (endReached) {
-        endProcessed = true
-        LaunchedEffect(scrollState) {
-            endReachedCallback(currentPrayer)
-        }
-    }
-
+    //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
     key(changed) {
-        val content = preparePrayer(firstLang, currentPrayer, config, prayers)
+        val content = preparePrayer(firstLang, prayer, config, prayers)
+        //println("PrayerDetails - after preparePrayer for  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -336,17 +337,17 @@ fun PrayerDetails(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = getPrayerTitle(firstLang, currentPrayer, config),
+                            text = getPrayerTitle(firstLang, prayer, config),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground
                         )
                         if (intention != null) {
                             var nums = ""
                             if (config.showNumbers) {
-                                nums = intention.totalNum.toString() + " / "
+                                nums = intention.totalNum.toString()
                             }
                             if (intention.days > 1) {
-                                nums = nums + intention.inrowNum
+                                nums = nums + " / " + intention.inrowNum
                             }
                             if (nums.isNotEmpty()) nums = " (" + nums + ")"
                             Text(
@@ -362,7 +363,7 @@ fun PrayerDetails(
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 val margins = maxWidth * 0.04f
                 MAX_LEN = ((DpToPx(maxWidth) / textWidth) / 2.3).toInt()
-
+                //println("Preparing markdown for:  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                 Markdown(
                     content = content,
                     padding = markdownPadding(
@@ -386,24 +387,27 @@ fun PrayerDetails(
                         paragraph = customParagraphComponent,
                     ),
                     success = @Composable  { state, components, modifier ->
-                        MyMarkdownSuccess(state, components, modifier, scrollState)
+                        MyMarkdownSuccess(state, components, modifier, endReachedCallback)
                     },
                 )
-
+                //println("Prepared markdown for:  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
             }
-            if (currentPrayer.prevPrayer != null || currentPrayer.nextPrayer != null) {
+            if (prayer.prevPrayer != null || prayer.nextPrayer != null) {
                 val navColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.5f)
                 Row() {
-                    if (currentPrayer.prevPrayer != null) {
+                    if (prayer.prevPrayer != null) {
+                        //println("PrayerDetails prevPrayer != null - before previous, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                         TextButton(
                             onClick = {
-                                currentPrayer = currentPrayer.prevPrayer!!
+                                //currentPrayer = currentPrayer.prevPrayer!!
+                                //println("PrayerDetails onClick previous, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
+                                prayerChangedCallback(prayer.prevPrayer!!)
+//                                endProcessed = false
+//                                coroutineScope.launch {
+//                                    scrollState.scrollToItem(0)
+//
+//                                }
                                 changed = !changed
-                                coroutineScope.launch {
-                                    scrollState.scrollToItem(0)
-                                    endProcessed = false
-                                }
-                                prayerChangedCallback(currentPrayer)
                             }
                         ) {
                             Icon(
@@ -416,7 +420,7 @@ fun PrayerDetails(
                             Text(
                                 text = getPrayerTitle(
                                     firstLang,
-                                    currentPrayer.prevPrayer!!,
+                                    prayer.prevPrayer!!,
                                     config,
                                     MAX_LEN
                                 ),
@@ -424,23 +428,26 @@ fun PrayerDetails(
                             )
                         }
                     }
-                    if (currentPrayer.nextPrayer != null) {
+                    if (prayer.nextPrayer != null) {
+                        //println("PrayerDetails nextPrayer != null - before next, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                         Spacer(Modifier.weight(1f))
                         TextButton(
                             onClick = {
-                                currentPrayer = currentPrayer.nextPrayer!!
+                                //currentPrayer = currentPrayer.nextPrayer!!
+                                //println("PrayerDetails onClick next, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
+                                prayerChangedCallback(prayer.nextPrayer!!)
+//                                endProcessed = false
+//                                coroutineScope.launch {
+//                                    scrollState.scrollToItem(0)
+//
+//                                }
                                 changed = !changed
-                                coroutineScope.launch {
-                                    scrollState.scrollToItem(0)
-                                    endProcessed = false
-                                }
-                                prayerChangedCallback(currentPrayer)
                             }
                         ) {
                             Text(
                                 text = getPrayerTitle(
                                     firstLang,
-                                    currentPrayer.nextPrayer!!,
+                                    prayer.nextPrayer!!,
                                     config,
                                     MAX_LEN
                                 ),
@@ -456,6 +463,7 @@ fun PrayerDetails(
                     }
                 }
             }
+            //println("PrayerDetails - end of function, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
         }
     }
 

@@ -209,7 +209,7 @@ fun Main() {
                         }
                         composable(route = MainScreens.PrayerDetailsScreen.name) {
                             PrayerDetailsScreen(
-                                prayer = currentPrayer,
+                                startPrayer = currentPrayer,
                                 config = defConfig,
                                 prayers = prayers,
                                 //animatedContentScope = this,

@@ -256,11 +256,12 @@ fun findNextActiveIntention(curIntention: PrayerIntention, prayerIntentions: Lis
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun PrayerDetailsScreen(
-    prayer: Prayer,
+    startPrayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
     goBack: () -> Unit,
 ) {
+    var prayer by remember { mutableStateOf(startPrayer) }
     val (fraction) = remember { mutableStateOf(0.25f) }
     var firstLang by remember { mutableStateOf(true) }
     var daily by remember { mutableStateOf(config.dailyPrayers.contains(prayer.name)) }
@@ -450,24 +451,26 @@ fun PrayerDetailsScreen(
             prayer = prayer,
             config = config,
             prayers = prayers,
-            endReachedCallback = { pr ->
-                println("End reached start: ${pr.name} - ${pr.nums}, ${currentIntention}")
-                config.incPrayerNum(pr, prayerIntentions)
-                totalNum = pr.nums.totalNum
-                inrowNum = pr.nums.inrowNum
-                prayerIntentions = config.loadIntentions(pr)
+            endReachedCallback = {
+                //println("End reached start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
+                config.incPrayerNum(prayer, prayerIntentions)
+                totalNum = prayer.nums.totalNum
+                inrowNum = prayer.nums.inrowNum
+                prayerIntentions = config.loadIntentions(prayer)
                 currentIntention = prayerIntentions.find { it.currentIntention }
-                println("End reached end: ${pr.name} - ${pr.nums}, ${currentIntention}")
+                //println("End reached end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
             },
             intention = currentIntention,
             prayerChangedCallback = { pr ->
-                daily = config.dailyPrayers.contains(pr.name)
-                favorite = config.favorites.contains(pr.name)
-                totalNum = pr.nums.totalNum
-                inrowNum = pr.nums.inrowNum
-                prayerIntentions = config.loadIntentions(pr)
+                //println("Prayer changed start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
+                prayer = pr
+                daily = config.dailyPrayers.contains(prayer.name)
+                favorite = config.favorites.contains(prayer.name)
+                totalNum = prayer.nums.totalNum
+                inrowNum = prayer.nums.inrowNum
+                prayerIntentions = config.loadIntentions(prayer)
                 currentIntention = prayerIntentions.find { it.currentIntention }
-                println("Prayer changed end: ${pr.name} - ${pr.nums}, ${currentIntention}")
+                //println("Prayer changed end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
             }
         )
     }
