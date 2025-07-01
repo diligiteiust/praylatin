@@ -141,6 +141,7 @@ fun SettingsScreen(
                         scope.launch {
                             config.saveUILang(lang)
                             uiLangChange(config)
+                            goBack()
                         }
                     }
                 }
