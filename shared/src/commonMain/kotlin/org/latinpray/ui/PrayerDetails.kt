@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
@@ -276,10 +277,12 @@ fun MyMarkdownSuccess(
     state: State.Success,
     components: MarkdownComponents,
     modifier: Modifier = Modifier,
+    savedScrollPosition: Int,
+    saveScrollPosition: (LazyListState) -> Unit,
     endReachedCallback: () -> Unit,
     //scrollState: LazyListState,
 ) {
-    val scrollState = rememberLazyListState()
+    val scrollState = rememberLazyListState(initialFirstVisibleItemIndex = savedScrollPosition)
     var endProcessed by remember { mutableStateOf(false) }
     val endReached by remember {
         derivedStateOf {
@@ -289,6 +292,7 @@ fun MyMarkdownSuccess(
     if (endReached) {
         endProcessed = true
         LaunchedEffect(scrollState) {
+            saveScrollPosition(scrollState)
             endReachedCallback()
         }
     }
@@ -307,7 +311,7 @@ fun PrayerDetails(
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
-    endReachedCallback: () -> Unit,
+    endReachedCallbackPD: () -> Unit,
     prayerChangedCallback: (pr: Prayer) -> Unit,
     intention: PrayerIntention? = null
 ) {
@@ -318,6 +322,12 @@ fun PrayerDetails(
     val textWidth = textLayoutResult.size.width
     //val coroutineScope = rememberCoroutineScope()
     var changed by remember { mutableStateOf(false) }
+    var intenTotalNum by remember { mutableStateOf(intention?.totalNum ?: 0) }
+    var intenInrowNum by remember { mutableStateOf(intention?.inrowNum ?: 0) }
+    intenTotalNum = intention?.totalNum ?: 0
+    intenInrowNum = intention?.inrowNum ?: 0
+    var savedScrollPosition by remember { mutableStateOf(0) }
+    //println("PrayerDetails, $intenTotalNum, $intenInrowNum")
     //var currentPrayer by remember { mutableStateOf( prayer) }
 
     //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
@@ -346,11 +356,11 @@ fun PrayerDetails(
                         if (intention != null) {
                             var nums = ""
                             if (config.showNumbers) {
-                                nums = intention.totalNum.toString()
+                                nums = intenTotalNum.toString()
                             }
                             if (intention.days > 1) {
                                 if (nums.isNotEmpty()) nums += " / "
-                                nums = nums + intention.inrowNum
+                                nums = nums + intenInrowNum
                             }
                             if (nums.isNotEmpty()) nums = " (" + nums + ")"
                             Text(
@@ -390,7 +400,19 @@ fun PrayerDetails(
                         paragraph = customParagraphComponent,
                     ),
                     success = @Composable  { state, components, modifier ->
-                        MyMarkdownSuccess(state, components, modifier, endReachedCallback)
+                        MyMarkdownSuccess(state, components, modifier,
+                            savedScrollPosition,
+                            { it ->
+                                savedScrollPosition = it.firstVisibleItemIndex
+                            },
+                            //scrollState,
+                            {
+                                endReachedCallbackPD()
+                                intenTotalNum = intention?.totalNum ?: 0
+                                intenInrowNum = intention?.inrowNum ?: 0
+                                //println("PrayerDetails endReachedCallback, $intenTotalNum, $intenInrowNum")
+                            }
+                        )
                     },
                 )
                 //println("Prepared markdown for:  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
@@ -405,6 +427,7 @@ fun PrayerDetails(
                                 //currentPrayer = currentPrayer.prevPrayer!!
                                 //println("PrayerDetails onClick previous, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                                 prayerChangedCallback(prayer.prevPrayer!!)
+                                savedScrollPosition = 0
 //                                endProcessed = false
 //                                coroutineScope.launch {
 //                                    scrollState.scrollToItem(0)
@@ -439,6 +462,7 @@ fun PrayerDetails(
                                 //currentPrayer = currentPrayer.nextPrayer!!
                                 //println("PrayerDetails onClick next, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                                 prayerChangedCallback(prayer.nextPrayer!!)
+                                savedScrollPosition = 0
 //                                endProcessed = false
 //                                coroutineScope.launch {
 //                                    scrollState.scrollToItem(0)

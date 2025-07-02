@@ -274,6 +274,7 @@ fun PrayerDetailsScreen(
     val allIntentions = config.loadIntentions(prayer)
     var prayerIntentions by remember { mutableStateOf(allIntentions) }
     var currInten = allIntentions.find { it.currentIntention }
+    var endProcessed by remember { mutableStateOf(false) }
     if (currInten != null && currInten.inrowNum >= currInten.days) {
         val oldInten = currInten
         //println("Current intention: ${currInten.toPropsString()}")
@@ -445,33 +446,37 @@ fun PrayerDetailsScreen(
                 }
             }
         }
-
-        PrayerDetails(
-            firstLang = firstLang,
-            prayer = prayer,
-            config = config,
-            prayers = prayers,
-            endReachedCallback = {
-                //println("End reached start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
-                config.incPrayerNum(prayer, prayerIntentions)
-                totalNum = prayer.nums.totalNum
-                inrowNum = prayer.nums.inrowNum
-                prayerIntentions = config.loadIntentions(prayer)
-                currentIntention = prayerIntentions.find { it.currentIntention }
-                //println("End reached end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
-            },
-            intention = currentIntention,
-            prayerChangedCallback = { pr ->
-                //println("Prayer changed start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
-                prayer = pr
-                daily = config.dailyPrayers.contains(prayer.name)
-                favorite = config.favorites.contains(prayer.name)
-                totalNum = prayer.nums.totalNum
-                inrowNum = prayer.nums.inrowNum
-                prayerIntentions = config.loadIntentions(prayer)
-                currentIntention = prayerIntentions.find { it.currentIntention }
-                //println("Prayer changed end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
-            }
-        )
+        //key (totalNum, inrowNum) {
+            PrayerDetails(
+                firstLang = firstLang,
+                prayer = prayer,
+                config = config,
+                prayers = prayers,
+                endReachedCallbackPD = {
+                    if (endProcessed) return@PrayerDetails
+                    endProcessed = true
+                    //println("End reached start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
+                    config.incPrayerNum(prayer, prayerIntentions)
+                    totalNum = prayer.nums.totalNum
+                    inrowNum = prayer.nums.inrowNum
+                    prayerIntentions = config.loadIntentions(prayer)
+                    currentIntention = prayerIntentions.find { it.currentIntention }
+                    //println("End reached end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
+                },
+                intention = currentIntention,
+                prayerChangedCallback = { pr ->
+                    //println("Prayer changed start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
+                    prayer = pr
+                    daily = config.dailyPrayers.contains(prayer.name)
+                    favorite = config.favorites.contains(prayer.name)
+                    totalNum = prayer.nums.totalNum
+                    inrowNum = prayer.nums.inrowNum
+                    prayerIntentions = config.loadIntentions(prayer)
+                    currentIntention = prayerIntentions.find { it.currentIntention }
+                    endProcessed = false
+                    //println("Prayer changed end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
+                }
+            )
+        //}
     }
 }
