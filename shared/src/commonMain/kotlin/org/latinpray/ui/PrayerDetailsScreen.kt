@@ -236,6 +236,8 @@ fun IntentionsDialog(
 }
 
 fun findNextActiveIntention(curIntention: PrayerIntention, prayerIntentions: List<PrayerIntention>): PrayerIntention {
+    //println("Current intention: ${curIntention?.toPropsString()}")
+    //println("All intentions: ${prayerIntentions.map { it.toPropsString() }}")
     if (prayerIntentions.size > 1) {
         var idx = prayerIntentions.indexOf( curIntention )
         //println("Current intention index: $idx")
@@ -250,6 +252,7 @@ fun findNextActiveIntention(curIntention: PrayerIntention, prayerIntentions: Lis
         } while (!nextInten.active && nextInten != curIntention)
         return nextInten
     }
+    //println("Current intention: ${curIntention?.toPropsString()}")
     return curIntention
 }
 
@@ -271,10 +274,20 @@ fun PrayerDetailsScreen(
     var totalNum by remember { mutableStateOf(prayer.nums.totalNum) }
     var inrowNum by remember { mutableStateOf(prayer.nums.inrowNum) }
     var showDialog by remember { mutableStateOf(false) }
+    var endProcessed by remember { mutableStateOf(false) }
+
     val allIntentions = config.loadIntentions(prayer)
     var prayerIntentions by remember { mutableStateOf(allIntentions) }
+    //println("All intentions: ${allIntentions.map { it.toPropsString() }}")
     var currInten = allIntentions.find { it.currentIntention }
-    var endProcessed by remember { mutableStateOf(false) }
+    if (currInten == null) {
+        currInten = allIntentions.find { it.active }
+        if (currInten != null) {
+            currInten.currentIntention = true
+            config.saveIntention(prayer, currInten)
+        }
+    }
+    //println("Current currInten: ${currInten?.toPropsString()}")
     if (currInten != null && currInten.inrowNum >= currInten.days) {
         val oldInten = currInten
         //println("Current intention: ${currInten.toPropsString()}")
@@ -294,6 +307,7 @@ fun PrayerDetailsScreen(
         }
     }
     var currentIntention by remember { mutableStateOf(currInten) }
+    //println("Current currentIntention: ${currentIntention?.toPropsString()}")
 
     if (showDialog) {
         IntentionsDialog(
@@ -310,6 +324,12 @@ fun PrayerDetailsScreen(
                         intent = nextInten
                     } else {
                         intent = null
+                    }
+                }
+                if (intent == null) {
+                    intent = it.find { it.active }
+                    if (intent != null) {
+                        intent.currentIntention = true
                     }
                 }
                 scope.launch {
