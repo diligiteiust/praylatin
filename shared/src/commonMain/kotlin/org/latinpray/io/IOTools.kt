@@ -76,7 +76,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
         }
         if (lang != config.prayerLang && lang != config.secondLang
             && lang != config.prayerLang + "_tr" &&  lang != config.secondLang + "_tr") return@forEach
-        //println("Loading prayers for $lang")
+       // println("Loading prayers for $lang")
         val prs = listAssetsInDirectory("assets/prayers/$lang/")
         var i = 1
         prs.forEach { pr ->
@@ -90,7 +90,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
                 //println("Creating new prayer $name")
                 prayer = Prayer(i++, name, mutableMapOf(basicPrayer.lang to basicPrayer))
                 prayer.nums = config.loadPrayerNums(prayer)
-                println("Loaded prayer nums: ${prayer.name} - ${prayer.nums}")
+                //println("Loaded prayer nums: ${prayer.name} - ${prayer.nums}")
                 prayers[name] = prayer
             }
             if (lang == basicPrayer.lang) {
