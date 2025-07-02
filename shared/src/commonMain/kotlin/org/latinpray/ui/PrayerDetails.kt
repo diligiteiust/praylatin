@@ -140,7 +140,7 @@ fun preparePrayer(
             if (lang2?.title != null) {
                 result += "### " + lang2.title + "\n\n"
             }
-            result += "^^^\n\n"
+            result += EMPTY_LINE+"\n\n"
             prayerStart = false
         }
 
@@ -159,6 +159,7 @@ fun preparePrayer(
             }
             var t = false
             // Double embedded mark means title = true
+            // and no indentation for embedded content
             if (file.startsWith(EMBEDDED)) {
                 t = true
                 file = file.substring(1)
@@ -166,7 +167,7 @@ fun preparePrayer(
             val subprayer = prayers.find { p -> p.name == file }
             result += if (subprayer != null) {
                 preparePrayer(firstLang, subprayer, config, prayers,
-                    indent + (if (list)  "" else INDENT), false, list, t)
+                    indent + (if (list || t)  "" else INDENT), false, list, t)
             } else {
                 "$indent *$it* not found\n\n"
             }
@@ -195,14 +196,14 @@ fun preparePrayer(
                 if (link is Link.Youtube) {
                     val url_title = link.title ?: "Listen on YouTube"
                     val yt_link = "[$url_title](${link.url})"
-                    result += "^^^\n\n$yt_link\n\n"
+                    result += EMPTY_LINE+"\n\n$yt_link\n\n"
                 }
             }
         }
         if (lang2?.notes != null && lang2.notes.isNotEmpty()) {
-            result += "^^^\n\n__Notes:__\n\n" + lang2.notes
+            result += EMPTY_LINE+"\n\n__Notes:__\n\n" + lang2.notes
         } else if (lang2 == null && lang1?.notes != null && lang1.notes.isNotEmpty()) {
-            result += "^^^\n\n__Notes:__\n\n" + lang1.notes
+            result += EMPTY_LINE+"\n\n__Notes:__\n\n" + lang1.notes
         }
     }
 
