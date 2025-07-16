@@ -1,0 +1,8 @@
+app_identifier("org.latinpray.LatinPray") # The bundle identifier of your app
+apple_id("artur.hefczyc@icloud.com") # Your Apple Developer Portal username
+
+itc_team_id("1442109") # App Store Connect Team ID
+team_id("BJ35L2AFA3") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
