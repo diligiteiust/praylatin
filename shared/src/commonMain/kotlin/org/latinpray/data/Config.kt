@@ -146,6 +146,12 @@ data class Config(
         }
     //var dataStore: DataStore<Preferences>? = null
 
+    fun addExternalPrayerModificationListener(prayer: Prayer) {
+        sharedSettings.addStringListener(prayer.name + PRAYER_NUM_KEY.name, "") {
+            prayer.externalChange(loadPrayerNums(prayer))
+        }
+    }
+
     //suspend fun loadConfigProps(ds: DataStore<Preferences>) {
     fun loadConfigProps() {
         sharedPrefs = getSharedPrefsPref()
@@ -431,15 +437,15 @@ data class Config(
     fun addDailyPrayer(prayer: String) {
         if (dailyPrayers.contains(prayer)) return
         dailyPrayers.add(prayer)
-        println("Saving daily prayer $prayer")
-        println("Daily prayers: $dailyPrayers")
+        //println("Saving daily prayer $prayer")
+        //println("Daily prayers: $dailyPrayers")
         saveDailyPrayers()
     }
 
     fun removeDailyPrayer(prayer: String) {
         dailyPrayers.remove(prayer)
-        println("Removing daily prayer $prayer")
-        println("Daily prayers: $dailyPrayers")
+        //println("Removing daily prayer $prayer")
+        //println("Daily prayers: $dailyPrayers")
         saveDailyPrayers()
     }
 
@@ -522,22 +528,22 @@ data class Config(
         val prayerTime = calcPrayerTime(prayer_curr_date)
         when (prayerTime) {
             PrayerTime.TODAY -> {
-                println("$prayerTime")
+                //println("$prayerTime")
             }
             PrayerTime.YESTERDAY -> {
-                println("$prayerTime")
+                //println("$prayerTime")
                 inrowNum += 1
                 intention_inrowNum += 1
                 prayer_curr_date = prayer_curr_date.plus(1, DateTimeUnit.DAY)
             }
             PrayerTime.SIX_HOURS_LATE -> {
-                println("$prayerTime")
+                //println("$prayerTime")
                 inrowNum += 1
                 intention_inrowNum += 1
                 prayer_curr_date = prayer_curr_date.plus(1, DateTimeUnit.DAY)
             }
             PrayerTime.DAYS_GAP -> {
-                println("$prayerTime")
+                //println("$prayerTime")
                 inrowNum = 1
                 prayer_curr_date = Clock.System.todayIn(TimeZone.currentSystemDefault())
             }
@@ -549,7 +555,7 @@ data class Config(
             currentIntention.inrowNum = intention_inrowNum
             if (currentIntention.days <= 1) {
                 currentIntention.totalNum += 1
-                println("Inc +1 current intention totalNum: ${currentIntention.totalNum}")
+                //println("Inc +1 current intention totalNum: ${currentIntention.totalNum}")
             } else {
                 if (currentIntention.inrowNum > currentIntention.days) {
                     currentIntention.totalNum += 1

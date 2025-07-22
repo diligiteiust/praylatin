@@ -24,6 +24,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
@@ -44,9 +48,20 @@ fun PrayerListItem(
 ) {
     val normalSurface =  MaterialTheme.colorScheme.surfaceVariant
     val darkerSurface = normalSurface.darken()
-    prayerItem.darker = prayerItem.prayer.prayedToday() && prayerItem.tag == stringResource(Res.string.daily_prayers)
-    val backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface}
-    val textColor = if (prayerItem.darker) { Gray600 } else { MaterialTheme.colorScheme.onBackground }
+    val onBackground = MaterialTheme.colorScheme.onBackground
+    val dailyPrayersStr = stringResource(Res.string.daily_prayers)
+
+    prayerItem.darker = prayerItem.prayer.prayedToday() && prayerItem.tag == dailyPrayersStr
+
+    var backgroundColor by remember { mutableStateOf( if (prayerItem.darker) { darkerSurface } else { normalSurface} ) }
+    var textColor by remember { mutableStateOf( if (prayerItem.darker) { Gray600 } else { onBackground } ) }
+
+    prayerItem.prayer.addExternalChangeListener {
+        prayerItem.darker = prayerItem.prayer.prayedToday() && prayerItem.tag == dailyPrayersStr
+        backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface }
+        textColor = if (prayerItem.darker) { Gray600 } else { onBackground }
+    }
+
     var subtitle: String? = null
     var title = prayerItem.prayer.langs[config.prayerLang]?.title
     var pad = 2.dp

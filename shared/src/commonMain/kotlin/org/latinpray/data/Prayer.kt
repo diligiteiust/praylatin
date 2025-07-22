@@ -22,6 +22,7 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 sealed class Link {
@@ -54,9 +55,23 @@ data class Prayer(
         inrowNum = 0
     ),
 ) {
+    @Transient
+    var externalChangeListeners = ArrayList<() -> Unit>()
+
     fun prayedToday(): Boolean {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
         return nums.lastRecorded.daysUntil(today) <= 0
+    }
+
+    fun externalChange(prNums: PrayerNums) {
+        nums = prNums
+        externalChangeListeners.forEach { listener ->
+            listener()
+        }
+    }
+
+    fun addExternalChangeListener(listener: () -> Unit) {
+        externalChangeListeners.add(listener)
     }
 }
 
