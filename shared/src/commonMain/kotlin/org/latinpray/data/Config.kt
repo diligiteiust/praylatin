@@ -34,6 +34,8 @@ import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.latinpray.createSettings
+import org.latinpray.util.PrayerTime
+import org.latinpray.util.calcPrayerTime
 
 @Serializable
 data class Config(
@@ -495,63 +497,115 @@ data class Config(
         return prayer.nums
     }
 
-    val HOUR_IN_MILLIS = 3600000
+   //val DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS
 
-    /* Allows to say prayers until 6AM next day after the day on which the prayer should be said.
-       Otherwise the inrowNum is reset.
-     */
-    val TWO_DAYS_AND_6_HOURS_IN_MILLIS = (24 * 2 + 6) * HOUR_IN_MILLIS
-    //val DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS
-
-    fun inrowNumIncrement(last_date: LocalDate, inrowNum: Int, reset: Boolean = true): Int {
-        val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        val curr_time_millis = Clock.System.now().toEpochMilliseconds()
-        val last_date_millis =
-            last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
-        // Allows to say prayers until 6AM next day after the day on which the prayer should be said
-        if (reset && (curr_time_millis - last_date_millis > (TWO_DAYS_AND_6_HOURS_IN_MILLIS))) {
-            return 1
-        }
-        if (curr_date == last_date) return inrowNum
-        return inrowNum + 1
-    }
+//    fun inrowNumIncrement(last_date: LocalDate, inrowNum: Int, reset: Boolean = true): Int {
+//        val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+//        val curr_time_millis = Clock.System.now().toEpochMilliseconds()
+//        val last_date_millis =
+//            last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+//        // Allows to say prayers until 6AM next day after the day on which the prayer should be said
+//        if (reset && (curr_time_millis - last_date_millis > (TWO_DAYS_AND_6_HOURS_IN_MILLIS))) {
+//            return 1
+//        }
+//        if (curr_date == last_date) return inrowNum
+//        return inrowNum + 1
+//    }
 
     fun incPrayerNum(prayer: Prayer, intentions: List<PrayerIntention>) {
+
+        val prayerNums = loadPrayerNums(prayer)
+        val totalNum = prayerNums.totalNum + 1
+        var inrowNum = prayerNums.inrowNum
+        var prayer_curr_date = prayerNums.lastRecorded
+        var intention_inrowNum = 0
+        val currentIntention = intentions.find { it.currentIntention }
+        if (currentIntention != null) {
+            intention_inrowNum = currentIntention.inrowNum
+        }
+
+        val prayerTime = calcPrayerTime(prayer_curr_date)
+        when (prayerTime) {
+            PrayerTime.TODAY -> {
+                println("$prayerTime")
+            }
+            PrayerTime.YESTERDAY -> {
+                println("$prayerTime")
+                inrowNum += 1
+                intention_inrowNum += 1
+                prayer_curr_date = prayer_curr_date.plus(1, DateTimeUnit.DAY)
+            }
+            PrayerTime.SIX_HOURS_LATE -> {
+                println("$prayerTime")
+                inrowNum += 1
+                intention_inrowNum += 1
+                prayer_curr_date = prayer_curr_date.plus(1, DateTimeUnit.DAY)
+            }
+            PrayerTime.DAYS_GAP -> {
+                println("$prayerTime")
+                inrowNum = 1
+                prayer_curr_date = Clock.System.todayIn(TimeZone.currentSystemDefault())
+            }
+        }
+
+        putToSharedPrefs(prayer.name + PRAYER_NUM_KEY.name, "$prayer_curr_date,$totalNum,$inrowNum")
+
+        if (currentIntention != null) {
+            currentIntention.inrowNum = intention_inrowNum
+            if (currentIntention.days <= 1) {
+                currentIntention.totalNum += 1
+                println("Inc +1 current intention totalNum: ${currentIntention.totalNum}")
+            } else {
+                if (currentIntention.inrowNum > currentIntention.days) {
+                    currentIntention.totalNum += 1
+                    currentIntention.inrowNum = 1
+                }
+            }
+
+            // Bug caused the totalNum for intention to grow uncontrollably.
+            // The bug is fixed but there might be data stored with incorrect high number.
+            // Let's fix it here:
+            if (currentIntention.totalNum > totalNum) currentIntention.totalNum = totalNum
+
+            //println("Saving current intention: ${currentIntention.toPropsString()}")
+            saveIntention(prayer, currentIntention)
+        }
+
+        prayer.nums = PrayerNums(prayer_curr_date, totalNum, inrowNum)
+
         //println("Incrementing prayer num for $prayer")
         //val prayerNums = loadPrayerNums(prayer)
         //val lastRecorded = prayer.nums.lastRecorded
-        val totalNum = prayer.nums.totalNum + 1
-        val inrowNum = inrowNumIncrement(prayer.nums.lastRecorded, prayer.nums.inrowNum)
-        var curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        if (inrowNum > 1 && prayer.nums.lastRecorded.daysUntil(curr_date) > 0) {
-            val instantLast: Instant =
-                prayer.nums.lastRecorded.atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
-            val instantDayLater: Instant =
-                instantLast.plus(1, DateTimeUnit.DAY, TimeZone.currentSystemDefault())
-            curr_date = instantDayLater.toLocalDateTime(TimeZone.currentSystemDefault()).date
-
-            //println("Incrementing nums for current intention")
-            val currentIntention = intentions.find { it.currentIntention }
-            //println("Current intention: ${currentIntention?.toPropsString()}")
-            if (currentIntention != null) {
-                //currentIntention.inrowNum = inrowNumIncrement(LocalDate(year = 1970, monthNumber = 2, dayOfMonth = 27), currentIntention.inrowNum, false)
-                // For now novena, inrowNum is not reset if a day is missing.
-                currentIntention.inrowNum =
-                    inrowNumIncrement(prayer.nums.lastRecorded, currentIntention.inrowNum, false)
-                if (currentIntention.days <= 1) {
-                    currentIntention.totalNum += 1
-                } else {
-                    if (currentIntention.inrowNum > currentIntention.days) {
-                        currentIntention.totalNum += 1
-                        currentIntention.inrowNum = 1
-                    }
-                }
-                //println("Saving current intention: ${currentIntention.toPropsString()}")
-                saveIntention(prayer, currentIntention)
-            }
-        }
-        putToSharedPrefs(prayer.name + PRAYER_NUM_KEY.name, "$curr_date,$totalNum,$inrowNum")
-        prayer.nums = PrayerNums(curr_date, totalNum, inrowNum)
+//        var curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+//        if (inrowNum > 1 && prayer.nums.lastRecorded.daysUntil(curr_date) > 0) {
+//            val instantLast: Instant =
+//                prayer.nums.lastRecorded.atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
+//            val instantDayLater: Instant =
+//                instantLast.plus(1, DateTimeUnit.DAY, TimeZone.currentSystemDefault())
+//            curr_date = instantDayLater.toLocalDateTime(TimeZone.currentSystemDefault()).date
+//
+//            //println("Incrementing nums for current intention")
+//            val currentIntention = intentions.find { it.currentIntention }
+//            //println("Current intention: ${currentIntention?.toPropsString()}")
+//            if (currentIntention != null) {
+//                //currentIntention.inrowNum = inrowNumIncrement(LocalDate(year = 1970, monthNumber = 2, dayOfMonth = 27), currentIntention.inrowNum, false)
+//                // For now novena, inrowNum is not reset if a day is missing.
+//                currentIntention.inrowNum =
+//                    inrowNumIncrement(prayer.nums.lastRecorded, currentIntention.inrowNum, false)
+//                if (currentIntention.days <= 1) {
+//                    currentIntention.totalNum += 1
+//                } else {
+//                    if (currentIntention.inrowNum > currentIntention.days) {
+//                        currentIntention.totalNum += 1
+//                        currentIntention.inrowNum = 1
+//                    }
+//                }
+//                //println("Saving current intention: ${currentIntention.toPropsString()}")
+//                saveIntention(prayer, currentIntention)
+//            }
+//        }
+//        putToSharedPrefs(prayer.name + PRAYER_NUM_KEY.name, "$curr_date,$totalNum,$inrowNum")
+//        prayer.nums = PrayerNums(curr_date, totalNum, inrowNum)
     }
 
     fun loadIntentions(prayer: Prayer): List<PrayerIntention> {

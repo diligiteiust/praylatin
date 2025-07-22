@@ -1,0 +1,116 @@
+/*
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program. Look for COPYING file in the top folder.
+ *  If not, see http://www.gnu.org/licenses/.
+ */
+
+package org.latinpray.util
+
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.todayIn
+import org.latinpray.data.Config
+import org.latinpray.data.Prayer
+import org.latinpray.data.PrayerIntention
+
+val HOUR_IN_MILLIS = 3600000
+
+val TWO_DAYS_IN_MILLIS = 2 * 24 * HOUR_IN_MILLIS
+val SIX_HOURS_IN_MILLIS = 6 * HOUR_IN_MILLIS
+
+/* Allows to say prayers until 6AM next day after the day on which the prayer should be said.
+   Otherwise the inrowNum is reset.
+ */
+val TWO_DAYS_AND_6_HOURS_IN_MILLIS = TWO_DAYS_IN_MILLIS * SIX_HOURS_IN_MILLIS
+
+enum class PrayerTime {
+    TODAY,
+    YESTERDAY,
+    /* Allows to say prayers until 6AM next day after the day on which the prayer should be said.
+       Otherwise the inrowNum is reset.
+     */
+    SIX_HOURS_LATE,
+    DAYS_GAP
+}
+
+fun calcPrayerTime(last_date: LocalDate): PrayerTime {
+    val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+
+    if (curr_date <= last_date) return PrayerTime.TODAY
+    if (last_date.daysUntil(curr_date) == 1) return PrayerTime.YESTERDAY
+
+    val curr_time_millis = Clock.System.now().toEpochMilliseconds()
+    val last_date_millis =
+        last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+
+    if (curr_time_millis - last_date_millis <= TWO_DAYS_AND_6_HOURS_IN_MILLIS) return PrayerTime.SIX_HOURS_LATE
+
+    return PrayerTime.DAYS_GAP
+}
+
+fun findNextActiveIntention(curIntention: PrayerIntention, prayerIntentions: List<PrayerIntention>): PrayerIntention {
+    //println("Current intention: ${curIntention?.toPropsString()}")
+    //println("All intentions: ${prayerIntentions.map { it.toPropsString() }}")
+    if (prayerIntentions.size > 1) {
+        var idx = prayerIntentions.indexOf( curIntention )
+        //println("Current intention index: $idx")
+        var nextInten: PrayerIntention
+        do {
+            if (idx < prayerIntentions.size - 1) {
+                idx += 1
+            } else {
+                idx = 0
+            }
+            nextInten = prayerIntentions[idx]
+        } while (!nextInten.active && nextInten != curIntention)
+        return nextInten
+    }
+    //println("Current intention: ${curIntention?.toPropsString()}")
+    return curIntention
+}
+
+fun getCurrentIntention(prayer: Prayer, config: Config): PrayerIntention? {
+    val allIntentions = config.loadIntentions(prayer)
+    var curr_intent: PrayerIntention? = allIntentions.find { it.currentIntention }
+
+    if (curr_intent == null) {
+        curr_intent = allIntentions.find { it.active }
+        if (curr_intent != null) {
+            curr_intent.currentIntention = true
+            config.saveIntention(prayer, curr_intent)
+        }
+    }
+
+    if (curr_intent != null
+        && curr_intent.days > 1
+        && curr_intent.inrowNum >= curr_intent.days
+        && calcPrayerTime(prayer.nums.lastRecorded) != PrayerTime.TODAY) {
+
+        val old_intent = curr_intent
+        old_intent.totalNum += 1
+        old_intent.inrowNum = 0
+
+        curr_intent = findNextActiveIntention(curr_intent, allIntentions)
+        if (curr_intent != old_intent) {
+            curr_intent.currentIntention = true
+            old_intent.currentIntention = false
+            config.saveIntention(prayer, curr_intent)
+        }
+        config.saveIntention(prayer, old_intent)
+    }
+
+    return curr_intent
+}

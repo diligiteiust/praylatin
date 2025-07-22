@@ -85,6 +85,8 @@ import org.latinpray.theme.Gray300
 import org.latinpray.theme.Green300
 import org.latinpray.theme.Green900
 import org.latinpray.theme.Orange900
+import org.latinpray.util.findNextActiveIntention
+import org.latinpray.util.getCurrentIntention
 
 @Composable
 fun IntentionsForm(item: PrayerIntention) {
@@ -235,27 +237,6 @@ fun IntentionsDialog(
 
 }
 
-fun findNextActiveIntention(curIntention: PrayerIntention, prayerIntentions: List<PrayerIntention>): PrayerIntention {
-    //println("Current intention: ${curIntention?.toPropsString()}")
-    //println("All intentions: ${prayerIntentions.map { it.toPropsString() }}")
-    if (prayerIntentions.size > 1) {
-        var idx = prayerIntentions.indexOf( curIntention )
-        //println("Current intention index: $idx")
-        var nextInten: PrayerIntention
-        do {
-            if (idx < prayerIntentions.size - 1) {
-                idx += 1
-            } else {
-                idx = 0
-            }
-            nextInten = prayerIntentions[idx]
-        } while (!nextInten.active && nextInten != curIntention)
-        return nextInten
-    }
-    //println("Current intention: ${curIntention?.toPropsString()}")
-    return curIntention
-}
-
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun PrayerDetailsScreen(
@@ -276,37 +257,8 @@ fun PrayerDetailsScreen(
     var showDialog by remember { mutableStateOf(false) }
     var endProcessed by remember { mutableStateOf(false) }
 
-    val allIntentions = config.loadIntentions(prayer)
-    var prayerIntentions by remember { mutableStateOf(allIntentions) }
-    //println("All intentions: ${allIntentions.map { it.toPropsString() }}")
-    var currInten = allIntentions.find { it.currentIntention }
-    if (currInten == null) {
-        currInten = allIntentions.find { it.active }
-        if (currInten != null) {
-            currInten.currentIntention = true
-            config.saveIntention(prayer, currInten)
-        }
-    }
-    //println("Current currInten: ${currInten?.toPropsString()}")
-    if (currInten != null && currInten.inrowNum >= currInten.days) {
-        val oldInten = currInten
-        //println("Current intention: ${currInten.toPropsString()}")
-        currInten.totalNum += 1
-        currInten.inrowNum = 0
-        val nextInten = findNextActiveIntention(currInten, allIntentions)
-        if (nextInten != currInten) {
-            nextInten.currentIntention = true
-            currInten.currentIntention = false
-            scope.launch {
-                config.saveIntention(prayer, nextInten)
-            }
-            currInten = nextInten
-        }
-        scope.launch {
-            config.saveIntention(prayer, oldInten)
-        }
-    }
-    var currentIntention by remember { mutableStateOf(currInten) }
+    var prayerIntentions by remember { mutableStateOf(config.loadIntentions(prayer) ) }
+    var currentIntention by remember { mutableStateOf(getCurrentIntention(prayer, config)) }
     //println("Current currentIntention: ${currentIntention?.toPropsString()}")
 
     if (showDialog) {
