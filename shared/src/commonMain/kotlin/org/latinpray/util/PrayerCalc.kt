@@ -46,6 +46,18 @@ enum class PrayerTime {
     DAYS_GAP
 }
 
+enum class DisplayLang {
+    BOTH,
+    FIRST,
+    SECOND;
+
+    fun next(): DisplayLang {
+        val values = entries
+        val nextOrdinal = (ordinal + 1) % values.size
+        return values[nextOrdinal]
+    }
+}
+
 fun calcPrayerTime(last_date: LocalDate): PrayerTime {
     val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 

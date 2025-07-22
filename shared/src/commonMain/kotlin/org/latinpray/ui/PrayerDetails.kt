@@ -72,6 +72,7 @@ import org.latinpray.data.Link
 import org.latinpray.data.Prayer
 import org.latinpray.data.PrayerIntention
 import org.latinpray.getPlatform
+import org.latinpray.util.DisplayLang
 
 const val INDENT = "%"
 const val TRANSLATION = "!"
@@ -91,9 +92,9 @@ fun DpToPx(dp: Dp): Float {
     return dp.value * density
 }
 
-fun getPrayerTitle(firstLang: Boolean, prayer: Prayer, config: Config, maxLen: Int = 100): String {
+fun getPrayerTitle(dispayLang: DisplayLang, prayer: Prayer, config: Config, maxLen: Int = 100): String {
     var pr = prayer.langs[config.prayerLang]
-    if (pr == null || !firstLang) {
+    if (pr == null || (dispayLang == DisplayLang.SECOND)) {
         pr = prayer.langs[config.secondLang]
     }
     var result = pr?.title ?: ""
@@ -104,7 +105,7 @@ fun getPrayerTitle(firstLang: Boolean, prayer: Prayer, config: Config, maxLen: I
 }
 
 fun preparePrayer(
-    firstLang: Boolean,
+    dispayLang: DisplayLang,
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
@@ -118,15 +119,15 @@ fun preparePrayer(
     var lang1 = prayer.langs[config.prayerLang]
     // If content for the primary language is not found,
     // we use content for secondary language as primary
-    if (lang1 == null || !firstLang) {
+    if (lang1 == null || (dispayLang == DisplayLang.SECOND)) {
         lang1 = prayer.langs[config.secondLang]
     } else {
-        lang2 = prayer.langs[config.secondLang]
+        lang2 = if (dispayLang != DisplayLang.FIRST) prayer.langs[config.secondLang] else null
     }
     // If prefered translation is enabled, we try to find content with translation
     // instead of the standard content
     //println ("firstLang: ${firstLang}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${prayer.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
-    if (firstLang && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
+    if ((dispayLang != DisplayLang.SECOND) && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
         lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
         //println("Using translation for prayer: ${prayer.name} - ${lang2?.title}")
     }
@@ -167,7 +168,7 @@ fun preparePrayer(
             }
             val subprayer = prayers.find { p -> p.name == file }
             result += if (subprayer != null) {
-                preparePrayer(firstLang, subprayer, config, prayers,
+                preparePrayer(dispayLang, subprayer, config, prayers,
                     indent + (if (list || t)  "" else INDENT), false, list, t)
             } else {
                 "$indent *$it* not found\n\n"
@@ -307,7 +308,7 @@ fun MyMarkdownSuccess(
 
 @Composable
 fun PrayerDetails(
-    firstLang: Boolean,
+    displayLang: DisplayLang,
     prayer: Prayer,
     config: Config,
     prayers: MutableList<Prayer>,
@@ -332,7 +333,7 @@ fun PrayerDetails(
 
     //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
     key(changed) {
-        val content = preparePrayer(firstLang, prayer, config, prayers)
+        val content = preparePrayer(displayLang, prayer, config, prayers)
         //println("PrayerDetails - after preparePrayer for  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
         Column(
             modifier = Modifier.fillMaxSize()
@@ -349,7 +350,7 @@ fun PrayerDetails(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = getPrayerTitle(firstLang, prayer, config),
+                            text = getPrayerTitle(displayLang, prayer, config),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -445,7 +446,7 @@ fun PrayerDetails(
                             )
                             Text(
                                 text = getPrayerTitle(
-                                    firstLang,
+                                    displayLang,
                                     prayer.prevPrayer!!,
                                     config,
                                     MAX_LEN
@@ -473,7 +474,7 @@ fun PrayerDetails(
                         ) {
                             Text(
                                 text = getPrayerTitle(
-                                    firstLang,
+                                    displayLang,
                                     prayer.nextPrayer!!,
                                     config,
                                     MAX_LEN

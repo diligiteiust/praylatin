@@ -40,7 +40,6 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
-import androidx.compose.material.icons.automirrored.outlined.Notes
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cancel
@@ -72,6 +71,8 @@ import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 import org.latinpray.data.PrayerIntention
 import org.latinpray.shared.Res
+import org.latinpray.shared.align_end_24dp
+import org.latinpray.shared.align_start_24dp
 import org.latinpray.shared.bookmark_add
 import org.latinpray.shared.bookmark_check
 import org.latinpray.shared.calendar_add_on
@@ -87,6 +88,7 @@ import org.latinpray.theme.Green900
 import org.latinpray.theme.Orange900
 import org.latinpray.util.findNextActiveIntention
 import org.latinpray.util.getCurrentIntention
+import org.latinpray.util.DisplayLang
 
 @Composable
 fun IntentionsForm(item: PrayerIntention) {
@@ -248,6 +250,7 @@ fun PrayerDetailsScreen(
     var prayer by remember { mutableStateOf(startPrayer) }
     val (fraction) = remember { mutableStateOf(0.25f) }
     var firstLang by remember { mutableStateOf(true) }
+    var displayLang by remember { mutableStateOf(DisplayLang.BOTH ) }
     var daily by remember { mutableStateOf(config.dailyPrayers.contains(prayer.name)) }
     var favorite by remember { mutableStateOf(config.favorites.contains(prayer.name)) }
     val scope = rememberCoroutineScope()
@@ -340,22 +343,34 @@ fun PrayerDetailsScreen(
                     checked = firstLang,
                     onCheckedChange = {
                         firstLang = it
+                        displayLang = displayLang.next()
                     }
                 ) {
-                    if (firstLang) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.FormatAlignLeft,
-                            contentDescription = "1st lang On",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.Notes,
-                            contentDescription = "1st lang Off",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(30.dp)
-                        )
+                    when (displayLang) {
+                        DisplayLang.FIRST -> {
+                            Icon(
+                                painter = painterResource(Res.drawable.align_start_24dp),
+                                contentDescription = "2nd lang Off",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
+                        DisplayLang.SECOND -> {
+                            Icon(
+                                painter = painterResource(Res.drawable.align_end_24dp),
+                                contentDescription = "1st lang Off",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
+                        DisplayLang.BOTH -> {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.FormatAlignLeft,
+                                contentDescription = "Both langs",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
                     }
                 }
                 IconToggleButton(
@@ -420,7 +435,7 @@ fun PrayerDetailsScreen(
         }
         //key (totalNum, inrowNum) {
             PrayerDetails(
-                firstLang = firstLang,
+                displayLang = displayLang,
                 prayer = prayer,
                 config = config,
                 prayers = prayers,
