@@ -446,7 +446,7 @@ fun PrayerDetailsScreen(
                     config.incPrayerNum(prayer, prayerIntentions)
                     totalNum = prayer.nums.totalNum
                     inrowNum = prayer.nums.inrowNum
-                    prayerIntentions = config.loadIntentions(prayer)
+                    //prayerIntentions = config.loadIntentions(prayer)
                     currentIntention = getCurrentIntention(prayer, config)
                     //println("End reached end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
                 },
@@ -459,7 +459,7 @@ fun PrayerDetailsScreen(
                     totalNum = prayer.nums.totalNum
                     inrowNum = prayer.nums.inrowNum
                     prayerIntentions = config.loadIntentions(prayer)
-                    currentIntention = prayerIntentions.find { it.currentIntention }
+                    currentIntention = getCurrentIntention(prayer, config)
                     endProcessed = false
                     //println("Prayer changed end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
                 }
