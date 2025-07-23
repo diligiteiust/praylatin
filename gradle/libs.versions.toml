@@ -24,6 +24,7 @@ markdownVer="0.35.0"
 purchases-kmp = "2.0.0+15.0.0"
 google-services = "4.4.3"
 settingsVer = "1.4.0-SNAPSHOT"
+kcronVer = "0.23.0"
 
 [libraries]
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -31,6 +32,8 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinVer" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdLibVer" }
 jb-androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "jbNavigationComposeVer" }
+
+kcron-common = { module = "com.ucasoft.kcron:kcron-common", version.ref = "kcronVer" }
 
 #androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidCoreVer" }
 #androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigationComposeVer" }

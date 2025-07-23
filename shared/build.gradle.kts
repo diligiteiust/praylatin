@@ -76,6 +76,7 @@ kotlin {
             implementation(libs.purchases.result)     // Optional
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
+            implementation(libs.kcron.common)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

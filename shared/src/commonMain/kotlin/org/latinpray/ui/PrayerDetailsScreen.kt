@@ -447,7 +447,7 @@ fun PrayerDetailsScreen(
                     totalNum = prayer.nums.totalNum
                     inrowNum = prayer.nums.inrowNum
                     prayerIntentions = config.loadIntentions(prayer)
-                    currentIntention = prayerIntentions.find { it.currentIntention }
+                    currentIntention = getCurrentIntention(prayer, config)
                     //println("End reached end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
                 },
                 intention = currentIntention,

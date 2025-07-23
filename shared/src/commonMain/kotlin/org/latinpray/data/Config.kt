@@ -557,11 +557,12 @@ data class Config(
             if (currentIntention.days <= 1) {
                 currentIntention.totalNum += 1
                 //println("Inc +1 current intention totalNum: ${currentIntention.totalNum}")
-            } else {
-                if (currentIntention.inrowNum > currentIntention.days) {
-                    currentIntention.totalNum += 1
-                    currentIntention.inrowNum = 1
-                }
+                // Below part is handled by getCurrentIntention()
+//            } else {
+//                if (currentIntention.inrowNum > currentIntention.days) {
+//                    currentIntention.totalNum += 1
+//                    currentIntention.inrowNum = 1
+//                }
             }
 
             // Bug caused the totalNum for intention to grow uncontrollably.
