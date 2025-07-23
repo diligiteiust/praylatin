@@ -545,6 +545,7 @@ data class Config(
             PrayerTime.DAYS_GAP -> {
                 //println("$prayerTime")
                 inrowNum = 1
+                intention_inrowNum += 1
                 prayer_curr_date = Clock.System.todayIn(TimeZone.currentSystemDefault())
             }
         }
