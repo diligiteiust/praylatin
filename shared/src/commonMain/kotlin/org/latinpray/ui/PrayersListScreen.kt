@@ -40,15 +40,19 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.HIDE_TAG
@@ -57,6 +61,7 @@ import org.latinpray.shared.Res
 import org.latinpray.shared.daily_prayers
 import org.latinpray.shared.favorite_prayers
 import org.latinpray.shared.today_and_now
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -72,7 +77,18 @@ fun PrayersListScreen(
 ) {
     val (fraction) = remember { mutableStateOf(0.50f) }
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
+    var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
+
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        while (true) {
+            delay(20.seconds)
+            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            if (now.hour != currentHour) {
+                currentHour = now.hour
+            }
+        }
+    }
 
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
     val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
