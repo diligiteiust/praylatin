@@ -37,4 +37,5 @@
     <string name="intention_active">Activus</string>
     <string name="intention_add">Intentiones addere</string>
     <string name="reset_shared_data">Notitias communes restituere</string>
+    <string name="today_and_now">Hodie et nunc</string>
 </resources>

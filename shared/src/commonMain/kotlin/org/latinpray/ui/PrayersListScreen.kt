@@ -52,6 +52,7 @@ import org.latinpray.data.Prayer
 import org.latinpray.shared.Res
 import org.latinpray.shared.daily_prayers
 import org.latinpray.shared.favorite_prayers
+import org.latinpray.shared.today_and_now
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -69,6 +70,8 @@ fun PrayersListScreen(
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
     val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
+    val todayAndNowStr = stringResource(Res.string.today_and_now)
+
     val groupedPrayers: MutableList<Any> = remember(prayers, config) {
         val gp = mutableListOf<Any>()
         if (config.grouping) {
@@ -87,6 +90,19 @@ fun PrayersListScreen(
                 }
             }
             tags.remove(HIDE_TAG)
+            if (config.todayAndNow) {
+                gp.add(todayAndNowStr)
+                prayers.forEach { prayer ->
+                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
+                    if ((prayer.langs[config.prayerLang] != null || prayer.langs[config.secondLang] != null)
+                        && prayer.isTodayAndNow()
+                    ) {
+                        gp.add(PrayerItem(prayer, prayer.prayedToday(), todayAndNowStr))
+                        //println("Added 1st prayer ${prayer.name} to group: $tag")
+                    }
+                }
+
+            }
             if (config.dailyPrayers.isNotEmpty()) {
                 gp.add(dailyPrayersStr)
                 var lastPr: Prayer? = null
@@ -123,7 +139,7 @@ fun PrayersListScreen(
                         && (prayer.langs[config.secondLang]?.tags?.contains(tag) == true)
                         && prayer.langs[config.secondLang]?.tags?.contains(HIDE_TAG) == false
                     ) {
-                        gp.add(prayer)
+                        gp.add(PrayerItem(prayer, false, tag))
                         //println("Added 2nd prayer ${prayer.name} to group: $tag")
                     }
                 }

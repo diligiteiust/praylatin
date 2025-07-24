@@ -35,6 +35,7 @@ import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 import org.latinpray.shared.Res
 import org.latinpray.shared.daily_prayers
+import org.latinpray.shared.today_and_now
 import org.latinpray.theme.Gray600
 import org.latinpray.theme.darken
 
@@ -50,8 +51,10 @@ fun PrayerListItem(
     val darkerSurface = normalSurface.darken()
     val onBackground = MaterialTheme.colorScheme.onBackground
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
+    val todayAndNowStr = stringResource(Res.string.today_and_now)
 
-    prayerItem.darker = prayerItem.prayer.prayedToday() && prayerItem.tag == dailyPrayersStr
+    prayerItem.darker = prayerItem.prayer.prayedToday()
+            && (prayerItem.tag == dailyPrayersStr || prayerItem.tag == todayAndNowStr)
 
     var backgroundColor by remember { mutableStateOf( if (prayerItem.darker) { darkerSurface } else { normalSurface} ) }
     var textColor by remember { mutableStateOf( if (prayerItem.darker) { Gray600 } else { onBackground } ) }

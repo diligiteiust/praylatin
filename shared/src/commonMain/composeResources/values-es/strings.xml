@@ -37,4 +37,5 @@
     <string name="intention_active">Activo</string>
     <string name="intention_add">Añadir intenciones</string>
     <string name="reset_shared_data">Restablecer datos compartidos</string>
+    <string name="today_and_now">Hoy y ahora</string>
 </resources>

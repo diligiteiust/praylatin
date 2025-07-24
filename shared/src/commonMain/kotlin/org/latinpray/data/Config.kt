@@ -42,7 +42,8 @@ data class Config(
     var fontScale: Float = 1.0f,
     var donation: String? = null,
     var sharedPrefs: Boolean = false,
-    var showNumbers: Boolean = false
+    var showNumbers: Boolean = false,
+    var todayAndNow: Boolean = true,
 ) {
 
     @Transient
@@ -101,6 +102,9 @@ data class Config(
 
     @Transient
     private val SHOW_NUMBERS_PROP_KEY = booleanPreferencesKey("showNumbers")
+
+    @Transient
+    private val TODAYANDNOW_PROP_KEY = booleanPreferencesKey("todayandnow")
 
     @Transient
     private val PRAYER_NUM_KEY = stringPreferencesKey("_num")
@@ -170,22 +174,23 @@ data class Config(
         //println("Loaded font scale $fontScale")
         donation = getDonationPref()
         showNumbers = getShowNumbersPref()
+        todayAndNow = getTodayAndNowPref()
         loadSubstitutions()
         loadDailyPrayers()
         loadFavorites()
     }
 
     private fun getPref(key: String, def: String): String {
-        println("Getting pref $key")
+        //println("Getting pref $key")
         var result: String
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
             result = sharedSettings.getString(key, def)
-            println("Got pref $key from shared prefs: $result")
+            //println("Got pref $key from shared prefs: $result")
             // Make copy of shared data in local settings
             localSettings.putString(key, result)
         } else {
             result = localSettings.getString(key, def)
-            println("Got pref $key from local settings: $result")
+            //println("Got pref $key from local settings: $result")
         }
         return result
     }
@@ -315,6 +320,9 @@ data class Config(
     private fun getShowNumbersPref(): Boolean =
         getPref(SHOW_NUMBERS_PROP_KEY.name, showNumbers)
 
+    private fun getTodayAndNowPref(): Boolean =
+        getPref(TODAYANDNOW_PROP_KEY.name, todayAndNow)
+
     private fun getPrayerLangPref(): String =
         getPref(PRAYERLANG_PROP_KEY.name, prayerLang)
 
@@ -347,6 +355,7 @@ data class Config(
         saveFontScale(fontScale)
         saveDonation(donation)
         saveShowNumbers(showNumbers)
+        saveTodayAndNow(todayAndNow)
         saveSubstitutions()
         saveDailyPrayers()
         saveFavorites()
@@ -410,6 +419,11 @@ data class Config(
     fun saveShowNumbers(pref: Boolean) {
         showNumbers = pref
         setPref(SHOW_NUMBERS_PROP_KEY.name, showNumbers)
+    }
+
+    fun saveTodayAndNow(pref: Boolean) {
+        todayAndNow = pref
+        setPref(TODAYANDNOW_PROP_KEY.name, todayAndNow)
     }
 
     fun saveFontScale(scale: Float) {

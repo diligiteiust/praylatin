@@ -15,10 +15,15 @@
 
 package org.latinpray.data
 
+import com.ucasoft.kcron.core.builders.Builder
+import com.ucasoft.kcron.kotlinx.datetime.CronLocalDateTime
+import com.ucasoft.kcron.kotlinx.datetime.CronLocalDateTimeProvider
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -54,6 +59,7 @@ data class Prayer(
         totalNum = 0,
         inrowNum = 0
     ),
+    val dates: MutableSet<Builder<LocalDateTime, CronLocalDateTime, CronLocalDateTimeProvider>> = mutableSetOf(),
 ) {
     @Transient
     var externalChangeListeners = ArrayList<() -> Unit>()
@@ -72,6 +78,17 @@ data class Prayer(
 
     fun addExternalChangeListener(listener: () -> Unit) {
         externalChangeListeners.add(listener)
+    }
+
+    fun isTodayAndNow(): Boolean {
+        val curHour = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour
+        dates.forEach { builder ->
+            if (builder.nextRun?.date == Clock.System.todayIn(TimeZone.currentSystemDefault())
+                && builder.nextRun?.time?.hour == curHour) {
+                return true
+            }
+        }
+        return false
     }
 }
 
