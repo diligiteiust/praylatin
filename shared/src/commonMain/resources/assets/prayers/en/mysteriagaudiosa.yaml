@@ -6,7 +6,7 @@ tags:
   - Blessed Virgin Mary
   - Hide
 dates:
-  - "* * * * MON,THU,FRI"
+  - "* * * * * MON,THU,FRI *"
 lines:
   - "@"
   - "### 1. The Annunciation"

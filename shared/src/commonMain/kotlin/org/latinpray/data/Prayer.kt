@@ -81,7 +81,10 @@ data class Prayer(
     }
 
     fun isTodayAndNow(): Boolean {
-        val curHour = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour
+        return isTodayAndNow(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour)
+    }
+
+    fun isTodayAndNow(curHour: Int): Boolean {
         dates.forEach { builder ->
             if (builder.nextRun?.date == Clock.System.todayIn(TimeZone.currentSystemDefault())
                 && builder.nextRun?.time?.hour == curHour) {
@@ -90,6 +93,7 @@ data class Prayer(
         }
         return false
     }
+
 }
 
 val HIDE_TAG = "Hide"
