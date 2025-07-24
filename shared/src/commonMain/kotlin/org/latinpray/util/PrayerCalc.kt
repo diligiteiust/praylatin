@@ -87,7 +87,7 @@ fun findNextActiveIntention(curIntention: PrayerIntention, prayerIntentions: Lis
                 idx = 0
             }
             nextInten = prayerIntentions[idx]
-        } while (!nextInten.active && nextInten != curIntention)
+        } while (!nextInten.active && nextInten.id != curIntention.id)
         return nextInten
     }
     //println("Current intention: ${curIntention?.toPropsString()}")
@@ -108,15 +108,27 @@ fun getCurrentIntention(prayer: Prayer, config: Config): PrayerIntention? {
 
     if (curr_intent != null
         && curr_intent.days > 1
-        && curr_intent.inrowNum >= curr_intent.days
-        && calcPrayerTime(prayer.nums.lastRecorded) != PrayerTime.TODAY) {
+        && curr_intent.inrowNum >= curr_intent.days) {
 
-        val old_intent = curr_intent
-        old_intent.totalNum += 1
-        old_intent.inrowNum = 0
+        // I am not sure if copy() is needed here. Probably for data class is the default
+        // any way I want to make sure we do not pass reference to the same object but
+        // a copy of the object.
+        val old_intent = curr_intent.copy()
 
-        curr_intent = findNextActiveIntention(curr_intent, allIntentions)
-        if (curr_intent != old_intent) {
+        if (old_intent.inrowNum == old_intent.days) {
+            if (calcPrayerTime(prayer.nums.lastRecorded) != PrayerTime.TODAY) {
+                old_intent.totalNum += 1
+                old_intent.inrowNum = 0
+                curr_intent = findNextActiveIntention(curr_intent, allIntentions)
+            }
+        } else {
+            // This should not actually happen...
+            old_intent.totalNum += 1
+            old_intent.inrowNum = 1
+            curr_intent = findNextActiveIntention(curr_intent, allIntentions)
+        }
+
+        if (curr_intent.id != old_intent.id) {
             curr_intent.currentIntention = true
             old_intent.currentIntention = false
             config.saveIntention(prayer, curr_intent)
