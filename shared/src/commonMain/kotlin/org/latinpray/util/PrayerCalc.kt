@@ -17,6 +17,7 @@ package org.latinpray.util
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.daysUntil
@@ -57,6 +58,20 @@ enum class DisplayLang {
         return values[nextOrdinal]
     }
 }
+
+fun truncateToHour(dateTime: LocalDateTime): LocalDateTime {
+    return LocalDateTime(
+        year = dateTime.year,
+        monthNumber = dateTime.monthNumber,
+        dayOfMonth = dateTime.dayOfMonth,
+        hour = dateTime.hour,
+        minute = 0,
+        second = 0,
+        nanosecond = 0
+    )
+}
+
+fun LocalDateTime.truncateToHour() = truncateToHour(this)
 
 fun calcPrayerTime(last_date: LocalDate): PrayerTime {
     val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())

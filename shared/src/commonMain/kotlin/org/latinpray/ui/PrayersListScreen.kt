@@ -48,11 +48,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.ucasoft.kcron.kotlinx.datetime.plusHours
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.HIDE_TAG
@@ -61,7 +63,16 @@ import org.latinpray.shared.Res
 import org.latinpray.shared.daily_prayers
 import org.latinpray.shared.favorite_prayers
 import org.latinpray.shared.today_and_now
-import kotlin.time.Duration.Companion.seconds
+import org.latinpray.util.truncateToHour
+import kotlin.time.Duration
+
+fun untilNextFullHour(): Duration {
+    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    val nextFullHour = now.plusHours(1).truncateToHour()
+    val result = nextFullHour.toInstant(TimeZone.currentSystemDefault()) - Clock.System.now()
+    println("It is now: $now and the next full hour is: $nextFullHour until next full hour: $result")
+    return result
+}
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -82,10 +93,12 @@ fun PrayersListScreen(
     val scope = rememberCoroutineScope()
     scope.launch {
         while (true) {
-            delay(20.seconds)
+            delay(untilNextFullHour())
             val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            println("Checking time: ${now.hour}, previous: ${currentHour}")
             if (now.hour != currentHour) {
                 currentHour = now.hour
+                println("New time: ${currentHour}")
             }
         }
     }
@@ -94,7 +107,7 @@ fun PrayersListScreen(
     val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
     val todayAndNowStr = stringResource(Res.string.today_and_now)
 
-    val groupedPrayers: MutableList<Any> = remember(prayers, config) {
+    val groupedPrayers: MutableList<Any> = remember(prayers, config, currentHour) {
         val gp = mutableListOf<Any>()
         if (config.grouping) {
             val tags = mutableSetOf<String>()

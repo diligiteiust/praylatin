@@ -60,7 +60,7 @@ import org.latinpray.ui.SettingsScreen
 
 fun loadLocalizedContent(file: String, lang: String): String {
     val f = file.substringBefore('.') + '-' + lang + "." + file.substringAfter('.')
-    println("reading file: $f")
+    //println("reading file: $f")
     try {
         return readFileFromAssets(f).replace('\n', ' ').replace("<p>", "\n   \n")
     } catch (_: Exception) {
@@ -69,7 +69,7 @@ fun loadLocalizedContent(file: String, lang: String): String {
 }
 
 fun reloadPrayers(config: Config): MutableList<Prayer> {
-    println("Reloading prayers...")
+    //println("Reloading prayers...")
     return prayersList(mutableListOf<Prayer>(), config).sortedBy { prayer ->
         prayer.langs[config.prayerLang]?.title
     }.toMutableList()
@@ -78,20 +78,20 @@ fun reloadPrayers(config: Config): MutableList<Prayer> {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Main() {
-    println("Main")
+    //println("Main")
     // Initialize platform-specific data
     getPlatform()
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
 
     val defConfig: Config = readConfigFromAssets("assets/config.yaml")
-    println("Loaded config from yaml")
+    //println("Loaded config from yaml")
     //var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var prayers by remember { mutableStateOf(mutableListOf<Prayer>()) }
     var currentPrayer: Prayer = avemaria
     defConfig.prayersChangedCallback = {
         scope.launch {
-            println("Prayers changed")
+            //println("Prayers changed")
             prayers = reloadPrayers(defConfig)
             currentPrayer = prayers.first()
         }
@@ -103,7 +103,7 @@ fun Main() {
 
     //defConfig = readConfigFromAssets("assets/config.yaml")
     defConfig.loadConfigProps()
-    println("Loaded config from datastore ${defConfig.prayerLang}")
+    //println("Loaded config from datastore ${defConfig.prayerLang}")
     if (lang != defConfig.uiLang) {
         lang = defConfig.uiLang
         getPlatform().changeLang(lang)
@@ -111,7 +111,7 @@ fun Main() {
     fontScale = defConfig.fontScale
 
     scope.launch {
-        println("Main scope launched")
+        //println("Main scope launched")
         //println("Loading config from yaml...")
 //        defConfig = readConfigFromAssets("assets/config.yaml")
 //        //println("Loaded config from yaml")

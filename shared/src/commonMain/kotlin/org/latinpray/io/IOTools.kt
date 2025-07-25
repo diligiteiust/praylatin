@@ -21,10 +21,6 @@ import com.charleskorn.kaml.Yaml
 import com.ucasoft.kcron.Cron
 import com.ucasoft.kcron.core.builders.DelicateIterableApi
 import com.ucasoft.kcron.core.common.WeekDays
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlinx.datetime.todayIn
 import kotlinx.serialization.decodeFromString
 import okio.buffer
 import org.latinpray.data.BasicPrayer
@@ -106,7 +102,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
                 prayer.langs[lang] = basicPrayer
                 basicPrayer.dates?.forEach { date ->
                     try {
-                        println("Parsing date $date to prayer ${prayer.name}")
+                        //println("Parsing date $date to prayer ${prayer.name}")
                         var expr = date
                         if (expr.startsWith("daily")) {
                             expr = "* * * * *"
@@ -115,11 +111,11 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
                             it.firstDayOfWeek = WeekDays.Sunday
                         }
                         prayer.dates.add(builder)
-                        println("Added date $expr to prayer ${prayer.name}, ${builder.asIterable().take(3)}")
-                        if (builder.nextRun?.date == Clock.System.todayIn(TimeZone.currentSystemDefault())
-                            && builder.nextRun?.time?.hour == Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour) {
-                            println("Running prayer ${prayer.name} TODAY and NOW!")
-                        }
+//                        println("Added date $expr to prayer ${prayer.name}, ${builder.asIterable().take(3)}")
+//                        if (builder.nextRun?.date == Clock.System.todayIn(TimeZone.currentSystemDefault())
+//                            && builder.nextRun?.time?.hour == Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour) {
+//                            println("Running prayer ${prayer.name} TODAY and NOW!")
+//                        }
                     } catch (e: Exception) {
                         println("Error adding date $date to prayer ${prayer.name}, ${e.message}")
                     }

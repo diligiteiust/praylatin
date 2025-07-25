@@ -196,36 +196,36 @@ data class Config(
     }
 
     fun externalModification() {
-        println("External modification")
+        //println("External modification")
         loadConfigProps()
         prayersChangedCallback()
     }
 
     private fun getPref(key: String, def: Boolean): Boolean {
-        println("Getting pref $key")
+        //println("Getting pref $key")
         var result: Boolean
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
             result = sharedSettings.getBoolean(key, def)
-            println("Got pref $key from shared prefs: $result")
+            //println("Got pref $key from shared prefs: $result")
             // Make copy of shared data in local settings
             localSettings.putBoolean(key, result)
         } else {
-            println("Got pref $key from local settings")
+            //println("Got pref $key from local settings")
             result = localSettings.getBoolean(key, def)
         }
         return result
     }
 
     private fun getPref(key: String, def: Float): Float {
-        println("Getting pref $key")
+        //println("Getting pref $key")
         var result: Float
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
             result = sharedSettings.getFloat(key, def)
-            println("Got pref $key from shared prefs")
+            //println("Got pref $key from shared prefs")
             // Make copy of shared data in local settings
             localSettings.putFloat(key, result)
         } else {
-            println("Got pref $key from local settings")
+            //println("Got pref $key from local settings")
             result = localSettings.getFloat(key, def)
         }
         return result
@@ -244,31 +244,31 @@ data class Config(
     }
 
     private fun setPref(key: String, def: String) {
-        println("Setting pref $key")
-        println("Setting pref $key in local settings")
+        //println("Setting pref $key")
+        //println("Setting pref $key in local settings")
         localSettings.putString(key, def)
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
-            println("Setting pref $key in shared prefs")
+            //println("Setting pref $key in shared prefs")
             sharedSettings.putString(key, def)
         }
     }
 
     private fun setPref(key: String, def: Boolean) {
-        println("Setting pref $key")
-        println("Setting pref $key in local settings")
+        //println("Setting pref $key")
+        //println("Setting pref $key in local settings")
         localSettings.putBoolean(key, def)
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
-            println("Setting pref $key in shared prefs")
+            //println("Setting pref $key in shared prefs")
             sharedSettings.putBoolean(key, def)
         }
     }
 
     private fun setPref(key: String, def: Float) {
-        println("Setting pref $key")
-        println("Setting pref $key in local settings")
+        //println("Setting pref $key")
+        //println("Setting pref $key in local settings")
         localSettings.putFloat(key, def)
         if (sharedPrefs && sharedPrefsSet.contains(key)) {
-            println("Setting pref $key in shared prefs")
+            //println("Setting pref $key in shared prefs")
             sharedSettings.putFloat(key, def)
         }
     }
