@@ -6,21 +6,30 @@ tags:
   - Beata Virgo Maria
   - Hide
 dates:
-  - "* * * * * MON,THU,FRI *"
+  - "* * * * * MON,THU,SAT *"
 lines:
   - "@"
-  - "### 1. Annuntiatiónem Beátæ Maríæ Vírginis"
+  - |
+    1\. Primum Mysterium Gaudiosum:
+    __Annuntiatiónem Beátæ Maríæ Vírginis__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 2. Visitatiónem Beátæ Maríæ Vírginis"
+  - |
+    2\. Secundum Mysterium Gaudiosum: 
+    __Visitatiónem Beátæ Maríæ Vírginis__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 3. Nativitátem Dómini nostri Iesu Christi"
+  - |
+    3\. Tertium Mysterium Gaudiosum: 
+    __Nativitátem Dómini nostri Iesu Christi__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 4. Oblatiónem Dómini nostri Iesu Christi"
+  - |
+    4\. Quartum Mysterium Gaudiosum: 
+    __Oblatiónem Dómini nostri Iesu Christi__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 5. Inventiónem Dómini nostri Iesu Christi in templo"
+  - |
+    5\. Quintum Mysterium Gaudiosum: 
+    __Inventiónem Dómini nostri Iesu Christi in templo__
   - "@rosariumdecembrevis"
-  - ^^^

@@ -37,5 +37,5 @@
     <string name="intention_active">Active</string>
     <string name="intention_add">Add intention</string>
     <string name="reset_shared_data">Reset shared data</string>
-    <string name="today_and_now">Today and now</string>
+    <string name="today_and_now">Today</string>
 </resources>

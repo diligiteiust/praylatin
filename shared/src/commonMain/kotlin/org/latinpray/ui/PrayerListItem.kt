@@ -60,7 +60,8 @@ fun PrayerListItem(
     var textColor by remember { mutableStateOf( if (prayerItem.darker) { Gray600 } else { onBackground } ) }
 
     prayerItem.prayer.addExternalChangeListener {
-        prayerItem.darker = prayerItem.prayer.prayedToday() && prayerItem.tag == dailyPrayersStr
+        prayerItem.darker = prayerItem.prayer.prayedToday()
+                && (prayerItem.tag == dailyPrayersStr || prayerItem.tag == todayAndNowStr)
         backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface }
         textColor = if (prayerItem.darker) { Gray600 } else { onBackground }
     }

@@ -37,5 +37,5 @@
     <string name="intention_active">Aktywna</string>
     <string name="intention_add">Dodaj intencję</string>
     <string name="reset_shared_data">Usuń synchronizowane dane</string>
-    <string name="today_and_now">Dzisiaj i teraz</string>
+    <string name="today_and_now">Dzisiaj</string>
 </resources>

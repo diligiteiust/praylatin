@@ -9,18 +9,27 @@ dates:
   - "* * * * * TUE,FRI *"
 lines:
   - "@"
-  - "### 1. Agóniam Dómini nostri Iesu Christi in horto"
+  - |
+    1\. Primum Mysterium Dolorosum: 
+    __Agóniam Dómini nostri Iesu Christi in horto__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 2. Flagellatiónem Dómini nostri Iesu Christi"
+  - |
+    2\. Secundum Mysterium Dolorosum: 
+    __Flagellatiónem Dómini nostri Iesu Christi__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 3. Coronatiónem spinis Dómini nostri Iesu Christi"
+  - |
+    3\. Tertium Mysterium Dolorosum: 
+    __Coronatiónem spinis Dómini nostri Iesu Christi__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 4. Bajulatiónem Crucis"
+  - |
+    4\. Quartum Mysterium Dolorosum: 
+    __Bajulatiónem Crucis__
   - "@rosariumdecembrevis"
   - ^^^
-  - "### 5. Crucifixiónem Dómini nostri Iesu Christi"
+  - |
+    5\. Quintum Mysterium Dolorosum: 
+    __Crucifixiónem Dómini nostri Iesu Christi__
   - "@rosariumdecembrevis"
-  - ^^^
