@@ -103,6 +103,15 @@ fun PrayersListScreen(
         }
     }
 
+    OnResume {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        println("OnResume, Checking time: ${now.hour}, previous: ${currentHour}")
+        if (now.hour != currentHour) {
+            currentHour = now.hour
+            println("OnResume, New time: ${currentHour}")
+        }
+    }
+
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
     val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
     val todayAndNowStr = stringResource(Res.string.today_and_now)
