@@ -27,15 +27,11 @@ import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 import org.latinpray.data.PrayerIntention
 
-val HOUR_IN_MILLIS = 3600000
-
-val TWO_DAYS_IN_MILLIS = 2 * 24 * HOUR_IN_MILLIS
-val SIX_HOURS_IN_MILLIS = 6 * HOUR_IN_MILLIS
-
 /* Allows to say prayers until 6AM next day after the day on which the prayer should be said.
    Otherwise the inrowNum is reset.
  */
-val TWO_DAYS_AND_6_HOURS_IN_MILLIS = TWO_DAYS_IN_MILLIS * SIX_HOURS_IN_MILLIS
+const val TWO_DAYS_AND_6_HOURS_IN_HOURS = 56
+
 
 enum class PrayerTime {
     TODAY,
@@ -79,11 +75,12 @@ fun calcPrayerTime(last_date: LocalDate): PrayerTime {
     if (curr_date <= last_date) return PrayerTime.TODAY
     if (last_date.daysUntil(curr_date) == 1) return PrayerTime.YESTERDAY
 
-    val curr_time_millis = Clock.System.now().toEpochMilliseconds()
+    val curr_time_millis = Clock.System.now()
     val last_date_millis =
-        last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+        last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
+    val diff = curr_time_millis - last_date_millis
 
-    if (curr_time_millis - last_date_millis <= TWO_DAYS_AND_6_HOURS_IN_MILLIS) return PrayerTime.SIX_HOURS_LATE
+    if (diff.inWholeHours <= TWO_DAYS_AND_6_HOURS_IN_HOURS) return PrayerTime.SIX_HOURS_LATE
 
     return PrayerTime.DAYS_GAP
 }

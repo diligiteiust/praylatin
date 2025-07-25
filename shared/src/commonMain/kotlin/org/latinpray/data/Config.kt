@@ -583,40 +583,6 @@ data class Config(
         }
 
         prayer.nums = PrayerNums(prayer_curr_date, totalNum, inrowNum)
-
-        //println("Incrementing prayer num for $prayer")
-        //val prayerNums = loadPrayerNums(prayer)
-        //val lastRecorded = prayer.nums.lastRecorded
-//        var curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
-//        if (inrowNum > 1 && prayer.nums.lastRecorded.daysUntil(curr_date) > 0) {
-//            val instantLast: Instant =
-//                prayer.nums.lastRecorded.atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
-//            val instantDayLater: Instant =
-//                instantLast.plus(1, DateTimeUnit.DAY, TimeZone.currentSystemDefault())
-//            curr_date = instantDayLater.toLocalDateTime(TimeZone.currentSystemDefault()).date
-//
-//            //println("Incrementing nums for current intention")
-//            val currentIntention = intentions.find { it.currentIntention }
-//            //println("Current intention: ${currentIntention?.toPropsString()}")
-//            if (currentIntention != null) {
-//                //currentIntention.inrowNum = inrowNumIncrement(LocalDate(year = 1970, monthNumber = 2, dayOfMonth = 27), currentIntention.inrowNum, false)
-//                // For now novena, inrowNum is not reset if a day is missing.
-//                currentIntention.inrowNum =
-//                    inrowNumIncrement(prayer.nums.lastRecorded, currentIntention.inrowNum, false)
-//                if (currentIntention.days <= 1) {
-//                    currentIntention.totalNum += 1
-//                } else {
-//                    if (currentIntention.inrowNum > currentIntention.days) {
-//                        currentIntention.totalNum += 1
-//                        currentIntention.inrowNum = 1
-//                    }
-//                }
-//                //println("Saving current intention: ${currentIntention.toPropsString()}")
-//                saveIntention(prayer, currentIntention)
-//            }
-//        }
-//        putToSharedPrefs(prayer.name + PRAYER_NUM_KEY.name, "$curr_date,$totalNum,$inrowNum")
-//        prayer.nums = PrayerNums(curr_date, totalNum, inrowNum)
     }
 
     fun loadIntentions(prayer: Prayer): List<PrayerIntention> {
