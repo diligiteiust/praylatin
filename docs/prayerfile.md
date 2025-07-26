@@ -88,15 +88,52 @@ Please note, when stars: '\*' are used for formatting, the line must be in quote
      part added in the 15th century. It is commonly recited in private and in public, 
      and is said 150 times as part of the Rosary.
    ```
-4. __dates__ allows you to specify dates for the prayer. These are dates for which the prayer is recommended. For example, _Joyful Rosary Mysteries_ are recommended for: _Monday_, _Thursday_ and _Saturday_. _Litany of the Sacred Heart of Jesus_ is recommended for the month of _June_ and so on.<br/>
-   The format for putting dates is based on `crontab` file. You can find a very good description on the syntax [here](https://www.baeldung.com/cron-expressions).<br/>
-   __This is not yet implemented in the app.__<br/>
+4. __dates__ allows you to specify dates for the prayer. These are dates for which the prayer is 
+   recommended. For example, _Joyful Rosary Mysteries_ are recommended for: _Monday_, _Thursday_ 
+   and _Saturday_. _Litany of the Sacred Heart of Jesus_ is recommended for the month of _June_ and 
+   so on.<br/>
+   The format for putting dates is based on `crontab` file. You can find a very good description on 
+   the syntax [here](https://www.baeldung.com/cron-expressions).<br/>
+   In general the format is:<br/>
+   "Sec Min Hour DayOfMonth Months Weekdays Years"<br/>
    Example:
     ```yaml
     dates:
-       - "* * * * 1,4,6"
-       - "* * * 6 *"
+       - "* * * 10,20,30 JAN 1,4,6 *"
+       - "* * * * MAR,SEP SAT,SUN 2026.2028"
     ```
+5. __Longer text__ within Yaml's line can also be included. There are a few ways to do so, depending 
+   on how you want to format the text.
+   * Use `>` if you want to break a string up for readability but for it to still be treated as a 
+     single-line string: interior line breaks will be stripped out, there will only be one line 
+     break at the end:<br/>
+     Example:
+     ```yaml
+     - >
+       This is a long text which can be split into multiple lines
+       for readability but it is still treated as a single line.
+     ```
+   * Use `|` if you want those line breaks to be preserved as `\n` (for instance, embedded markdown 
+     with paragraphs).<br/>
+     Example:
+     ```yaml
+     - |
+       ### Some heading
+       
+       This is a long text which can be split into multiple lines for readability but it is still treated as a single line.
+     
+       1. First Point 
+       2. Second Point
+       3. Third Point
+     ```
+   * Use `>-` or `|-` instead if you don't want a line break appended at the end.
+   * Use `" "` if you need to split lines in the middle of words or want to literally type line 
+     breaks as `\n`:<br/>
+     Example:
+     ```yaml
+     - "This is a long text which can be split into multiple lines for reada\
+        bility. And line breaks\n can be added at any place\n in the text"
+     ```
 
 ### Non standard formatting and advanced content techniques
 
