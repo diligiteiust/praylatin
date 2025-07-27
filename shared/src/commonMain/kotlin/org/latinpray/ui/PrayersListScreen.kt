@@ -66,11 +66,11 @@ import org.latinpray.shared.today_and_now
 import org.latinpray.util.truncateToHour
 import kotlin.time.Duration
 
-fun untilNextFullHour(): Duration {
+fun untilNextFullHour(name: String = ""): Duration {
     val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     val nextFullHour = now.plusHours(1).truncateToHour()
     val result = nextFullHour.toInstant(TimeZone.currentSystemDefault()) - Clock.System.now()
-    println("It is now: $now and the next full hour is: $nextFullHour until next full hour: $result")
+    //println("$name - It is now: $now and the next full hour is: $nextFullHour until next full hour: $result")
     return result
 }
 
@@ -93,22 +93,22 @@ fun PrayersListScreen(
     val scope = rememberCoroutineScope()
     scope.launch {
         while (true) {
-            delay(untilNextFullHour())
+            delay(untilNextFullHour("Prayers List"))
             val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            println("Checking time: ${now.hour}, previous: ${currentHour}")
+            //println("Checking time: ${now.hour}, previous: ${currentHour}")
             if (now.hour != currentHour) {
                 currentHour = now.hour
-                println("New time: ${currentHour}")
+                //println("New time: ${currentHour}")
             }
         }
     }
 
     OnResume {
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        println("OnResume, Checking time: ${now.hour}, previous: ${currentHour}")
+        //println("OnResume, Checking time: ${now.hour}, previous: ${currentHour}")
         if (now.hour != currentHour) {
             currentHour = now.hour
-            println("OnResume, New time: ${currentHour}")
+            //println("OnResume, New time: ${currentHour}")
         }
     }
 
