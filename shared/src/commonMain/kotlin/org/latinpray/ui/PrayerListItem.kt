@@ -27,9 +27,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
@@ -58,12 +64,45 @@ fun PrayerListItem(
 
     var backgroundColor by remember { mutableStateOf( if (prayerItem.darker) { darkerSurface } else { normalSurface} ) }
     var textColor by remember { mutableStateOf( if (prayerItem.darker) { Gray600 } else { onBackground } ) }
+    var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
 
-    prayerItem.prayer.addExternalChangeListener {
+    val updateColors: () -> Unit = {
         prayerItem.darker = prayerItem.prayer.prayedToday()
-                && (prayerItem.tag == dailyPrayersStr || prayerItem.tag == todayAndNowStr)
         backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface }
         textColor = if (prayerItem.darker) { Gray600 } else { onBackground }
+    }
+
+    if (prayerItem.tag == dailyPrayersStr || prayerItem.tag == todayAndNowStr) {
+        prayerItem.prayer.addExternalChangeListener {
+            updateColors()
+//            prayerItem.darker = prayerItem.prayer.prayedToday()
+//            backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface }
+//            textColor = if (prayerItem.darker) { Gray600 } else { onBackground }
+        }
+
+        val scope = rememberCoroutineScope()
+        scope.launch {
+            while (true) {
+                delay(untilNextFullHour(prayerItem.prayer.name))
+                val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                //println("Checking time: ${now.hour}, previous: ${currentHour}")
+                if (now.hour != currentHour) {
+                    currentHour = now.hour
+                    updateColors()
+                    //println("New time: ${currentHour}")
+                }
+            }
+        }
+
+        OnResume {
+            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            //println("OnResume, Checking time: ${now.hour}, previous: ${currentHour}")
+            if (now.hour != currentHour) {
+                currentHour = now.hour
+                updateColors()
+                //println("OnResume, New time: ${currentHour}")
+            }
+        }
     }
 
     var subtitle: String? = null
