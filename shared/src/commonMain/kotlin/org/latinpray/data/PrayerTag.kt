@@ -92,10 +92,10 @@ val saints = mapOf<String, PrayerTag>(
     Language.Polish.isoFormat to PrayerTag(Language.Polish.isoFormat, "Do Świętych")
 )
 val saintJoseph = mapOf<String, PrayerTag>(
-    Language.English.isoFormat to PrayerTag(Language.English.isoFormat, "Rosary"),
-    Language.Spanish.isoFormat to PrayerTag(Language.Spanish.isoFormat, "Rosario"),
-    Language.Latin.isoFormat to PrayerTag(Language.Latin.isoFormat, "Rosarium"),
-    Language.Polish.isoFormat to PrayerTag(Language.Polish.isoFormat, "Różaniec")
+    Language.English.isoFormat to PrayerTag(Language.English.isoFormat, "Saint Joseph"),
+    Language.Spanish.isoFormat to PrayerTag(Language.Spanish.isoFormat, "San José"),
+    Language.Latin.isoFormat to PrayerTag(Language.Latin.isoFormat, "Sancti Ioseph"),
+    Language.Polish.isoFormat to PrayerTag(Language.Polish.isoFormat, "Święty Józef")
 )
 val novena = mapOf<String, PrayerTag>(
     Language.English.isoFormat to PrayerTag(Language.English.isoFormat, "Novena"),
@@ -121,6 +121,12 @@ val sacretHeart = mapOf<String, PrayerTag>(
     Language.Latin.isoFormat to PrayerTag(Language.Latin.isoFormat, "Sacratissimum Cor Iesu"),
     Language.Polish.isoFormat to PrayerTag(Language.Polish.isoFormat, "Najświętsze Serce Pana Jezusa")
 )
+val holySpirit = mapOf<String, PrayerTag>(
+    Language.English.isoFormat to PrayerTag(Language.English.isoFormat, "Holy Spirit"),
+    Language.Spanish.isoFormat to PrayerTag(Language.Spanish.isoFormat, "El Espíritu Santo"),
+    Language.Latin.isoFormat to PrayerTag(Language.Latin.isoFormat, "Spiritus Sanctus"),
+    Language.Polish.isoFormat to PrayerTag(Language.Polish.isoFormat, "Duch Święty")
+)
 
 class AllTags {
     val allTags = listOf(
@@ -132,6 +138,7 @@ class AllTags {
         devotion,
         holyEucharist,
         holyMass,
+        holySpirit,
         jesusChrist,
         litany,
         novena,

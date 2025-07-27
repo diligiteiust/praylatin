@@ -37,7 +37,7 @@
     <string name="intention_active">Activo</string>
     <string name="intention_add">Añadir intenciones</string>
     <string name="reset_shared_data">Restablecer datos compartidos</string>
-    <string name="today_and_now">Hoy y ahora</string>
+    <string name="today_and_now">Hoy</string>
     <string name="notes">Notas</string>
     <string name="added_to_daily">Añadido a las oraciones diarias</string>
     <string name="removed_from_daily">Eliminado de las oraciones diarias</string>
