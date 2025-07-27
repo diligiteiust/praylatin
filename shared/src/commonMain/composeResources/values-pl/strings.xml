@@ -38,4 +38,9 @@
     <string name="intention_add">Dodaj intencję</string>
     <string name="reset_shared_data">Usuń synchronizowane dane</string>
     <string name="today_and_now">Dzisiaj</string>
+    <string name="notes">Notatki</string>
+    <string name="added_to_daily">Dodana do codziennych modlitw</string>
+    <string name="removed_from_daily">Usunięto z codziennych modlitw</string>
+    <string name="added_to_favorites">Modlitwa dodana do ulubionych</string>
+    <string name="removed_from_favorites">Modlitwa usunięta z ulubionych</string>
 </resources>

@@ -28,7 +28,6 @@ sealed class Language(val isoFormat : String, val name : String) {
     data object Turkish : Language("tr", "Türkçe")
     data object Hebrew : Language("he", "עברית")
     data object Unknown : Language("unknown", "Unknown")
-
 }
 
 fun getLanguage(isoFormat : String) : Language {

@@ -38,4 +38,9 @@
     <string name="intention_add">Add intention</string>
     <string name="reset_shared_data">Reset shared data</string>
     <string name="today_and_now">Today</string>
+    <string name="notes">Notes</string>
+    <string name="added_to_daily">Added to daily prayers</string>
+    <string name="removed_from_daily">Removed from daily prayers</string>
+    <string name="added_to_favorites">Prayer added to favorites</string>
+    <string name="removed_from_favorites">Prayer removed from favorites</string>
 </resources>

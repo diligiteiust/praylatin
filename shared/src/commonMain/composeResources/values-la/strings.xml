@@ -38,4 +38,9 @@
     <string name="intention_add">Intentiones addere</string>
     <string name="reset_shared_data">Notitias communes restituere</string>
     <string name="today_and_now">Hodie</string>
+    <string name="notes">Notae</string>
+    <string name="added_to_daily">Additum precibus quotidianis</string>
+    <string name="removed_from_daily">A precibus quotidianis remotus</string>
+    <string name="added_to_favorites">Precatio ad favoritos addita est</string>
+    <string name="removed_from_favorites">Precatio e favoritis remota est</string>
 </resources>
