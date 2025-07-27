@@ -105,7 +105,7 @@ Please note, when stars: '\*' are used for formatting, the line must be in quote
 5. __Longer text__ within Yaml's line can also be included. There are a few ways to do so, depending 
    on how you want to format the text.
    * Use `>` if you want to break a string up for readability but for it to still be treated as a 
-     single-line string: interior line breaks will be stripped out, there will only be one line 
+     single-line string. Interior line breaks will be stripped out, there will only be one line 
      break at the end:<br/>
      Example:
      ```yaml
