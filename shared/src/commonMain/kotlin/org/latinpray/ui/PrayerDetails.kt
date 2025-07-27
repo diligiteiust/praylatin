@@ -66,13 +66,17 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
+import org.jetbrains.compose.resources.StringResource
 import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Link
 import org.latinpray.data.Prayer
 import org.latinpray.data.PrayerIntention
 import org.latinpray.getPlatform
+import org.latinpray.shared.Res
 import org.latinpray.util.DisplayLang
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.latinpray.shared.notes
 
 const val INDENT = "%"
 const val TRANSLATION = "!"
@@ -104,6 +108,13 @@ fun getPrayerTitle(dispayLang: DisplayLang, prayer: Prayer, config: Config, maxL
     return result
 }
 
+object Resource {
+    object string
+}
+
+@OptIn(ExperimentalResourceApi::class)
+val Resource.string.notes: StringResource get() = Res.string.notes
+
 fun preparePrayer(
     dispayLang: DisplayLang,
     prayer: Prayer,
@@ -127,7 +138,7 @@ fun preparePrayer(
     // If prefered translation is enabled, we try to find content with translation
     // instead of the standard content
     //println ("firstLang: ${firstLang}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${prayer.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
-    if ((dispayLang != DisplayLang.SECOND) && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
+    if ((dispayLang == DisplayLang.BOTH) && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
         lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
         //println("Using translation for prayer: ${prayer.name} - ${lang2?.title}")
     }
@@ -203,9 +214,9 @@ fun preparePrayer(
             }
         }
         if (lang2?.notes != null && lang2.notes.isNotEmpty()) {
-            result += EMPTY_LINE+"\n\n__Notes:__\n\n" + lang2.notes
+            result += EMPTY_LINE+"\n\n__" + Resource.string.notes + ":__\n\n" + lang2.notes
         } else if (lang2 == null && lang1?.notes != null && lang1.notes.isNotEmpty()) {
-            result += EMPTY_LINE+"\n\n__Notes:__\n\n" + lang1.notes
+            result += EMPTY_LINE+"\n\n__" + Resource.string.notes + ":__\n\n" + lang1.notes
         }
     }
 
