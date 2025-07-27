@@ -59,6 +59,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.HIDE_TAG
 import org.latinpray.data.Prayer
+import org.latinpray.data.allTags
 import org.latinpray.shared.Res
 import org.latinpray.shared.daily_prayers
 import org.latinpray.shared.favorite_prayers
@@ -124,12 +125,16 @@ fun PrayersListScreen(
                 if ((prayer.langs[config.prayerLang] != null && prayer.langs[config.prayerLang]?.tags != null)
                     || (prayer.langs[config.secondLang] != null && prayer.langs[config.secondLang]?.tags != null)
                 ) {
+                    val tmp_tags = mutableSetOf<String>()
                     if (prayer.langs[config.prayerLang]?.tags != null) {
-                        tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
+                        tmp_tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
                     } else if (prayer.langs[config.secondLang]?.tags != null) {
-                        tags.addAll(prayer.langs[config.secondLang]?.tags!!)
+                        tmp_tags.addAll(prayer.langs[config.secondLang]?.tags!!)
                     }
 
+                    tmp_tags.forEach { tag ->
+                        tags.add(allTags.getTagForLanguage(config.uiLang, tag))
+                    }
                     //tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
                 }
             }
@@ -174,13 +179,13 @@ fun PrayersListScreen(
                 prayers.forEach { prayer ->
                     //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
                     if ((prayer.langs[config.prayerLang] != null)
-                        && (prayer.langs[config.prayerLang]?.tags?.contains(tag) == true)
+                        && (prayer.langs[config.prayerLang]?.tags?.contains(allTags.getTagForLanguage(config.prayerLang, tag)) == true)
                         && (prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false)
                     ) {
                         gp.add(PrayerItem(prayer, false, tag))
                         //println("Added 1st prayer ${prayer.name} to group: $tag")
                     } else if ((prayer.langs[config.secondLang] != null)
-                        && (prayer.langs[config.secondLang]?.tags?.contains(tag) == true)
+                        && (prayer.langs[config.secondLang]?.tags?.contains(allTags.getTagForLanguage(config.secondLang, tag)) == true)
                         && prayer.langs[config.secondLang]?.tags?.contains(HIDE_TAG) == false
                     ) {
                         gp.add(PrayerItem(prayer, false, tag))
