@@ -66,7 +66,6 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
-import org.jetbrains.compose.resources.StringResource
 import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Link
@@ -75,7 +74,7 @@ import org.latinpray.data.PrayerIntention
 import org.latinpray.getPlatform
 import org.latinpray.shared.Res
 import org.latinpray.util.DisplayLang
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import org.latinpray.shared.notes
 
 const val INDENT = "%"
@@ -108,13 +107,6 @@ fun getPrayerTitle(dispayLang: DisplayLang, prayer: Prayer, config: Config, maxL
     return result
 }
 
-object Resource {
-    object string
-}
-
-@OptIn(ExperimentalResourceApi::class)
-val Resource.string.notes: StringResource get() = Res.string.notes
-
 fun preparePrayer(
     dispayLang: DisplayLang,
     prayer: Prayer,
@@ -123,7 +115,8 @@ fun preparePrayer(
     indent: String = "",
     extras: Boolean = true,
     listMode : Boolean = false,
-    title: Boolean = false
+    title: Boolean = false,
+    notesRes: String = ""
 ): String {
     var list = listMode
     var lang2: BasicPrayer? = null
@@ -180,7 +173,7 @@ fun preparePrayer(
             val subprayer = prayers.find { p -> p.name == file }
             result += if (subprayer != null) {
                 preparePrayer(dispayLang, subprayer, config, prayers,
-                    indent + (if (list || t)  "" else INDENT), false, list, t)
+                    indent + (if (list || t)  "" else INDENT), false, list, t, notesRes)
             } else {
                 "$indent *$it* not found\n\n"
             }
@@ -214,9 +207,9 @@ fun preparePrayer(
             }
         }
         if (lang2?.notes != null && lang2.notes.isNotEmpty()) {
-            result += EMPTY_LINE+"\n\n__" + Resource.string.notes + ":__\n\n" + lang2.notes
+            result += EMPTY_LINE+"\n\n__" + notesRes + ":__\n\n" + lang2.notes
         } else if (lang2 == null && lang1?.notes != null && lang1.notes.isNotEmpty()) {
-            result += EMPTY_LINE+"\n\n__" + Resource.string.notes + ":__\n\n" + lang1.notes
+            result += EMPTY_LINE+"\n\n__" + notesRes + ":__\n\n" + lang1.notes
         }
     }
 
@@ -341,10 +334,12 @@ fun PrayerDetails(
     var savedScrollPosition by remember { mutableStateOf(0) }
     //println("PrayerDetails, $intenTotalNum, $intenInrowNum")
     //var currentPrayer by remember { mutableStateOf( prayer) }
+    val notesRes = stringResource(Res.string.notes)
+
 
     //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
     key(changed) {
-        val content = preparePrayer(displayLang, prayer, config, prayers)
+        val content = preparePrayer(displayLang, prayer, config, prayers, notesRes = notesRes)
         //println("PrayerDetails - after preparePrayer for  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
         Column(
             modifier = Modifier.fillMaxSize()
