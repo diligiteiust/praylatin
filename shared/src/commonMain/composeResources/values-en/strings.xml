@@ -43,4 +43,5 @@
     <string name="removed_from_daily">Removed from daily prayers</string>
     <string name="added_to_favorites">Prayer added to favorites</string>
     <string name="removed_from_favorites">Prayer removed from favorites</string>
+    <string name="today_list">Today prayers list</string>
 </resources>

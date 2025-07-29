@@ -43,4 +43,5 @@
     <string name="removed_from_daily">A precibus quotidianis remotus</string>
     <string name="added_to_favorites">Precatio ad favoritos addita est</string>
     <string name="removed_from_favorites">Precatio e favoritis remota est</string>
+    <string name="today_list">Index hodiernus</string>
 </resources>

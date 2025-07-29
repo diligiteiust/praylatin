@@ -67,6 +67,7 @@ import org.latinpray.shared.settings_ui_lang
 import org.latinpray.shared.shared_prayer_lists
 import org.latinpray.shared.show_numbers
 import org.latinpray.shared.reset_shared_data
+import org.latinpray.shared.today_list
 import org.latinpray.sharedPrefsSupported
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -85,6 +86,7 @@ fun SettingsScreen(
     var groupingChecked by remember { mutableStateOf(config.grouping) }
     var preferTranslationChecked by remember { mutableStateOf(config.preferTranslation) }
     var showNumbersChecked by remember { mutableStateOf(config.showNumbers) }
+    var todayListChecked by remember { mutableStateOf(config.todayAndNow) }
 
     Column(
         modifier = Modifier
@@ -170,6 +172,28 @@ fun SettingsScreen(
                     }
                 }
             )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding( horizontal = 32.dp)
+            )  {
+                Text(
+                    text = stringResource(Res.string.today_list),
+                )
+                Spacer(Modifier.weight(1f))
+                Checkbox(
+                    checked = todayListChecked,
+                    onCheckedChange = {
+                        scope.launch {
+                            config.saveTodayAndNow(it)
+                            todayListChecked = it
+                        }
+                    },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = MaterialTheme.colorScheme.primary,
+                        uncheckedColor = MaterialTheme.colorScheme.onBackground
+                    )
+                )
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding( horizontal = 32.dp)
