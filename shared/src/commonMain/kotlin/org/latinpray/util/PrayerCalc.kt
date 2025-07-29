@@ -55,19 +55,17 @@ enum class DisplayLang {
     }
 }
 
-fun truncateToHour(dateTime: LocalDateTime): LocalDateTime {
+fun LocalDateTime.truncateToHour(): LocalDateTime {
     return LocalDateTime(
-        year = dateTime.year,
-        monthNumber = dateTime.monthNumber,
-        dayOfMonth = dateTime.dayOfMonth,
-        hour = dateTime.hour,
+        year = this.year,
+        monthNumber = this.monthNumber,
+        dayOfMonth = this.dayOfMonth,
+        hour = this.hour,
         minute = 0,
         second = 0,
         nanosecond = 0
     )
 }
-
-fun LocalDateTime.truncateToHour() = truncateToHour(this)
 
 fun calcPrayerTime(last_date: LocalDate): PrayerTime {
     val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
