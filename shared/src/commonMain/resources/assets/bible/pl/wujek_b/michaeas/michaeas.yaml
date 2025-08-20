@@ -1,0 +1,14 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Michaeas
+abbrev: Mi,Mic,Miq,Mch
+title: Księga Micheasza
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7

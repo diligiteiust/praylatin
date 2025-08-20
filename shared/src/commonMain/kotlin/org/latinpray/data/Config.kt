@@ -20,6 +20,8 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -129,6 +131,9 @@ data class Config(
     val sharedSettings: ObservableSettings = createSettings()
 
     @Transient
+    val sharedSetingsSync: SynchronizedObject = SynchronizedObject()
+
+    @Transient
     var prayersChangedCallback: () -> Unit = {}
         set(value) {
             field = value
@@ -151,8 +156,10 @@ data class Config(
     //var dataStore: DataStore<Preferences>? = null
 
     fun addExternalPrayerModificationListener(prayer: Prayer) {
-        sharedSettings.addStringListener(prayer.name + PRAYER_NUM_KEY.name, "") {
-            prayer.externalChange(loadPrayerNums(prayer))
+        synchronized(sharedSetingsSync) {
+            sharedSettings.addStringListener(prayer.name + PRAYER_NUM_KEY.name, "") {
+                prayer.externalChange(loadPrayerNums(prayer))
+            }
         }
     }
 
@@ -512,7 +519,7 @@ data class Config(
         return prayer.nums
     }
 
-   //val DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS
+    //val DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS
 
 //    fun inrowNumIncrement(last_date: LocalDate, inrowNum: Int, reset: Boolean = true): Int {
 //        val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
@@ -544,18 +551,21 @@ data class Config(
             PrayerTime.TODAY -> {
                 //println("$prayerTime")
             }
+
             PrayerTime.YESTERDAY -> {
                 //println("$prayerTime")
                 inrowNum += 1
                 intention_inrowNum += 1
                 prayer_curr_date = prayer_curr_date.plus(1, DateTimeUnit.DAY)
             }
+
             PrayerTime.SIX_HOURS_LATE -> {
                 //println("$prayerTime")
                 inrowNum += 1
                 intention_inrowNum += 1
                 prayer_curr_date = prayer_curr_date.plus(1, DateTimeUnit.DAY)
             }
+
             PrayerTime.DAYS_GAP -> {
                 //println("$prayerTime")
                 inrowNum = 1

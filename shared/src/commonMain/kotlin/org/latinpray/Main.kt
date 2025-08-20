@@ -35,7 +35,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
-import org.latinpray.data.avemaria
 import org.latinpray.data.offers
 import org.latinpray.data.privacy
 import org.latinpray.data.terms
@@ -52,11 +51,14 @@ import org.latinpray.theme.TABLET_CONTENT_FONT_FACTOR
 import org.latinpray.theme.TABLET_HEADLINE_FONT_FACTOR
 import org.latinpray.theme.TABLET_UI_FONT_FACTOR
 import org.latinpray.ui.AboutScreen
+import org.latinpray.ui.ContentItem
 import org.latinpray.ui.HelpScreen
 import org.latinpray.ui.MainScreens
 import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
+import org.latinpray.data.ReadingPlan
+import org.latinpray.io.readBibleReadingPlan
 
 fun loadLocalizedContent(file: String, lang: String): String {
     val f = file.substringBefore('.') + '-' + lang + "." + file.substringAfter('.')
@@ -88,12 +90,13 @@ fun Main() {
     //println("Loaded config from yaml")
     //var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var prayers by remember { mutableStateOf(mutableListOf<Prayer>()) }
-    var currentPrayer: Prayer = avemaria
+    var readingPlan: ReadingPlan? by remember { mutableStateOf(null) }
+    var currentContent: ContentItem? = null
     defConfig.prayersChangedCallback = {
         scope.launch {
             //println("Prayers changed")
             prayers = reloadPrayers(defConfig)
-            currentPrayer = prayers.first()
+            //currentPrayer = prayers.first()
         }
     }
     var helpContent by remember { mutableStateOf("") }
@@ -142,7 +145,10 @@ fun Main() {
             prayer.langs[defConfig.prayerLang]?.title
         }.toMutableList()
         println("Loaded ${prayers.size} prayers")
-        currentPrayer = prayers.first()
+        readingPlan = readBibleReadingPlan("assets/bible/annual-plan.yaml", defConfig)
+        println("Loaded reading plan: ${readingPlan?.name}")
+        //println("Loaded reading plan")
+        //currentPrayer = prayers.first()
         //if (getPlatform().isIOS) {
             Purchases.sharedInstance.getOfferings(
                 onError = { error ->
@@ -194,8 +200,8 @@ fun Main() {
                                 config = defConfig,
                                 //animatedVisibilityScope = this,
                                 //sharedTransitionScope = sharedTransitionScope,
-                                onClick = { prayer ->
-                                    currentPrayer = prayer
+                                onClick = { content ->
+                                    currentContent = content
                                     navController.navigate(MainScreens.PrayerDetailsScreen.name)
                                 },
                                 navController = navController,
@@ -204,12 +210,14 @@ fun Main() {
                                     scope.launch {
                                         defConfig.saveFontScale(fontScale)
                                     }
-                                }
+                                },
+                                readingPlan = readingPlan
+
                             )
                         }
                         composable(route = MainScreens.PrayerDetailsScreen.name) {
                             PrayerDetailsScreen(
-                                startPrayer = currentPrayer,
+                                startContent = currentContent!!,
                                 config = defConfig,
                                 prayers = prayers,
                                 //animatedContentScope = this,
@@ -229,7 +237,7 @@ fun Main() {
                                                 scope.launch {
                                                     println("Reloading prayers...")
                                                     prayers = reloadPrayers(defConfig)
-                                                    currentPrayer = prayers.first()
+                                                    //currentContent = prayers.first()
                                                 }
                                             }
                                             navController.popBackStack()

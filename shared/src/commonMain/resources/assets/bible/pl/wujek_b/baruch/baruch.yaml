@@ -1,0 +1,13 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Baruch
+abbrev: Ba,Bar
+title: Księga Barucha
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6

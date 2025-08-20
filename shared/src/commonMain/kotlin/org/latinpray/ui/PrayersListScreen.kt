@@ -57,8 +57,10 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
+import org.latinpray.data.Content
 import org.latinpray.data.HIDE_TAG
 import org.latinpray.data.Prayer
+import org.latinpray.data.ReadingPlan
 import org.latinpray.data.allTags
 import org.latinpray.shared.Res
 import org.latinpray.shared.daily_prayers
@@ -81,11 +83,12 @@ fun PrayersListScreen(
     title: String,
     prayers: List<Prayer>,
     config: Config,
-    onClick: (prayer: Prayer) -> Unit,
+    onClick: (content: ContentItem) -> Unit,
     navController: NavController,
 //    sharedTransitionScope: SharedTransitionScope,
 //    animatedVisibilityScope: AnimatedVisibilityScope,
-    fontChange: (scale: Float) -> Unit
+    fontChange: (scale: Float) -> Unit,
+    readingPlan: ReadingPlan? = null
 ) {
     val (fraction) = remember { mutableStateOf(0.50f) }
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
@@ -141,12 +144,16 @@ fun PrayersListScreen(
             tags.remove(HIDE_TAG)
             if (config.todayAndNow) {
                 gp.add(todayAndNowStr)
+                var bible: Content? = readingPlan?.bibleForToday(config)
+                if (bible != null) {
+                    gp.add(ContentItem(bible, false, "bible"))
+                }
                 prayers.forEach { prayer ->
                     //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
                     if ((prayer.langs[config.prayerLang] != null || prayer.langs[config.secondLang] != null)
                         && prayer.isTodayAndNow(currentHour)
                     ) {
-                        gp.add(PrayerItem(prayer, prayer.prayedToday(), todayAndNowStr))
+                        gp.add(ContentItem(prayer, prayer.prayedToday(), todayAndNowStr))
                         //println("Added 1st prayer ${prayer.name} to group: $tag")
                     }
                 }
@@ -154,15 +161,15 @@ fun PrayersListScreen(
             }
             if (config.dailyPrayers.isNotEmpty()) {
                 gp.add(dailyPrayersStr)
-                var lastPr: Prayer? = null
+                var lastPr: ContentItem? = null
                 config.dailyPrayers.forEach { prayer ->
                     prayers.firstOrNull { it.name == prayer }?.let {
-                        gp.add(PrayerItem(it, it.prayedToday(), dailyPrayersStr))
-                        if (lastPr != null) {
-                            lastPr!!.nextPrayer = it
-                            it.prevPrayer = lastPr
-                        }
-                        lastPr = it
+                        val contItem = ContentItem(it, it.prayedToday(), dailyPrayersStr)
+                        gp.add(contItem)
+                        if (lastPr != null)
+                            lastPr!!.nextContent = contItem
+                        contItem.prevContent = lastPr
+                        lastPr = contItem
                     }
                 }
             }
@@ -170,7 +177,7 @@ fun PrayersListScreen(
                 gp.add(favoritePrayersStr)
                 config.favorites.forEach { prayer ->
                     prayers.firstOrNull { it.name == prayer }?.let {
-                        gp.add(PrayerItem(it, false, favoritePrayersStr))
+                        gp.add(ContentItem(it, false, favoritePrayersStr))
                     }
                 }
             }
@@ -182,13 +189,13 @@ fun PrayersListScreen(
                         && (prayer.langs[config.prayerLang]?.tags?.contains(allTags.getTagForLanguage(config.prayerLang, tag)) == true)
                         && (prayer.langs[config.prayerLang]?.tags?.contains(HIDE_TAG) == false)
                     ) {
-                        gp.add(PrayerItem(prayer, false, tag))
+                        gp.add(ContentItem(prayer, false, tag))
                         //println("Added 1st prayer ${prayer.name} to group: $tag")
                     } else if ((prayer.langs[config.secondLang] != null)
                         && (prayer.langs[config.secondLang]?.tags?.contains(allTags.getTagForLanguage(config.secondLang, tag)) == true)
                         && prayer.langs[config.secondLang]?.tags?.contains(HIDE_TAG) == false
                     ) {
-                        gp.add(PrayerItem(prayer, false, tag))
+                        gp.add(ContentItem(prayer, false, tag))
                         //println("Added 2nd prayer ${prayer.name} to group: $tag")
                     }
                 }
@@ -260,9 +267,9 @@ fun PrayersListScreen(
                         )
                     }
 
-                    is PrayerItem -> {
+                    is ContentItem -> {
                         PrayerListItem(
-                            prayerItem = item,
+                            contentItem = item,
                             onClick = onClick,
                             config = config,
                         )
@@ -270,7 +277,7 @@ fun PrayersListScreen(
 
                     is Prayer -> {
                         PrayerListItem(
-                            prayerItem = PrayerItem(item, false, null),
+                            contentItem = ContentItem(item, false, null),
                             onClick = onClick,
                             config = config,
                         )

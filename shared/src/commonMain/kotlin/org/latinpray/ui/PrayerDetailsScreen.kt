@@ -17,8 +17,6 @@ package org.latinpray.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -58,7 +56,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -316,26 +313,34 @@ fun MessageDialog(
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun PrayerDetailsScreen(
-    startPrayer: Prayer,
+    startContent: ContentItem,
     config: Config,
     prayers: MutableList<Prayer>,
     goBack: () -> Unit,
 ) {
-    var prayer by remember { mutableStateOf(startPrayer) }
+    var contentItem by remember { mutableStateOf(startContent) }
+    var prayer: Prayer? by remember { mutableStateOf(null) }
+    prayer = contentItem.content as? Prayer
     val (fraction) = remember { mutableStateOf(0.25f) }
     var firstLang by remember { mutableStateOf(true) }
     var displayLang by remember { mutableStateOf(DisplayLang.BOTH) }
-    var daily by remember { mutableStateOf(config.dailyPrayers.contains(prayer.name)) }
-    var favorite by remember { mutableStateOf(config.favorites.contains(prayer.name)) }
+    var daily by remember { mutableStateOf(config.dailyPrayers.contains(contentItem.content.name)) }
+    var favorite by remember { mutableStateOf(config.favorites.contains(contentItem.content.name)) }
     val scope = rememberCoroutineScope()
     //var prayerNums = config.loadPrayerNums(prayer)
-    var totalNum by remember { mutableStateOf(prayer.nums.totalNum) }
-    var inrowNum by remember { mutableStateOf(prayer.nums.inrowNum) }
     var showDialog by remember { mutableStateOf(false) }
     var endProcessed by remember { mutableStateOf(false) }
 
-    var prayerIntentions by remember { mutableStateOf(config.loadIntentions(prayer)) }
-    var currentIntention by remember { mutableStateOf(getCurrentIntention(prayer, config)) }
+    var totalNum: Int by remember { mutableStateOf(0) }
+    var inrowNum: Int by remember { mutableStateOf(0) }
+    var prayerIntentions: List<PrayerIntention> by remember { mutableStateOf(listOf<PrayerIntention>()) }
+    var currentIntention: PrayerIntention? by remember { mutableStateOf(null) }
+    if (prayer != null) {
+        totalNum = prayer!!.nums.totalNum
+        inrowNum = prayer!!.nums.inrowNum
+        prayerIntentions = config.loadIntentions(prayer!!)
+        currentIntention = getCurrentIntention(prayer!!, config)
+    }
 
     var dlgMessage by remember { mutableStateOf("") }
     var showMessage by remember { mutableStateOf(false) }
@@ -376,7 +381,7 @@ fun PrayerDetailsScreen(
                     }
                 }
                 scope.launch {
-                    config.saveIntentions(prayer, it)
+                    prayer?.let { it1 -> config.saveIntentions(it1, it) }
                 }
                 currentIntention = intent
             },
@@ -415,17 +420,19 @@ fun PrayerDetailsScreen(
                     Text(text = "$totalNum / $inrowNum")
                 }
                 Spacer(Modifier.weight(1f))
-                IconButton(
-                    onClick = {
-                        showDialog = true
+                if (prayer != null) {
+                    IconButton(
+                        onClick = {
+                            showDialog = true
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AutoStories,
+                            contentDescription = "Intentions",
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.size(30.dp)
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AutoStories,
-                        contentDescription = "Intentions",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(30.dp)
-                    )
                 }
                 IconToggleButton(
                     checked = firstLang,
@@ -463,99 +470,106 @@ fun PrayerDetailsScreen(
                         }
                     }
                 }
-                IconToggleButton(
-                    checked = daily,
-                    onCheckedChange = {
-                        daily = it
-                        scope.launch {
-                            if (daily) {
-                                config.addDailyPrayer(prayer.name)
-                                dlgMessage = added_to_daily
-                            } else {
-                                config.removeDailyPrayer(prayer.name)
-                                dlgMessage = removed_from_daily
+                if (prayer != null) {
+                    IconToggleButton(
+                        checked = daily,
+                        onCheckedChange = {
+                            daily = it
+                            scope.launch {
+                                if (daily) {
+                                    config.addDailyPrayer(prayer!!.name)
+                                    dlgMessage = added_to_daily
+                                } else {
+                                    config.removeDailyPrayer(prayer!!.name)
+                                    dlgMessage = removed_from_daily
+                                }
+                                showMessage = true
                             }
-                            showMessage = true
+                        }
+                    ) {
+                        if (daily) {
+                            Icon(
+                                painter = painterResource(Res.drawable.calendar_month),
+                                contentDescription = "In daily prayers",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(Res.drawable.calendar_add_on),
+                                contentDescription = "Add to daily prayers",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
                         }
                     }
-                ) {
-                    if (daily) {
-                        Icon(
-                            painter = painterResource(Res.drawable.calendar_month),
-                            contentDescription = "In daily prayers",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    } else {
-                        Icon(
-                            painter = painterResource(Res.drawable.calendar_add_on),
-                            contentDescription = "Add to daily prayers",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
-                }
-                IconToggleButton(
-                    checked = favorite,
-                    onCheckedChange = {
-                        favorite = it
-                        scope.launch {
-                            if (favorite) {
-                                config.addFavorite(prayer.name)
-                                dlgMessage = added_to_favorites
-                            } else {
-                                config.removeFavorite(prayer.name)
-                                dlgMessage = removed_from_favorites
+                    IconToggleButton(
+                        checked = favorite,
+                        onCheckedChange = {
+                            favorite = it
+                            scope.launch {
+                                if (favorite) {
+                                    config.addFavorite(prayer!!.name)
+                                    dlgMessage = added_to_favorites
+                                } else {
+                                    config.removeFavorite(prayer!!.name)
+                                    dlgMessage = removed_from_favorites
+                                }
+                                showMessage = true
                             }
-                            showMessage = true
                         }
-                    }
-                ) {
-                    if (favorite) {
-                        Icon(
-                            painter = painterResource(Res.drawable.bookmark_check),
-                            contentDescription = "In favorites",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    } else {
-                        Icon(
-                            painter = painterResource(Res.drawable.bookmark_add),
-                            contentDescription = "Add to favorites",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(30.dp)
-                        )
+                    ) {
+                        if (favorite) {
+                            Icon(
+                                painter = painterResource(Res.drawable.bookmark_check),
+                                contentDescription = "In favorites",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(Res.drawable.bookmark_add),
+                                contentDescription = "Add to favorites",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
                     }
                 }
             }
         }
         //key (totalNum, inrowNum) {
-        PrayerDetails(
+        ContentDetails(
             displayLang = displayLang,
-            prayer = prayer,
+            contentItem = contentItem,
             config = config,
             prayers = prayers,
             endReachedCallbackPD = {
-                if (endProcessed) return@PrayerDetails
+                if (endProcessed) return@ContentDetails
                 endProcessed = true
                 //println("End reached start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
-                config.incPrayerNum(prayer, prayerIntentions)
-                totalNum = prayer.nums.totalNum
-                inrowNum = prayer.nums.inrowNum
+                prayer?.let { it1 ->
+                    config.incPrayerNum(it1, prayerIntentions)
+                    totalNum = it1.nums.totalNum
+                    inrowNum = it1.nums.inrowNum
+                    currentIntention = getCurrentIntention(it1, config)
+                }
                 //prayerIntentions = config.loadIntentions(prayer)
-                currentIntention = getCurrentIntention(prayer, config)
                 //println("End reached end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
             },
             intention = currentIntention,
-            prayerChangedCallback = { pr ->
+            prayerChangedCallback = { contIt ->
                 //println("Prayer changed start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
-                prayer = pr
-                daily = config.dailyPrayers.contains(prayer.name)
-                favorite = config.favorites.contains(prayer.name)
-                totalNum = prayer.nums.totalNum
-                inrowNum = prayer.nums.inrowNum
-                prayerIntentions = config.loadIntentions(prayer)
-                currentIntention = getCurrentIntention(prayer, config)
+                contentItem = contIt
+                prayer = contentItem.content as? Prayer
+                daily = config.dailyPrayers.contains(contentItem.content.name)
+                favorite = config.favorites.contains(contentItem.content.name)
+                prayer?.let { it1 ->
+                    totalNum = it1.nums.totalNum
+                    inrowNum = it1.nums.inrowNum
+                    prayerIntentions = config.loadIntentions(it1)
+                    currentIntention = getCurrentIntention(it1, config)
+                }
                 endProcessed = false
                 //println("Prayer changed end: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
             }

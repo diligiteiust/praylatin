@@ -1,0 +1,12 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Iacobi
+abbrev: Jk,Jas,Ja,Sant,Stgo,St,Iac
+title: List św. Jakuba Apostoła
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

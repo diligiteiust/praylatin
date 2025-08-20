@@ -1,0 +1,1465 @@
+name: Bible Reading Plan
+description: Bible Reading Plan
+version: 1.0
+source: https://github.com/BrRoman/vulgate
+plan:
+  - type: dayreading
+    day: 25/04
+    start:  Gn 1, 1
+    end:  Gn 4, 17
+  - type: dayreading
+    day: 26/04
+    start:  Gn 4, 18
+    end:  Gn 8, 12
+  - type: dayreading
+    day: 27/04
+    start:  Gn 8, 13
+    end:  Gn 11, 27
+  - type: dayreading
+    day: 28/04
+    start:  Gn 11, 28
+    end:  Gn 16, 10
+  - type: dayreading
+    day: 29/04
+    start:  Gn 16, 11
+    end:  Gn 19, 33
+  - type: dayreading
+    day: 30/04
+    start:  Gn 19, 34
+    end:  Gn 23, 17
+  - type: dayreading
+    day: 01/05
+    start:  Gn 23, 18
+    end:  Gn 25, 28
+  - type: dayreading
+    day: 02/05
+    start:  Gn 25, 29
+    end:  Gn 28, 11
+  - type: dayreading
+    day: 03/05
+    start:  Gn 28, 12
+    end:  Gn 31, 9
+  - type: dayreading
+    day: 04/05
+    start:  Gn 31, 10
+    end:  Gn 34, 0
+  - type: dayreading
+    day: 05/05
+    start:  Gn 34, 1
+    end:  Gn 36, 38
+  - type: dayreading
+    day: 06/05
+    start:  Gn 36, 39
+    end:  Gn 40, 4
+  - type: dayreading
+    day: 07/05
+    start:  Gn 40, 5
+    end:  Gn 42, 22
+  - type: dayreading
+    day: 08/05
+    start:  Gn 42, 23
+    end:  Gn 45, 15
+  - type: dayreading
+    day: 09/05
+    start:  Gn 45, 16
+    end:  Gn 48, 20
+  - type: dayreading
+    day: 10/05
+    start:  Gn 48, 21
+    end:  Ex 2, 17
+  - type: dayreading
+    day: 11/05
+    start:  Ex 2, 18
+    end:  Ex 6, 14
+  - type: dayreading
+    day: 12/05
+    start:  Ex 6, 15
+    end:  Ex 9, 25
+  - type: dayreading
+    day: 13/05
+    start:  Ex 9, 26
+    end:  Ex 12, 49
+  - type: dayreading
+    day: 14/05
+    start:  Ex 12, 50
+    end:  Ex 16, 16
+  - type: dayreading
+    day: 15/05
+    start:  Ex 16, 17
+    end:  Ex 20, 10
+  - type: dayreading
+    day: 16/05
+    start:  Ex 20, 11
+    end:  Ex 23, 15
+  - type: dayreading
+    day: 17/05
+    start:  Ex 23, 16
+    end:  Ex 26, 23
+  - type: dayreading
+    day: 18/05
+    start:  Ex 26, 24
+    end:  Ex 29, 20
+  - type: dayreading
+    day: 19/05
+    start:  Ex 29, 21
+    end:  Ex 32, 16
+  - type: dayreading
+    day: 20/05
+    start:  Ex 32, 17
+    end:  Ex 35, 21
+  - type: dayreading
+    day: 21/05
+    start:  Ex 35, 22
+    end:  Ex 38, 17
+  - type: dayreading
+    day: 22/05
+    start:  Ex 38, 18
+    end:  Lev 1, 5
+  - type: dayreading
+    day: 23/05
+    start:  Lev 1, 6
+    end:  Lev 5, 18
+  - type: dayreading
+    day: 24/05
+    start:  Lev 5, 19
+    end:  Lev 8, 29
+  - type: dayreading
+    day: 25/05
+    start:  Lev 8, 30
+    end:  Lev 12, 0
+  - type: dayreading
+    day: 26/05
+    start:  Lev 12, 1
+    end:  Lev 14, 32
+  - type: dayreading
+    day: 27/05
+    start:  Lev 14, 33
+    end:  Lev 17, 6
+  - type: dayreading
+    day: 28/05
+    start:  Lev 17, 7
+    end:  Lev 20, 21
+  - type: dayreading
+    day: 29/05
+    start:  Lev 20, 22
+    end:  Lev 23, 35
+  - type: dayreading
+    day: 30/05
+    start:  Lev 23, 36
+    end:  Lev 26, 11
+  - type: dayreading
+    day: 31/05
+    start:  Lev 26, 12
+    end:  Num 1, 30
+  - type: dayreading
+    day: 01/06
+    start:  Num 1, 31
+    end:  Num 3, 40
+  - type: dayreading
+    day: 02/06
+    start:  Num 3, 41
+    end:  Num 6, 7
+  - type: dayreading
+    day: 03/06
+    start:  Num 6, 8
+    end:  Num 7, 78
+  - type: dayreading
+    day: 04/06
+    start:  Num 7, 79
+    end:  Num 11, 2
+  - type: dayreading
+    day: 05/06
+    start:  Num 11, 3
+    end:  Num 14, 18
+  - type: dayreading
+    day: 06/06
+    start:  Num 14, 19
+    end:  Num 16, 30
+  - type: dayreading
+    day: 07/06
+    start:  Num 16, 31
+    end:  Num 20, 11
+  - type: dayreading
+    day: 08/06
+    start:  Num 20, 12
+    end:  Num 23, 3
+  - type: dayreading
+    day: 09/06
+    start:  Num 23, 4
+    end:  Num 26, 28
+  - type: dayreading
+    day: 10/06
+    start:  Num 26, 29
+    end:  Num 29, 7
+  - type: dayreading
+    day: 11/06
+    start:  Num 29, 8
+    end:  Num 31, 49
+  - type: dayreading
+    day: 12/06
+    start:  Num 31, 50
+    end:  Num 33, 51
+  - type: dayreading
+    day: 13/06
+    start:  Num 33, 52
+    end:  Dt 1, 17
+  - type: dayreading
+    day: 14/06
+    start:  Dt 1, 18
+    end:  Dt 4, 4
+  - type: dayreading
+    day: 15/06
+    start:  Dt 4, 5
+    end:  Dt 6, 20
+  - type: dayreading
+    day: 16/06
+    start:  Dt 6, 21
+    end:  Dt 10, 18
+  - type: dayreading
+    day: 17/06
+    start:  Dt 10, 19
+    end:  Dt 14, 12
+  - type: dayreading
+    day: 18/06
+    start:  Dt 14, 13
+    end:  Dt 18, 16
+  - type: dayreading
+    day: 19/06
+    start:  Dt 18, 17
+    end:  Dt 22, 28
+  - type: dayreading
+    day: 20/06
+    start:  Dt 22, 29
+    end:  Dt 27, 11
+  - type: dayreading
+    day: 21/06
+    start:  Dt 27, 12
+    end:  Dt 29, 15
+  - type: dayreading
+    day: 22/06
+    start:  Dt 29, 16
+    end:  Dt 32, 34
+  - type: dayreading
+    day: 23/06
+    start:  Dt 32, 35
+    end:  Jos 2, 22
+  - type: dayreading
+    day: 24/06
+    start:  Jos 2, 23
+    end:  Jos 7, 11
+  - type: dayreading
+    day: 25/06
+    start:  Jos 7, 12
+    end:  Jos 10, 21
+  - type: dayreading
+    day: 26/06
+    start:  Jos 10, 22
+    end:  Jos 13, 29
+  - type: dayreading
+    day: 27/06
+    start:  Jos 13, 30
+    end:  Jos 17, 6
+  - type: dayreading
+    day: 28/06
+    start:  Jos 17, 7
+    end:  Jos 20, 7
+  - type: dayreading
+    day: 29/06
+    start:  Jos 20, 8
+    end:  Jos 24, 3
+  - type: dayreading
+    day: 30/06
+    start:  Jos 24, 4
+    end:  Jdc 3, 9
+  - type: dayreading
+    day: 01/07
+    start:  Jdc 3, 10
+    end:  Jdc 6, 20
+  - type: dayreading
+    day: 02/07
+    start:  Jdc 6, 21
+    end:  Jdc 9, 19
+  - type: dayreading
+    day: 03/07
+    start:  Jdc 9, 20
+    end:  Jdc 12, 2
+  - type: dayreading
+    day: 04/07
+    start:  Jdc 12, 3
+    end:  Jdc 16, 20
+  - type: dayreading
+    day: 05/07
+    start:  Jdc 16, 21
+    end:  Jdc 20, 13
+  - type: dayreading
+    day: 06/07
+    start:  Jdc 20, 14
+    end:  Ru 2, 17
+  - type: dayreading
+    day: 07/07
+    start:  Ru 2, 18
+    end:  1 Reg 2, 24
+  - type: dayreading
+    day: 08/07
+    start:  1 Reg 2, 25
+    end:  1 Reg 7, 10
+  - type: dayreading
+    day: 09/07
+    start:  1 Reg 7, 11
+    end:  1 Reg 12, 0
+  - type: dayreading
+    day: 10/07
+    start:  1 Reg 12, 1
+    end:  1 Reg 14, 50
+  - type: dayreading
+    day: 11/07
+    start:  1 Reg 14, 51
+    end:  1 Reg 17, 39
+  - type: dayreading
+    day: 12/07
+    start:  1 Reg 17, 40
+    end:  1 Reg 20, 25
+  - type: dayreading
+    day: 13/07
+    start:  1 Reg 20, 26
+    end:  1 Reg 24, 14
+  - type: dayreading
+    day: 14/07
+    start:  1 Reg 24, 15
+    end:  1 Reg 28, 8
+  - type: dayreading
+    day: 15/07
+    start:  1 Reg 28, 9
+    end:  2 Reg 1, 26
+  - type: dayreading
+    day: 16/07
+    start:  2 Reg 1, 27
+    end:  2 Reg 5, 14
+  - type: dayreading
+    day: 17/07
+    start:  2 Reg 5, 15
+    end:  2 Reg 10, 4
+  - type: dayreading
+    day: 18/07
+    start:  2 Reg 10, 5
+    end:  2 Reg 13, 25
+  - type: dayreading
+    day: 19/07
+    start:  2 Reg 13, 26
+    end:  2 Reg 16, 14
+  - type: dayreading
+    day: 20/07
+    start:  2 Reg 16, 15
+    end:  2 Reg 19, 28
+  - type: dayreading
+    day: 21/07
+    start:  2 Reg 19, 29
+    end:  2 Reg 22, 35
+  - type: dayreading
+    day: 22/07
+    start:  2 Reg 22, 36
+    end:  3 Reg 1, 18
+  - type: dayreading
+    day: 23/07
+    start:  3 Reg 1, 19
+    end:  3 Reg 3, 17
+  - type: dayreading
+    day: 24/07
+    start:  3 Reg 3, 18
+    end:  3 Reg 6, 35
+  - type: dayreading
+    day: 25/07
+    start:  3 Reg 6, 36
+    end:  3 Reg 8, 44
+  - type: dayreading
+    day: 26/07
+    start:  3 Reg 8, 45
+    end:  3 Reg 11, 19
+  - type: dayreading
+    day: 27/07
+    start:  3 Reg 11, 20
+    end:  3 Reg 14, 7
+  - type: dayreading
+    day: 28/07
+    start:  3 Reg 14, 8
+    end:  3 Reg 17, 6
+  - type: dayreading
+    day: 29/07
+    start:  3 Reg 17, 7
+    end:  3 Reg 20, 14
+  - type: dayreading
+    day: 30/07
+    start:  3 Reg 20, 15
+    end:  3 Reg 22, 40
+  - type: dayreading
+    day: 31/07
+    start:  3 Reg 22, 41
+    end:  4 Reg 4, 14
+  - type: dayreading
+    day: 01/08
+    start:  4 Reg 4, 15
+    end:  4 Reg 7, 8
+  - type: dayreading
+    day: 02/08
+    start:  4 Reg 7, 9
+    end:  4 Reg 10, 20
+  - type: dayreading
+    day: 03/08
+    start:  4 Reg 10, 21
+    end:  4 Reg 14, 15
+  - type: dayreading
+    day: 04/08
+    start:  4 Reg 14, 16
+    end:  4 Reg 17, 26
+  - type: dayreading
+    day: 05/08
+    start:  4 Reg 17, 27
+    end:  4 Reg 20, 9
+  - type: dayreading
+    day: 06/08
+    start:  4 Reg 20, 10
+    end:  4 Reg 24, 3
+  - type: dayreading
+    day: 07/08
+    start:  4 Reg 24, 4
+    end:  1 Par 1, 52
+  - type: dayreading
+    day: 08/08
+    start:  1 Par 1, 53
+    end:  1 Par 4, 17
+  - type: dayreading
+    day: 09/08
+    start:  1 Par 4, 18
+    end:  1 Par 6, 46
+  - type: dayreading
+    day: 10/08
+    start:  1 Par 6, 47
+    end:  1 Par 8, 23
+  - type: dayreading
+    day: 11/08
+    start:  1 Par 8, 24
+    end:  1 Par 11, 23
+  - type: dayreading
+    day: 12/08
+    start:  1 Par 11, 24
+    end:  1 Par 15, 4
+  - type: dayreading
+    day: 13/08
+    start:  1 Par 15, 5
+    end:  1 Par 18, 3
+  - type: dayreading
+    day: 14/08
+    start:  1 Par 18, 4
+    end:  1 Par 23, 9
+  - type: dayreading
+    day: 15/08
+    start:  1 Par 23, 10
+    end:  1 Par 26, 13
+  - type: dayreading
+    day: 16/08
+    start:  1 Par 26, 14
+    end:  1 Par 29, 24
+  - type: dayreading
+    day: 17/08
+    start:  1 Par 29, 25
+    end:  2 Par 6, 5
+  - type: dayreading
+    day: 18/08
+    start:  2 Par 6, 6
+    end:  2 Par 9, 21
+  - type: dayreading
+    day: 19/08
+    start:  2 Par 9, 22
+    end:  2 Par 14, 8
+  - type: dayreading
+    day: 20/08
+    start:  2 Par 14, 9
+    end:  2 Par 19, 5
+  - type: dayreading
+    day: 21/08
+    start:  2 Par 19, 6
+    end:  2 Par 24, 2
+  - type: dayreading
+    day: 22/08
+    start:  2 Par 24, 3
+    end:  2 Par 28, 13
+  - type: dayreading
+    day: 23/08
+    start:  2 Par 28, 14
+    end:  2 Par 32, 0
+  - type: dayreading
+    day: 24/08
+    start:  2 Par 32, 1
+    end:  2 Par 35, 7
+  - type: dayreading
+    day: 25/08
+    start:  2 Par 35, 8
+    end:  Esd 2, 44
+  - type: dayreading
+    day: 26/08
+    start:  Esd 2, 45
+    end:  Esd 6, 19
+  - type: dayreading
+    day: 27/08
+    start:  Esd 6, 20
+    end:  Esd 10, 16
+  - type: dayreading
+    day: 28/08
+    start:  Esd 10, 17
+    end:  Neh 4, 8
+  - type: dayreading
+    day: 29/08
+    start:  Neh 4, 9
+    end:  Neh 7, 45
+  - type: dayreading
+    day: 30/08
+    start:  Neh 7, 46
+    end:  Neh 10, 14
+  - type: dayreading
+    day: 31/08
+    start:  Neh 10, 15
+    end:  Neh 12, 37
+  - type: dayreading
+    day: 01/09
+    start:  Neh 12, 38
+    end:  Tb 3, 10
+  - type: dayreading
+    day: 02/09
+    start:  Tb 3, 11
+    end:  Tb 7, 10
+  - type: dayreading
+    day: 03/09
+    start:  Tb 7, 11
+    end:  Tb 12, 18
+  - type: dayreading
+    day: 04/09
+    start:  Tb 12, 19
+    end:  Jdt 4, 10
+  - type: dayreading
+    day: 05/09
+    start:  Jdt 4, 11
+    end:  Jdt 8, 16
+  - type: dayreading
+    day: 06/09
+    start:  Jdt 8, 17
+    end:  Jdt 13, 0
+  - type: dayreading
+    day: 07/09
+    start:  Jdt 13, 1
+    end:  Est 1, 3
+  - type: dayreading
+    day: 08/09
+    start:  Est 1, 4
+    end:  Est 6, 10
+  - type: dayreading
+    day: 09/09
+    start:  Est 6, 11
+    end:  Est 13, 4
+  - type: dayreading
+    day: 10/09
+    start:  Est 13, 5
+    end:  Jb 2, 0
+  - type: dayreading
+    day: 11/09
+    start:  Jb 2, 1
+    end:  Jb 6, 11
+  - type: dayreading
+    day: 12/09
+    start:  Jb 6, 12
+    end:  Jb 10, 1
+  - type: dayreading
+    day: 13/09
+    start:  Jb 10, 2
+    end:  Jb 14, 5
+  - type: dayreading
+    day: 14/09
+    start:  Jb 14, 6
+    end:  Jb 18, 7
+  - type: dayreading
+    day: 15/09
+    start:  Jb 18, 8
+    end:  Jb 21, 26
+  - type: dayreading
+    day: 16/09
+    start:  Jb 21, 27
+    end:  Jb 26, 12
+  - type: dayreading
+    day: 17/09
+    start:  Jb 26, 13
+    end:  Jb 30, 20
+  - type: dayreading
+    day: 18/09
+    start:  Jb 30, 21
+    end:  Jb 33, 25
+  - type: dayreading
+    day: 19/09
+    start:  Jb 33, 26
+    end:  Jb 37, 4
+  - type: dayreading
+    day: 20/09
+    start:  Jb 37, 5
+    end:  Jb 40, 2
+  - type: dayreading
+    day: 21/09
+    start:  Jb 40, 3
+    end:  Ps 4, 3
+  - type: dayreading
+    day: 22/09
+    start:  Ps 4, 4
+    end:  Ps 10, 1
+  - type: dayreading
+    day: 23/09
+    start:  Ps 10, 2
+    end:  Ps 17, 39
+  - type: dayreading
+    day: 24/09
+    start:  Ps 17, 40
+    end:  Ps 23, 9
+  - type: dayreading
+    day: 25/09
+    start:  Ps 23, 10
+    end:  Ps 30, 16
+  - type: dayreading
+    day: 26/09
+    start:  Ps 30, 17
+    end:  Ps 35, 5
+  - type: dayreading
+    day: 27/09
+    start:  Ps 35, 6
+    end:  Ps 39, 13
+  - type: dayreading
+    day: 28/09
+    start:  Ps 39, 14
+    end:  Ps 46, 6
+  - type: dayreading
+    day: 29/09
+    start:  Ps 46, 7
+    end:  Ps 52, 3
+  - type: dayreading
+    day: 30/09
+    start:  Ps 52, 4
+    end:  Ps 59, 6
+  - type: dayreading
+    day: 01/10
+    start:  Ps 59, 7
+    end:  Ps 67, 4
+  - type: dayreading
+    day: 02/10
+    start:  Ps 67, 5
+    end:  Ps 70, 23
+  - type: dayreading
+    day: 03/10
+    start:  Ps 70, 24
+    end:  Ps 76, 2
+  - type: dayreading
+    day: 04/10
+    start:  Ps 76, 3
+    end:  Ps 78, 7
+  - type: dayreading
+    day: 05/10
+    start:  Ps 78, 8
+    end:  Ps 85, 1
+  - type: dayreading
+    day: 06/10
+    start:  Ps 85, 2
+    end:  Ps 89, 3
+  - type: dayreading
+    day: 07/10
+    start:  Ps 89, 4
+    end:  Ps 96, 0
+  - type: dayreading
+    day: 08/10
+    start:  Ps 96, 1
+    end:  Ps 103, 4
+  - type: dayreading
+    day: 09/10
+    start:  Ps 103, 5
+    end:  Ps 105, 22
+  - type: dayreading
+    day: 10/10
+    start:  Ps 105, 23
+    end:  Ps 108, 16
+  - type: dayreading
+    day: 11/10
+    start:  Ps 108, 17
+    end:  Ps 117, 0
+  - type: dayreading
+    day: 12/10
+    start:  Ps 117, 1
+    end:  Ps 118, 69
+  - type: dayreading
+    day: 13/10
+    start:  Ps 118, 70
+    end:  Ps 118, 167
+  - type: dayreading
+    day: 14/10
+    start:  Ps 118, 168
+    end:  Ps 131, 12
+  - type: dayreading
+    day: 15/10
+    start:  Ps 131, 13
+    end:  Ps 138, 22
+  - type: dayreading
+    day: 16/10
+    start:  Ps 138, 23
+    end:  Ps 146, 6
+  - type: dayreading
+    day: 17/10
+    start:  Ps 146, 7
+    end:  Pr 3, 0
+  - type: dayreading
+    day: 18/10
+    start:  Pr 3, 1
+    end:  Pr 6, 13
+  - type: dayreading
+    day: 19/10
+    start:  Pr 6, 14
+    end:  Pr 9, 14
+  - type: dayreading
+    day: 20/10
+    start:  Pr 9, 15
+    end:  Pr 13, 3
+  - type: dayreading
+    day: 21/10
+    start:  Pr 13, 4
+    end:  Pr 16, 8
+  - type: dayreading
+    day: 22/10
+    start:  Pr 16, 9
+    end:  Pr 19, 21
+  - type: dayreading
+    day: 23/10
+    start:  Pr 19, 22
+    end:  Pr 23, 0
+  - type: dayreading
+    day: 24/10
+    start:  Pr 23, 1
+    end:  Pr 26, 1
+  - type: dayreading
+    day: 25/10
+    start:  Pr 26, 2
+    end:  Pr 29, 16
+  - type: dayreading
+    day: 26/10
+    start:  Pr 29, 17
+    end:  Qo 2, 5
+  - type: dayreading
+    day: 27/10
+    start:  Qo 2, 6
+    end:  Qo 7, 8
+  - type: dayreading
+    day: 28/10
+    start:  Qo 7, 9
+    end:  Qo 12, 11
+  - type: dayreading
+    day: 29/10
+    start:  Qo 12, 12
+    end:  Ct 7, 7
+  - type: dayreading
+    day: 30/10
+    start:  Ct 7, 8
+    end:  Sap 4, 18
+  - type: dayreading
+    day: 31/10
+    start:  Sap 4, 19
+    end:  Sap 8, 15
+  - type: dayreading
+    day: 01/11
+    start:  Sap 8, 16
+    end:  Sap 12, 25
+  - type: dayreading
+    day: 02/11
+    start:  Sap 12, 26
+    end:  Sap 16, 27
+  - type: dayreading
+    day: 03/11
+    start:  Sap 16, 28
+    end:  Si 1, 31
+  - type: dayreading
+    day: 04/11
+    start:  Si 1, 32
+    end:  Si 4, 32
+  - type: dayreading
+    day: 05/11
+    start:  Si 4, 33
+    end:  Si 7, 39
+  - type: dayreading
+    day: 06/11
+    start:  Si 7, 40
+    end:  Si 11, 16
+  - type: dayreading
+    day: 07/11
+    start:  Si 11, 17
+    end:  Si 15, 1
+  - type: dayreading
+    day: 08/11
+    start:  Si 15, 2
+    end:  Si 18, 15
+  - type: dayreading
+    day: 09/11
+    start:  Si 18, 16
+    end:  Si 21, 19
+  - type: dayreading
+    day: 10/11
+    start:  Si 21, 20
+    end:  Si 24, 15
+  - type: dayreading
+    day: 11/11
+    start:  Si 24, 16
+    end:  Si 27, 2
+  - type: dayreading
+    day: 12/11
+    start:  Si 27, 3
+    end:  Si 30, 2
+  - type: dayreading
+    day: 13/11
+    start:  Si 30, 3
+    end:  Si 33, 3
+  - type: dayreading
+    day: 14/11
+    start:  Si 33, 4
+    end:  Si 36, 11
+  - type: dayreading
+    day: 15/11
+    start:  Si 36, 12
+    end:  Si 39, 8
+  - type: dayreading
+    day: 16/11
+    start:  Si 39, 9
+    end:  Si 42, 6
+  - type: dayreading
+    day: 17/11
+    start:  Si 42, 7
+    end:  Si 45, 14
+  - type: dayreading
+    day: 18/11
+    start:  Si 45, 15
+    end:  Si 48, 27
+  - type: dayreading
+    day: 19/11
+    start:  Si 48, 28
+    end:  Is 1, 9
+  - type: dayreading
+    day: 20/11
+    start:  Is 1, 10
+    end:  Is 5, 22
+  - type: dayreading
+    day: 21/11
+    start:  Is 5, 23
+    end:  Is 10, 9
+  - type: dayreading
+    day: 22/11
+    start:  Is 10, 10
+    end:  Is 14, 29
+  - type: dayreading
+    day: 23/11
+    start:  Is 14, 30
+    end:  Is 22, 3
+  - type: dayreading
+    day: 24/11
+    start:  Is 22, 4
+    end:  Is 27, 2
+  - type: dayreading
+    day: 25/11
+    start:  Is 27, 3
+    end:  Is 31, 2
+  - type: dayreading
+    day: 26/11
+    start:  Is 31, 3
+    end:  Is 36, 20
+  - type: dayreading
+    day: 27/11
+    start:  Is 36, 21
+    end:  Is 40, 28
+  - type: dayreading
+    day: 28/11
+    start:  Is 40, 29
+    end:  Is 44, 13
+  - type: dayreading
+    day: 29/11
+    start:  Is 44, 14
+    end:  Is 49, 8
+  - type: dayreading
+    day: 30/11
+    start:  Is 49, 9
+    end:  Is 55, 2
+  - type: dayreading
+    day: 01/12
+    start:  Is 55, 3
+    end:  Is 60, 19
+  - type: dayreading
+    day: 02/12
+    start:  Is 60, 20
+    end:  Is 66, 16
+  - type: dayreading
+    day: 03/12
+    start:  Is 66, 17
+    end:  Jer 4, 9
+  - type: dayreading
+    day: 04/12
+    start:  Jer 4, 10
+    end:  Jer 7, 16
+  - type: dayreading
+    day: 05/12
+    start:  Jer 7, 17
+    end:  Jer 11, 7
+  - type: dayreading
+    day: 06/12
+    start:  Jer 11, 8
+    end:  Jer 15, 16
+  - type: dayreading
+    day: 07/12
+    start:  Jer 15, 17
+    end:  Jer 20, 7
+  - type: dayreading
+    day: 08/12
+    start:  Jer 20, 8
+    end:  Jer 24, 3
+  - type: dayreading
+    day: 09/12
+    start:  Jer 24, 4
+    end:  Jer 28, 7
+  - type: dayreading
+    day: 10/12
+    start:  Jer 28, 8
+    end:  Jer 31, 32
+  - type: dayreading
+    day: 11/12
+    start:  Jer 31, 33
+    end:  Jer 34, 20
+  - type: dayreading
+    day: 12/12
+    start:  Jer 34, 21
+    end:  Jer 38, 25
+  - type: dayreading
+    day: 13/12
+    start:  Jer 38, 26
+    end:  Jer 44, 9
+  - type: dayreading
+    day: 14/12
+    start:  Jer 44, 10
+    end:  Jer 48, 37
+  - type: dayreading
+    day: 15/12
+    start:  Jer 48, 38
+    end:  Jer 51, 3
+  - type: dayreading
+    day: 16/12
+    start:  Jer 51, 4
+    end:  Lam 1, 3
+  - type: dayreading
+    day: 17/12
+    start:  Lam 1, 4
+    end:  Lam 3, 57
+  - type: dayreading
+    day: 18/12
+    start:  Lam 3, 58
+    end:  Ba 2, 23
+  - type: dayreading
+    day: 19/12
+    start:  Ba 2, 24
+    end:  Ba 6, 2
+  - type: dayreading
+    day: 20/12
+    start:  Ba 6, 3
+    end:  Ez 2, 0
+  - type: dayreading
+    day: 21/12
+    start:  Ez 2, 1
+    end:  Ez 7, 14
+  - type: dayreading
+    day: 22/12
+    start:  Ez 7, 15
+    end:  Ez 12, 10
+  - type: dayreading
+    day: 23/12
+    start:  Ez 12, 11
+    end:  Ez 16, 26
+  - type: dayreading
+    day: 24/12
+    start:  Ez 16, 27
+    end:  Ez 19, 5
+  - type: dayreading
+    day: 25/12
+    start:  Ez 19, 6
+    end:  Ez 22, 8
+  - type: dayreading
+    day: 26/12
+    start:  Ez 22, 9
+    end:  Ez 24, 26
+  - type: dayreading
+    day: 27/12
+    start:  Ez 24, 27
+    end:  Ez 28, 23
+  - type: dayreading
+    day: 28/12
+    start:  Ez 28, 24
+    end:  Ez 32, 30
+  - type: dayreading
+    day: 29/12
+    start:  Ez 32, 31
+    end:  Ez 36, 17
+  - type: dayreading
+    day: 30/12
+    start:  Ez 36, 18
+    end:  Ez 39, 26
+  - type: dayreading
+    day: 31/12
+    start:  Ez 39, 27
+    end:  Ez 43, 1
+  - type: dayreading
+    day: 01/01
+    start:  Ez 43, 2
+    end:  Ez 46, 16
+  - type: dayreading
+    day: 02/01
+    start:  Ez 46, 17
+    end:  Dn 2, 11
+  - type: dayreading
+    day: 03/01
+    start:  Dn 2, 12
+    end:  Dn 3, 60
+  - type: dayreading
+    day: 04/01
+    start:  Dn 3, 61
+    end:  Dn 5, 24
+  - type: dayreading
+    day: 05/01
+    start:  Dn 5, 25
+    end:  Dn 9, 8
+  - type: dayreading
+    day: 06/01
+    start:  Dn 9, 9
+    end:  Dn 13, 0
+  - type: dayreading
+    day: 07/01
+    start:  Dn 13, 1
+    end:  Dn 14, 33
+  - type: dayreading
+    day: 08/01
+    start:  Dn 14, 34
+    end:  Os 7, 4
+  - type: dayreading
+    day: 09/01
+    start:  Os 7, 5
+    end:  Os 13, 14
+  - type: dayreading
+    day: 10/01
+    start:  Os 13, 15
+    end:  Am 2, 0
+  - type: dayreading
+    day: 11/01
+    start:  Am 2, 1
+    end:  Am 7, 12
+  - type: dayreading
+    day: 12/01
+    start:  Am 7, 13
+    end:  Jon 4, 6
+  - type: dayreading
+    day: 13/01
+    start:  Jon 4, 7
+    end:  Mi 7, 9
+  - type: dayreading
+    day: 14/01
+    start:  Mi 7, 10
+    end:  Ha 3, 3
+  - type: dayreading
+    day: 15/01
+    start:  Ha 3, 4
+    end:  Ag 2, 15
+  - type: dayreading
+    day: 16/01
+    start:  Ag 2, 16
+    end:  Za 7, 5
+  - type: dayreading
+    day: 17/01
+    start:  Za 7, 6
+    end:  Za 13, 6
+  - type: dayreading
+    day: 18/01
+    start:  Za 13, 7
+    end:  1 Ma 1, 19
+  - type: dayreading
+    day: 19/01
+    start:  1 Ma 1, 20
+    end:  1 Ma 2, 51
+  - type: dayreading
+    day: 20/01
+    start:  1 Ma 2, 52
+    end:  1 Ma 4, 19
+  - type: dayreading
+    day: 21/01
+    start:  1 Ma 4, 20
+    end:  1 Ma 5, 56
+  - type: dayreading
+    day: 22/01
+    start:  1 Ma 5, 57
+    end:  1 Ma 7, 23
+  - type: dayreading
+    day: 23/01
+    start:  1 Ma 7, 24
+    end:  1 Ma 9, 39
+  - type: dayreading
+    day: 24/01
+    start:  1 Ma 9, 40
+    end:  1 Ma 10, 64
+  - type: dayreading
+    day: 25/01
+    start:  1 Ma 10, 65
+    end:  1 Ma 11, 73
+  - type: dayreading
+    day: 26/01
+    start:  1 Ma 11, 74
+    end:  1 Ma 13, 43
+  - type: dayreading
+    day: 27/01
+    start:  1 Ma 13, 44
+    end:  1 Ma 15, 38
+  - type: dayreading
+    day: 28/01
+    start:  1 Ma 15, 39
+    end:  2 Ma 3, 3
+  - type: dayreading
+    day: 29/01
+    start:  2 Ma 3, 4
+    end:  2 Ma 5, 11
+  - type: dayreading
+    day: 30/01
+    start:  2 Ma 5, 12
+    end:  2 Ma 8, 9
+  - type: dayreading
+    day: 31/01
+    start:  2 Ma 8, 10
+    end:  2 Ma 11, 4
+  - type: dayreading
+    day: 01/02
+    start:  2 Ma 11, 5
+    end:  2 Ma 13, 18
+  - type: dayreading
+    day: 02/02
+    start:  2 Ma 13, 19
+    end:  Mt 1, 4
+  - type: dayreading
+    day: 03/02
+    start:  Mt 1, 5
+    end:  Mt 5, 12
+  - type: dayreading
+    day: 04/02
+    start:  Mt 5, 13
+    end:  Mt 7, 28
+  - type: dayreading
+    day: 05/02
+    start:  Mt 7, 29
+    end:  Mt 10, 25
+  - type: dayreading
+    day: 06/02
+    start:  Mt 10, 26
+    end:  Mt 13, 2
+  - type: dayreading
+    day: 07/02
+    start:  Mt 13, 3
+    end:  Mt 15, 6
+  - type: dayreading
+    day: 08/02
+    start:  Mt 15, 7
+    end:  Mt 18, 11
+  - type: dayreading
+    day: 09/02
+    start:  Mt 18, 12
+    end:  Mt 21, 10
+  - type: dayreading
+    day: 10/02
+    start:  Mt 21, 11
+    end:  Mt 23, 16
+  - type: dayreading
+    day: 11/02
+    start:  Mt 23, 17
+    end:  Mt 25, 24
+  - type: dayreading
+    day: 12/02
+    start:  Mt 25, 25
+    end:  Mt 27, 1
+  - type: dayreading
+    day: 13/02
+    start:  Mt 27, 2
+    end:  Mc 1, 13
+  - type: dayreading
+    day: 14/02
+    start:  Mc 1, 14
+    end:  Mc 4, 3
+  - type: dayreading
+    day: 15/02
+    start:  Mc 4, 4
+    end:  Mc 6, 19
+  - type: dayreading
+    day: 16/02
+    start:  Mc 6, 20
+    end:  Mc 8, 24
+  - type: dayreading
+    day: 17/02
+    start:  Mc 8, 25
+    end:  Mc 10, 34
+  - type: dayreading
+    day: 18/02
+    start:  Mc 10, 35
+    end:  Mc 13, 3
+  - type: dayreading
+    day: 19/02
+    start:  Mc 13, 4
+    end:  Mc 14, 64
+  - type: dayreading
+    day: 20/02
+    start:  Mc 14, 65
+    end:  Lc 1, 23
+  - type: dayreading
+    day: 21/02
+    start:  Lc 1, 24
+    end:  Lc 2, 41
+  - type: dayreading
+    day: 22/02
+    start:  Lc 2, 42
+    end:  Lc 5, 5
+  - type: dayreading
+    day: 23/02
+    start:  Lc 5, 6
+    end:  Lc 7, 15
+  - type: dayreading
+    day: 24/02
+    start:  Lc 7, 16
+    end:  Lc 9, 8
+  - type: dayreading
+    day: 25/02
+    start:  Lc 9, 9
+    end:  Lc 11, 2
+  - type: dayreading
+    day: 26/02
+    start:  Lc 11, 3
+    end:  Lc 12, 46
+  - type: dayreading
+    day: 27/02
+    start:  Lc 12, 47
+    end:  Lc 15, 15
+  - type: dayreading
+    day: 28/02
+    start:  Lc 15, 16
+    end:  Lc 18, 13
+  - type: dayreading
+    day: 01/03
+    start:  Lc 18, 14
+    end:  Lc 20, 20
+  - type: dayreading
+    day: 02/03
+    start:  Lc 20, 21
+    end:  Lc 22, 33
+  - type: dayreading
+    day: 03/03
+    start:  Lc 22, 34
+    end:  Lc 24, 4
+  - type: dayreading
+    day: 04/03
+    start:  Lc 24, 5
+    end:  Jo 1, 49
+  - type: dayreading
+    day: 05/03
+    start:  Jo 1, 50
+    end:  Jo 4, 36
+  - type: dayreading
+    day: 06/03
+    start:  Jo 4, 37
+    end:  Jo 6, 33
+  - type: dayreading
+    day: 07/03
+    start:  Jo 6, 34
+    end:  Jo 8, 6
+  - type: dayreading
+    day: 08/03
+    start:  Jo 8, 7
+    end:  Jo 10, 4
+  - type: dayreading
+    day: 09/03
+    start:  Jo 10, 5
+    end:  Jo 12, 3
+  - type: dayreading
+    day: 10/03
+    start:  Jo 12, 4
+    end:  Jo 14, 13
+  - type: dayreading
+    day: 11/03
+    start:  Jo 14, 14
+    end:  Jo 17, 20
+  - type: dayreading
+    day: 12/03
+    start:  Jo 17, 21
+    end:  Jo 20, 10
+  - type: dayreading
+    day: 13/03
+    start:  Jo 20, 11
+    end:  Ac 2, 26
+  - type: dayreading
+    day: 14/03
+    start:  Ac 2, 27
+    end:  Ac 5, 15
+  - type: dayreading
+    day: 15/03
+    start:  Ac 5, 16
+    end:  Ac 7, 56
+  - type: dayreading
+    day: 16/03
+    start:  Ac 7, 57
+    end:  Ac 10, 12
+  - type: dayreading
+    day: 17/03
+    start:  Ac 10, 13
+    end:  Ac 13, 7
+  - type: dayreading
+    day: 18/03
+    start:  Ac 13, 8
+    end:  Ac 15, 26
+  - type: dayreading
+    day: 19/03
+    start:  Ac 15, 27
+    end:  Ac 18, 9
+  - type: dayreading
+    day: 20/03
+    start:  Ac 18, 10
+    end:  Ac 21, 1
+  - type: dayreading
+    day: 21/03
+    start:  Ac 21, 2
+    end:  Ac 23, 29
+  - type: dayreading
+    day: 22/03
+    start:  Ac 23, 30
+    end:  Ac 27, 6
+  - type: dayreading
+    day: 23/03
+    start:  Ac 27, 7
+    end:  Rm 1, 29
+  - type: dayreading
+    day: 24/03
+    start:  Rm 1, 30
+    end:  Rm 5, 11
+  - type: dayreading
+    day: 25/03
+    start:  Rm 5, 12
+    end:  Rm 9, 1
+  - type: dayreading
+    day: 26/03
+    start:  Rm 9, 2
+    end:  Rm 12, 9
+  - type: dayreading
+    day: 27/03
+    start:  Rm 12, 10
+    end:  Rm 16, 16
+  - type: dayreading
+    day: 28/03
+    start:  Rm 16, 17
+    end:  1 Co 4, 17
+  - type: dayreading
+    day: 29/03
+    start:  1 Co 4, 18
+    end:  1 Co 9, 8
+  - type: dayreading
+    day: 30/03
+    start:  1 Co 9, 9
+    end:  1 Co 12, 12
+  - type: dayreading
+    day: 31/03
+    start:  1 Co 12, 13
+    end:  1 Co 15, 26
+  - type: dayreading
+    day: 01/04
+    start:  1 Co 15, 27
+    end:  2 Co 3, 2
+  - type: dayreading
+    day: 02/04
+    start:  2 Co 3, 3
+    end:  2 Co 8, 10
+  - type: dayreading
+    day: 03/04
+    start:  2 Co 8, 11
+    end:  2 Co 12, 18
+  - type: dayreading
+    day: 04/04
+    start:  2 Co 12, 19
+    end:  Ga 4, 8
+  - type: dayreading
+    day: 05/04
+    start:  Ga 4, 9
+    end:  Ep 2, 8
+  - type: dayreading
+    day: 06/04
+    start:  Ep 2, 9
+    end:  Ep 5, 31
+  - type: dayreading
+    day: 07/04
+    start:  Ep 5, 32
+    end:  Ph 3, 12
+  - type: dayreading
+    day: 08/04
+    start:  Ph 3, 13
+    end:  Col 3, 14
+  - type: dayreading
+    day: 09/04
+    start:  Col 3, 15
+    end:  1 Th 5, 8
+  - type: dayreading
+    day: 10/04
+    start:  1 Th 5, 9
+    end:  1 Tim 2, 11
+  - type: dayreading
+    day: 11/04
+    start:  1 Tim 2, 12
+    end:  2 Tim 1, 17
+  - type: dayreading
+    day: 12/04
+    start:  2 Tim 1, 18
+    end:  Tit 3, 1
+  - type: dayreading
+    day: 13/04
+    start:  Tit 3, 2
+    end:  He 4, 8
+  - type: dayreading
+    day: 14/04
+    start:  He 4, 9
+    end:  He 9, 15
+  - type: dayreading
+    day: 15/04
+    start:  He 9, 16
+    end:  He 12, 6
+  - type: dayreading
+    day: 16/04
+    start:  He 12, 7
+    end:  Jc 2, 23
+  - type: dayreading
+    day: 17/04
+    start:  Jc 2, 24
+    end:  1 Pe 2, 15
+  - type: dayreading
+    day: 18/04
+    start:  1 Pe 2, 16
+    end:  2 Pe 2, 12
+  - type: dayreading
+    day: 19/04
+    start:  2 Pe 2, 13
+    end:  1 Jo 4, 7
+  - type: dayreading
+    day: 20/04
+    start:  1 Jo 4, 8
+    end:  Ap 1, 12
+  - type: dayreading
+    day: 21/04
+    start:  Ap 1, 13
+    end:  Ap 6, 14
+  - type: dayreading
+    day: 22/04
+    start:  Ap 6, 15
+    end:  Ap 12, 14
+  - type: dayreading
+    day: 23/04
+    start:  Ap 12, 15
+    end:  Ap 18, 9
+  - type: dayreading
+    day: 24/04
+    start:  Ap 18, 10
+    end:  Ap 22, 21

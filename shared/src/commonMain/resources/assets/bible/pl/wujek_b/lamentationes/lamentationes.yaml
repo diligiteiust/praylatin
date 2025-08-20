@@ -1,0 +1,12 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Lamentationes
+abbrev: Lm,Lam,La
+title: Lamentacje
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

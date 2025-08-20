@@ -66,7 +66,6 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
-import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Config
 import org.latinpray.data.Link
 import org.latinpray.data.Prayer
@@ -75,6 +74,8 @@ import org.latinpray.getPlatform
 import org.latinpray.shared.Res
 import org.latinpray.util.DisplayLang
 import org.jetbrains.compose.resources.stringResource
+import org.latinpray.data.BssicContent
+import org.latinpray.data.Content
 import org.latinpray.shared.notes
 
 const val INDENT = "%"
@@ -95,10 +96,10 @@ fun DpToPx(dp: Dp): Float {
     return dp.value * density
 }
 
-fun getPrayerTitle(dispayLang: DisplayLang, prayer: Prayer, config: Config, maxLen: Int = 100): String {
-    var pr = prayer.langs[config.prayerLang]
+fun getTitle(dispayLang: DisplayLang, content: Content, config: Config, maxLen: Int = 100): String {
+    var pr = content.langs[config.prayerLang]
     if (pr == null || (dispayLang == DisplayLang.SECOND)) {
-        pr = prayer.langs[config.secondLang]
+        pr = content.langs[config.secondLang]
     }
     var result = pr?.title ?: ""
     if (result.length > maxLen) {
@@ -109,7 +110,7 @@ fun getPrayerTitle(dispayLang: DisplayLang, prayer: Prayer, config: Config, maxL
 
 fun preparePrayer(
     dispayLang: DisplayLang,
-    prayer: Prayer,
+    content: Content,
     config: Config,
     prayers: MutableList<Prayer>,
     indent: String = "",
@@ -119,20 +120,20 @@ fun preparePrayer(
     notesRes: String = ""
 ): String {
     var list = listMode
-    var lang2: BasicPrayer? = null
-    var lang1 = prayer.langs[config.prayerLang]
+    var lang2: BssicContent? = null
+    var lang1 = content.langs[config.prayerLang]
     // If content for the primary language is not found,
     // we use content for secondary language as primary
     if (lang1 == null || (dispayLang == DisplayLang.SECOND)) {
-        lang1 = prayer.langs[config.secondLang]
+        lang1 = content.langs[config.secondLang]
     } else {
-        lang2 = if (dispayLang != DisplayLang.FIRST) prayer.langs[config.secondLang] else null
+        lang2 = if (dispayLang != DisplayLang.FIRST) content.langs[config.secondLang] else null
     }
     // If prefered translation is enabled, we try to find content with translation
     // instead of the standard content
     //println ("firstLang: ${firstLang}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${prayer.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
-    if ((dispayLang == DisplayLang.BOTH) && config.preferTranslation && prayer.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
-        lang2 = prayer.langs[config.secondLang + TRANSLATION_TRAIL]
+    if ((dispayLang == DisplayLang.BOTH) && config.preferTranslation && content.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
+        lang2 = content.langs[config.secondLang + TRANSLATION_TRAIL]
         //println("Using translation for prayer: ${prayer.name} - ${lang2?.title}")
     }
 
@@ -197,8 +198,8 @@ fun preparePrayer(
     }
 
     if (extras) {
-        if (lang1?.links != null && lang1.links.isNotEmpty()) {
-            lang1.links.forEach { link ->
+        if (lang1?.links != null && (lang1.links as Collection<Any?>).isNotEmpty()) {
+            (lang1.links as Iterable<Any?>).forEach { link ->
                 if (link is Link.Youtube) {
                     val url_title = link.title ?: "Listen on YouTube"
                     val yt_link = "[$url_title](${link.url})"
@@ -206,9 +207,9 @@ fun preparePrayer(
                 }
             }
         }
-        if (lang2?.notes != null && lang2.notes.isNotEmpty()) {
+        if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
             result += EMPTY_LINE+"\n\n__" + notesRes + ":__\n\n" + lang2.notes
-        } else if (lang2 == null && lang1?.notes != null && lang1.notes.isNotEmpty()) {
+        } else if (lang2 == null && lang1?.notes != null && lang1.notes!!.isNotEmpty()) {
             result += EMPTY_LINE+"\n\n__" + notesRes + ":__\n\n" + lang1.notes
         }
     }
@@ -311,13 +312,13 @@ fun MyMarkdownSuccess(
 }
 
 @Composable
-fun PrayerDetails(
+fun ContentDetails(
     displayLang: DisplayLang,
-    prayer: Prayer,
+    contentItem: ContentItem,
     config: Config,
     prayers: MutableList<Prayer>,
     endReachedCallbackPD: () -> Unit,
-    prayerChangedCallback: (pr: Prayer) -> Unit,
+    prayerChangedCallback: (contIt: ContentItem) -> Unit,
     intention: PrayerIntention? = null
 ) {
     val textMeasurer = rememberTextMeasurer()
@@ -339,7 +340,7 @@ fun PrayerDetails(
 
     //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
     key(changed) {
-        val content = preparePrayer(displayLang, prayer, config, prayers, notesRes = notesRes)
+        val content = preparePrayer(displayLang, contentItem.content, config, prayers, notesRes = notesRes)
         //println("PrayerDetails - after preparePrayer for  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
         Column(
             modifier = Modifier.fillMaxSize()
@@ -356,7 +357,7 @@ fun PrayerDetails(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = getPrayerTitle(displayLang, prayer, config),
+                            text = getTitle(displayLang, contentItem.content, config),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -424,16 +425,16 @@ fun PrayerDetails(
                 )
                 //println("Prepared markdown for:  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
             }
-            if (prayer.prevPrayer != null || prayer.nextPrayer != null) {
+            if (contentItem.prevContent != null || contentItem.nextContent != null) {
                 val navColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.5f)
                 Row() {
-                    if (prayer.prevPrayer != null) {
+                    if (contentItem.prevContent != null) {
                         //println("PrayerDetails prevPrayer != null - before previous, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                         TextButton(
                             onClick = {
                                 //currentPrayer = currentPrayer.prevPrayer!!
                                 //println("PrayerDetails onClick previous, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
-                                prayerChangedCallback(prayer.prevPrayer!!)
+                                prayerChangedCallback(contentItem.prevContent!!)
                                 savedScrollPosition = 0
 //                                endProcessed = false
 //                                coroutineScope.launch {
@@ -451,9 +452,9 @@ fun PrayerDetails(
                                 modifier = Modifier.size(30.dp)
                             )
                             Text(
-                                text = getPrayerTitle(
+                                text = getTitle(
                                     displayLang,
-                                    prayer.prevPrayer!!,
+                                    contentItem.prevContent!!.content,
                                     config,
                                     MAX_LEN
                                 ),
@@ -461,14 +462,14 @@ fun PrayerDetails(
                             )
                         }
                     }
-                    if (prayer.nextPrayer != null) {
+                    if (contentItem.nextContent != null) {
                         //println("PrayerDetails nextPrayer != null - before next, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                         Spacer(Modifier.weight(1f))
                         TextButton(
                             onClick = {
                                 //currentPrayer = currentPrayer.nextPrayer!!
                                 //println("PrayerDetails onClick next, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
-                                prayerChangedCallback(prayer.nextPrayer!!)
+                                prayerChangedCallback(contentItem.nextContent!!)
                                 savedScrollPosition = 0
 //                                endProcessed = false
 //                                coroutineScope.launch {
@@ -479,9 +480,9 @@ fun PrayerDetails(
                             }
                         ) {
                             Text(
-                                text = getPrayerTitle(
+                                text = getTitle(
                                     displayLang,
-                                    prayer.nextPrayer!!,
+                                    contentItem.nextContent!!.content,
                                     config,
                                     MAX_LEN
                                 ),

@@ -38,19 +38,25 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
-import org.latinpray.data.Prayer
+import org.latinpray.data.Content
 import org.latinpray.shared.Res
 import org.latinpray.shared.daily_prayers
 import org.latinpray.shared.today_and_now
 import org.latinpray.theme.Gray600
 import org.latinpray.theme.darken
 
-data class PrayerItem(val prayer: Prayer, var darker: Boolean, val tag: String?)
+data class ContentItem(
+    val content: Content,
+    var darker: Boolean,
+    val tag: String?,
+    var prevContent: ContentItem? = null,
+    var nextContent: ContentItem? = null,
+)
 
 @Composable
 fun PrayerListItem(
-    prayerItem: PrayerItem,
-    onClick: (prayer: Prayer) -> Unit,
+    contentItem: ContentItem,
+    onClick: (content: ContentItem) -> Unit,
     config: Config,
 ) {
     val normalSurface =  MaterialTheme.colorScheme.surfaceVariant
@@ -59,21 +65,21 @@ fun PrayerListItem(
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
     val todayAndNowStr = stringResource(Res.string.today_and_now)
 
-    prayerItem.darker = prayerItem.prayer.prayedToday()
-            && (prayerItem.tag == dailyPrayersStr || prayerItem.tag == todayAndNowStr)
+    contentItem.darker = contentItem.content.prayedToday()
+            && (contentItem.tag == dailyPrayersStr || contentItem.tag == todayAndNowStr)
 
-    var backgroundColor by remember { mutableStateOf( if (prayerItem.darker) { darkerSurface } else { normalSurface} ) }
-    var textColor by remember { mutableStateOf( if (prayerItem.darker) { Gray600 } else { onBackground } ) }
+    var backgroundColor by remember { mutableStateOf( if (contentItem.darker) { darkerSurface } else { normalSurface} ) }
+    var textColor by remember { mutableStateOf( if (contentItem.darker) { Gray600 } else { onBackground } ) }
     var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
 
     val updateColors: () -> Unit = {
-        prayerItem.darker = prayerItem.prayer.prayedToday()
-        backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface }
-        textColor = if (prayerItem.darker) { Gray600 } else { onBackground }
+        contentItem.darker = contentItem.content.prayedToday()
+        backgroundColor = if (contentItem.darker) { darkerSurface } else { normalSurface }
+        textColor = if (contentItem.darker) { Gray600 } else { onBackground }
     }
 
-    if (prayerItem.tag == dailyPrayersStr || prayerItem.tag == todayAndNowStr) {
-        prayerItem.prayer.addExternalChangeListener {
+    if (contentItem.tag == dailyPrayersStr || contentItem.tag == todayAndNowStr) {
+        contentItem.content.addExternalChangeListener {
             updateColors()
 //            prayerItem.darker = prayerItem.prayer.prayedToday()
 //            backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface }
@@ -83,7 +89,7 @@ fun PrayerListItem(
         val scope = rememberCoroutineScope()
         scope.launch {
             while (true) {
-                delay(untilNextFullHour(prayerItem.prayer.name))
+                delay(untilNextFullHour(contentItem.content.name))
                 val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 //println("Checking time: ${now.hour}, previous: ${currentHour}")
                 if (now.hour != currentHour) {
@@ -106,12 +112,12 @@ fun PrayerListItem(
     }
 
     var subtitle: String? = null
-    var title = prayerItem.prayer.langs[config.prayerLang]?.title
+    var title = contentItem.content.langs[config.prayerLang]?.title
     var pad = 2.dp
     if (title == null) {
-        title = prayerItem.prayer.langs[config.secondLang]?.title
+        title = contentItem.content.langs[config.secondLang]?.title
     } else {
-        subtitle = prayerItem.prayer.langs[config.secondLang]?.title
+        subtitle = contentItem.content.langs[config.secondLang]?.title
     }
     if (subtitle == null || subtitle.isEmpty()) {
         pad = 6.dp
@@ -120,7 +126,7 @@ fun PrayerListItem(
         modifier = Modifier
             .padding(vertical = 2.dp, horizontal = 4.dp)
             .fillMaxWidth()
-            .clickable { onClick(prayerItem.prayer) },
+            .clickable { onClick(contentItem) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
             containerColor = backgroundColor

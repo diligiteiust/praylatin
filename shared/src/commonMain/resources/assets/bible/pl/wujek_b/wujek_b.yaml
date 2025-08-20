@@ -1,0 +1,81 @@
+title: Biblia to iest Księgi Starego y Nowego Testamentv
+subtitle: Wedłvg łacińskiego przekłádu stárègo, w kościele powszechnym przyiętègo, ná Polski ięzyk z nowu z pilnośćią przełożonè, Z DOKŁADANIEM TEXTV ZYDOWSKIEGO y Gréckiégo, y z wykłádem Kátholickim trudnieyszych mieysc, do obrony Wiáry świętéy powszechnéy przeciw kácérztwóm tych czásów należących
+lang: pl
+language: Polski
+source: https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles
+transcription: PRZEZ D. JAKVBA WVYKA Z WĄGROWCA THEOLOGA SOCIETATIS IESV. Z DOZWOLENIEM STOLICE APOSTOLSKIEY, a nakłádem Ieº M. Kśiędzá Arcybiskupá Gniéźnieńskiégo, etć. wydáné. Transcrypcja typu B
+bible: wujek_b
+books:
+  - genesis
+  - exodus
+  - leviticus
+  - numeri
+  - deuteronomium
+  - iosue
+  - iudicum
+  - ruth
+  - 1samuelis
+  - 2samuelis
+  - 1regum
+  - 2regum
+  - 1paralipomenon
+  - 2paralipomenon
+  - esdrae
+  - nehemiae
+  - tobiae
+  - iudith
+  - esther
+  - iob
+  - psalmi
+  - proverbia
+  - ecclesiastes
+  - canticum
+  - sapientia
+  - ecclesiasticus
+  - isaias
+  - ieremias
+  - lamentationes
+  - baruch
+  - ezechiel
+  - daniel
+  - osee
+  - ioel
+  - amos
+  - abdias
+  - ionas
+  - michaeas
+  - nahum
+  - habacuc
+  - sophonias
+  - aggaeus
+  - zacharias
+  - malachias
+  - 1machabaeorum
+  - 2machabaeorum
+  - matthaeus
+  - marcus
+  - lucas
+  - ioannes
+  - actus
+  - romanos
+  - 1corinthios
+  - 2corinthios
+  - galatas
+  - ephesios
+  - philippenses
+  - colossenses
+  - 1thessalonicenses
+  - 2thessalonicenses
+  - 1timotheum
+  - 2timotheum
+  - titum
+  - philemonem
+  - hebraeos
+  - iacobi
+  - 1petri
+  - 2petri
+  - 1ioannis
+  - 2ioannis
+  - 3ioannis
+  - iudae
+  - apocalypsis

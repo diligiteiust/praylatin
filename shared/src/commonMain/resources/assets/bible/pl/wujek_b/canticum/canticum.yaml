@@ -1,0 +1,15 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Canticum Canticorum
+abbrev: Pnp,Song,SS,So,Sg,Cant,Can,Ct
+title: Księga Pieśni nad pieśniami
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8

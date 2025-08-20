@@ -59,3 +59,4 @@ If you are interested in contributing new prayers, please continue to read below
 
 1. [Prayer file format](docs/prayerfile.md)
 2. [App settings description](docs/appsettings.md)
+3. [Bible file format](docs/biblefile.md)

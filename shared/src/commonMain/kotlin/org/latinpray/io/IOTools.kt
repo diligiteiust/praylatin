@@ -24,8 +24,10 @@ import com.ucasoft.kcron.core.common.WeekDays
 import kotlinx.serialization.decodeFromString
 import okio.buffer
 import org.latinpray.data.BasicPrayer
+import org.latinpray.data.Chapter
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.data.ReadingPlan
 import org.latinpray.loc.getLanguage
 
 val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
@@ -55,6 +57,26 @@ fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
         }
     }
     return prayer
+}
+
+fun readBibleReadingPlan(assetsFile: String, config: Config): ReadingPlan {
+    val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
+    val yaml = Yaml(configuration = Yaml.default.configuration.copy(
+        strictMode = false,
+        polymorphismStyle = PolymorphismStyle.Property
+    ))
+    val plan = yaml.decodeFromString<ReadingPlan>(yamlContent)
+    return plan
+}
+
+fun loadChapter(lang: String, bible: String, book: String, chapter: Int): Chapter {
+    val yamlContent = defaultAssetFileProvider.get("assets/bible/$lang/$bible/$book/$chapter.yaml").buffer().readUtf8()
+    val yaml = Yaml(configuration = Yaml.default.configuration.copy(
+        strictMode = false,
+        polymorphismStyle = PolymorphismStyle.Property
+    ))
+    val chapter = yaml.decodeFromString<Chapter>(yamlContent)
+    return chapter
 }
 
 fun readFileFromAssets(assetsFile: String): String {

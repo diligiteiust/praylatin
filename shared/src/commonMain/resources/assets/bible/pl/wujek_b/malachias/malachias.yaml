@@ -1,0 +1,11 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Malachias
+abbrev: Ml,Mal
+title: Księga Micheasza
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4

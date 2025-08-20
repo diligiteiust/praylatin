@@ -108,3 +108,6 @@ var sampleConfig = Config(
     true,
     true)
 //var defConfig : Config? = sampleConfig
+
+var terms: String = ""
+var privacy: String = ""

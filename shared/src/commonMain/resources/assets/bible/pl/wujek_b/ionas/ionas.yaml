@@ -1,0 +1,11 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Ionas
+abbrev: Jon,Jonah,Ion
+title: Księga Jonasza
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4

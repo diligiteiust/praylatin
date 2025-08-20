@@ -1,0 +1,11 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Ruth
+abbrev: Rt,Ruth,Ru,Rut
+title: Księga Rut
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4

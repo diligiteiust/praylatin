@@ -1,0 +1,10 @@
+bible: wujek_b
+lang: pl
+language: Polski
+book: Sophonias
+abbrev: So,Zeph,Zep,Sof,Soph
+title: Księga Sofoniasza
+chapters:
+  - 1
+  - 2
+  - 3

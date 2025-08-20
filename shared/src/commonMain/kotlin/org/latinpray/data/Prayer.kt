@@ -38,33 +38,31 @@ sealed class Link {
 
 @Serializable
 data class BasicPrayer(
-    val title: String,
-    val lang: String,
-    val language: String,
-    val lines: MutableList<String?>,
+    override val title: String,
+    override val lang: String,
+    override val language: String,
+    override val lines: MutableList<String?>,
     val dates: List<String>? = null,
     val tags: Set<String>? = null,
-    val links: List<Link>? = null,
-    val notes: String? = null
-)
+    override val links: List<Link>? = null,
+    override val notes: String? = null
+) : BssicContent
 
 data class Prayer(
-    val id: Int,
-    val name: String,
-    val langs: MutableMap<String, BasicPrayer>,
-    var prevPrayer: Prayer? = null,
-    var nextPrayer: Prayer? = null,
+    override val id: Int,
+    override val name: String,
+    override val langs: MutableMap<String, BasicPrayer>,
     var nums: PrayerNums = PrayerNums(
         lastRecorded = LocalDate(1970, 1,1),
         totalNum = 0,
         inrowNum = 0
     ),
     val dates: MutableSet<Builder<LocalDateTime, CronLocalDateTime, CronLocalDateTimeProvider>> = mutableSetOf(),
-) {
+): Content {
     @Transient
     var externalChangeListeners = ArrayList<() -> Unit>()
 
-    fun prayedToday(): Boolean {
+    override fun prayedToday(): Boolean {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
         return nums.lastRecorded.daysUntil(today) <= 0
     }
@@ -76,7 +74,7 @@ data class Prayer(
         }
     }
 
-    fun addExternalChangeListener(listener: () -> Unit) {
+    override fun addExternalChangeListener(listener: () -> Unit) {
         externalChangeListeners.add(listener)
     }
 

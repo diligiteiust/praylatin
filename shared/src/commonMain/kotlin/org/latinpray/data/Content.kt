@@ -15,5 +15,20 @@
 
 package org.latinpray.data
 
-var terms: String = ""
-var privacy: String = ""
+interface BssicContent {
+    val title: String
+    val lang: String
+    val language: String
+    val lines: List<String?>
+    val links: List<Link>?
+    val notes: String?
+}
+
+interface Content {
+    val id: Int
+    val name: String
+    val langs: Map<String, BssicContent>
+
+    fun prayedToday(): Boolean
+    fun addExternalChangeListener(listener: () -> Unit)
+}
