@@ -164,7 +164,8 @@ data class Chapter(
     val chapter: String,
     val verses: MutableMap<String, String>,
     override val links: List<Link>? = null,
-    override val notes: String? = null
+    override val notes: String? = null,
+    override val tags: Set<String>? = null
 ) : BssicContent {
 
     override val title: String
@@ -184,20 +185,15 @@ data class BibleBasicContent(
     override val language: String,
     override val lines: MutableList<String>,
     override val links: List<Link>?,
-    override val notes: String?
+    override val notes: String?,
+    override val tags: Set<String>? = null
 ) : BssicContent
 
 data class BibleContent(
     override val id: Int,
     override val name: String,
     override val langs: MutableMap<String, BssicContent>
-) : Content {
-    override fun prayedToday(): Boolean {
-        return false
-    }
-
-    override fun addExternalChangeListener(listener: () -> Unit) {}
-}
+) : Content()
 
 enum class REF_PART {
     BOOK,
@@ -270,7 +266,7 @@ data class ReadingPlan(
                 println("Reading for today ends: $endRef")
                 val bibleContent = BibleContent(
                     1,
-                    "${startRef} - ${endRef}", mutableMapOf()
+                    "dailybible", mutableMapOf()
                 )
                 val bibleBasicContent = BibleBasicContent(
                     title = "${startRef} - ${endRef}",

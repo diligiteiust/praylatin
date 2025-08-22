@@ -494,8 +494,8 @@ data class Config(
         saveSubstitutions()
     }
 
-    fun loadPrayerNums(prayer: Prayer): PrayerNums {
-        val prayer_num = getFromSharedPrefs(prayer.name + PRAYER_NUM_KEY.name)
+    fun loadPrayerNums(content: Content): PrayerNums {
+        val prayer_num = getFromSharedPrefs(content.name + PRAYER_NUM_KEY.name)
         var last_date = LocalDate(1970, 1, 1)
         var totalNum = 0
         var inrowNum = 0
@@ -515,8 +515,8 @@ data class Config(
             }
         }
         //println("last_date: " + last_date.toString())
-        prayer.nums = PrayerNums(last_date, totalNum, inrowNum)
-        return prayer.nums
+        content.nums = PrayerNums(last_date, totalNum, inrowNum)
+        return content.nums
     }
 
     //val DAY_IN_MILLIS = 24 * HOUR_IN_MILLIS
@@ -534,9 +534,9 @@ data class Config(
 //        return inrowNum + 1
 //    }
 
-    fun incPrayerNum(prayer: Prayer, intentions: List<PrayerIntention>) {
+    fun incPrayerNum(content: Content, intentions: List<PrayerIntention>) {
 
-        val prayerNums = loadPrayerNums(prayer)
+        val prayerNums = loadPrayerNums(content)
         val totalNum = prayerNums.totalNum + 1
         var inrowNum = prayerNums.inrowNum
         var prayer_curr_date = prayerNums.lastRecorded
@@ -574,7 +574,7 @@ data class Config(
             }
         }
 
-        putToSharedPrefs(prayer.name + PRAYER_NUM_KEY.name, "$prayer_curr_date,$totalNum,$inrowNum")
+        putToSharedPrefs(content.name + PRAYER_NUM_KEY.name, "$prayer_curr_date,$totalNum,$inrowNum")
 
         if (currentIntention != null) {
             currentIntention.inrowNum = intention_inrowNum
@@ -589,10 +589,13 @@ data class Config(
             if (currentIntention.totalNum > totalNum) currentIntention.totalNum = totalNum
 
             //println("Saving current intention: ${currentIntention.toPropsString()}")
-            saveIntention(prayer, currentIntention)
+            val prayer = content as? Prayer
+            prayer?.let {
+                saveIntention(it, currentIntention)
+            }
         }
 
-        prayer.nums = PrayerNums(prayer_curr_date, totalNum, inrowNum)
+        content.nums = PrayerNums(prayer_curr_date, totalNum, inrowNum)
     }
 
     fun loadIntentions(prayer: Prayer): List<PrayerIntention> {

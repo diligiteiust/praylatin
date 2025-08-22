@@ -22,6 +22,7 @@ plugins {
     alias(libs.plugins.kotlin.plugin.compose)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("org.jetbrains.kotlinx.atomicfu") version "0.29.0"
 }
 
 kotlin {

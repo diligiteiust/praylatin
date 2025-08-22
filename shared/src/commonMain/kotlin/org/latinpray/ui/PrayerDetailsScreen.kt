@@ -335,11 +335,11 @@ fun PrayerDetailsScreen(
     var inrowNum: Int by remember { mutableStateOf(0) }
     var prayerIntentions: List<PrayerIntention> by remember { mutableStateOf(listOf<PrayerIntention>()) }
     var currentIntention: PrayerIntention? by remember { mutableStateOf(null) }
-    if (prayer != null) {
-        totalNum = prayer!!.nums.totalNum
-        inrowNum = prayer!!.nums.inrowNum
-        prayerIntentions = config.loadIntentions(prayer!!)
-        currentIntention = getCurrentIntention(prayer!!, config)
+    totalNum = contentItem.content.nums.totalNum
+    inrowNum = contentItem.content.nums.inrowNum
+    prayer?.let {
+      prayerIntentions = config.loadIntentions(it)
+      currentIntention = getCurrentIntention(it, config)
     }
 
     var dlgMessage by remember { mutableStateOf("") }
@@ -548,10 +548,10 @@ fun PrayerDetailsScreen(
                 if (endProcessed) return@ContentDetails
                 endProcessed = true
                 //println("End reached start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
+                config.incPrayerNum(contentItem.content, prayerIntentions)
+                totalNum = contentItem.content.nums.totalNum
+                inrowNum = contentItem.content.nums.inrowNum
                 prayer?.let { it1 ->
-                    config.incPrayerNum(it1, prayerIntentions)
-                    totalNum = it1.nums.totalNum
-                    inrowNum = it1.nums.inrowNum
                     currentIntention = getCurrentIntention(it1, config)
                 }
                 //prayerIntentions = config.loadIntentions(prayer)
@@ -564,9 +564,9 @@ fun PrayerDetailsScreen(
                 prayer = contentItem.content as? Prayer
                 daily = config.dailyPrayers.contains(contentItem.content.name)
                 favorite = config.favorites.contains(contentItem.content.name)
+                totalNum = contentItem.content.nums.totalNum
+                inrowNum = contentItem.content.nums.inrowNum
                 prayer?.let { it1 ->
-                    totalNum = it1.nums.totalNum
-                    inrowNum = it1.nums.inrowNum
                     prayerIntentions = config.loadIntentions(it1)
                     currentIntention = getCurrentIntention(it1, config)
                 }

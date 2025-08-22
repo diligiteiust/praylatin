@@ -144,9 +144,9 @@ fun PrayersListScreen(
             tags.remove(HIDE_TAG)
             if (config.todayAndNow) {
                 gp.add(todayAndNowStr)
-                var bible: Content? = readingPlan?.bibleForToday(config)
+                val bible: Content? = readingPlan?.bibleForToday(config)
                 if (bible != null) {
-                    gp.add(ContentItem(bible, false, "bible"))
+                    gp.add(ContentItem(bible, bible.prayedToday(), todayAndNowStr))
                 }
                 prayers.forEach { prayer ->
                     //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")

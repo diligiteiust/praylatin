@@ -43,7 +43,7 @@ data class BasicPrayer(
     override val language: String,
     override val lines: MutableList<String?>,
     val dates: List<String>? = null,
-    val tags: Set<String>? = null,
+    override val tags: Set<String>? = null,
     override val links: List<Link>? = null,
     override val notes: String? = null
 ) : BssicContent
@@ -51,32 +51,9 @@ data class BasicPrayer(
 data class Prayer(
     override val id: Int,
     override val name: String,
-    override val langs: MutableMap<String, BasicPrayer>,
-    var nums: PrayerNums = PrayerNums(
-        lastRecorded = LocalDate(1970, 1,1),
-        totalNum = 0,
-        inrowNum = 0
-    ),
+    override val langs: MutableMap<String, BssicContent>,
     val dates: MutableSet<Builder<LocalDateTime, CronLocalDateTime, CronLocalDateTimeProvider>> = mutableSetOf(),
-): Content {
-    @Transient
-    var externalChangeListeners = ArrayList<() -> Unit>()
-
-    override fun prayedToday(): Boolean {
-        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        return nums.lastRecorded.daysUntil(today) <= 0
-    }
-
-    fun externalChange(prNums: PrayerNums) {
-        nums = prNums
-        externalChangeListeners.forEach { listener ->
-            listener()
-        }
-    }
-
-    override fun addExternalChangeListener(listener: () -> Unit) {
-        externalChangeListeners.add(listener)
-    }
+): Content() {
 
     fun isTodayAndNow(): Boolean {
         return isTodayAndNow(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour)

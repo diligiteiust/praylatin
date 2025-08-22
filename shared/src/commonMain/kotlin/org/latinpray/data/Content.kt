@@ -15,20 +15,50 @@
 
 package org.latinpray.data
 
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.todayIn
+import kotlinx.serialization.Transient
+
 interface BssicContent {
     val title: String
     val lang: String
     val language: String
     val lines: List<String?>
+    val tags: Set<String>?
     val links: List<Link>?
     val notes: String?
 }
 
-interface Content {
-    val id: Int
-    val name: String
-    val langs: Map<String, BssicContent>
+abstract class Content(
+    var nums: PrayerNums = PrayerNums(
+        lastRecorded = LocalDate(1970, 1,1),
+        totalNum = 0,
+        inrowNum = 0
+    )
+)  {
+    abstract val id: Int
+    abstract val name: String
+    abstract val langs: MutableMap<String, BssicContent>
+    @Transient
+    var externalChangeListeners = ArrayList<() -> Unit>()
 
-    fun prayedToday(): Boolean
-    fun addExternalChangeListener(listener: () -> Unit)
+    fun prayedToday(): Boolean {
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        return nums.lastRecorded.daysUntil(today) <= 0
+    }
+
+    fun addExternalChangeListener(listener: () -> Unit) {
+        externalChangeListeners.add(listener)
+    }
+
+    fun externalChange(prNums: PrayerNums) {
+        nums = prNums
+        externalChangeListeners.forEach { listener ->
+            listener()
+        }
+    }
+
 }
