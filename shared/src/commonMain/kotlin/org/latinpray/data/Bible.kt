@@ -304,6 +304,7 @@ data class ReadingPlan(
                     startIndex = 0
                 }
                 bibleContent.langs[bibleBasicContent.lang] = bibleBasicContent
+                bibleContent.nums = config.loadContentNums(bibleContent)
                 todaysContent = bibleContent
             }
         } else {

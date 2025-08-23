@@ -33,7 +33,7 @@ interface BssicContent {
 }
 
 abstract class Content(
-    var nums: PrayerNums = PrayerNums(
+    var nums: ContentNums = ContentNums(
         lastRecorded = LocalDate(1970, 1,1),
         totalNum = 0,
         inrowNum = 0
@@ -54,7 +54,7 @@ abstract class Content(
         externalChangeListeners.add(listener)
     }
 
-    fun externalChange(prNums: PrayerNums) {
+    fun externalChange(prNums: ContentNums) {
         nums = prNums
         externalChangeListeners.forEach { listener ->
             listener()

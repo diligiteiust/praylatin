@@ -158,7 +158,7 @@ data class Config(
     fun addExternalPrayerModificationListener(prayer: Prayer) {
         synchronized(sharedSetingsSync) {
             sharedSettings.addStringListener(prayer.name + PRAYER_NUM_KEY.name, "") {
-                prayer.externalChange(loadPrayerNums(prayer))
+                prayer.externalChange(loadContentNums(prayer))
             }
         }
     }
@@ -494,7 +494,7 @@ data class Config(
         saveSubstitutions()
     }
 
-    fun loadPrayerNums(content: Content): PrayerNums {
+    fun loadContentNums(content: Content): ContentNums {
         val prayer_num = getFromSharedPrefs(content.name + PRAYER_NUM_KEY.name)
         var last_date = LocalDate(1970, 1, 1)
         var totalNum = 0
@@ -515,7 +515,8 @@ data class Config(
             }
         }
         //println("last_date: " + last_date.toString())
-        content.nums = PrayerNums(last_date, totalNum, inrowNum)
+        content.nums = ContentNums(last_date, totalNum, inrowNum)
+        println("Loaded content ${content.name} nums: ${content.nums}")
         return content.nums
     }
 
@@ -534,9 +535,9 @@ data class Config(
 //        return inrowNum + 1
 //    }
 
-    fun incPrayerNum(content: Content, intentions: List<PrayerIntention>) {
+    fun incContentNum(content: Content, intentions: List<PrayerIntention>) {
 
-        val prayerNums = loadPrayerNums(content)
+        val prayerNums = loadContentNums(content)
         val totalNum = prayerNums.totalNum + 1
         var inrowNum = prayerNums.inrowNum
         var prayer_curr_date = prayerNums.lastRecorded
@@ -575,6 +576,7 @@ data class Config(
         }
 
         putToSharedPrefs(content.name + PRAYER_NUM_KEY.name, "$prayer_curr_date,$totalNum,$inrowNum")
+        println("Saving content ${content.name} nums: $prayer_curr_date,$totalNum,$inrowNum")
 
         if (currentIntention != null) {
             currentIntention.inrowNum = intention_inrowNum
@@ -595,7 +597,7 @@ data class Config(
             }
         }
 
-        content.nums = PrayerNums(prayer_curr_date, totalNum, inrowNum)
+        content.nums = ContentNums(prayer_curr_date, totalNum, inrowNum)
     }
 
     fun loadIntentions(prayer: Prayer): List<PrayerIntention> {

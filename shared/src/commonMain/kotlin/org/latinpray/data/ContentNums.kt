@@ -17,4 +17,8 @@ package org.latinpray.data
 
 import kotlinx.datetime.LocalDate
 
-data class PrayerNums(val lastRecorded: LocalDate, val totalNum: Int, val inrowNum: Int)
+data class ContentNums(
+    val lastRecorded: LocalDate,
+    val totalNum: Int,
+    val inrowNum: Int
+)

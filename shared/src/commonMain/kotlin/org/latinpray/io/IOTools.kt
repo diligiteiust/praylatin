@@ -115,7 +115,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
             if (prayer == null) {
                 //println("Creating new prayer $name")
                 prayer = Prayer(i++, name, mutableMapOf(basicPrayer.lang to basicPrayer))
-                prayer.nums = config.loadPrayerNums(prayer)
+                prayer.nums = config.loadContentNums(prayer)
                 config.addExternalPrayerModificationListener(prayer)
                 //println("Loaded prayer nums: ${prayer.name} - ${prayer.nums}")
                 prayers[name] = prayer

@@ -548,7 +548,7 @@ fun PrayerDetailsScreen(
                 if (endProcessed) return@ContentDetails
                 endProcessed = true
                 //println("End reached start: ${prayer.name} - ${prayer.nums}, ${currentIntention}")
-                config.incPrayerNum(contentItem.content, prayerIntentions)
+                config.incContentNum(contentItem.content, prayerIntentions)
                 totalNum = contentItem.content.nums.totalNum
                 inrowNum = contentItem.content.nums.inrowNum
                 prayer?.let { it1 ->
