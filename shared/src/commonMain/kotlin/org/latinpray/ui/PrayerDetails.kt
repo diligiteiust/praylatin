@@ -27,12 +27,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -66,21 +66,23 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
+import org.jetbrains.compose.resources.stringResource
+import org.latinpray.data.BibleBasicContent
+import org.latinpray.data.BssicContent
 import org.latinpray.data.Config
+import org.latinpray.data.Content
 import org.latinpray.data.Link
 import org.latinpray.data.Prayer
 import org.latinpray.data.PrayerIntention
 import org.latinpray.getPlatform
 import org.latinpray.shared.Res
-import org.latinpray.util.DisplayLang
-import org.jetbrains.compose.resources.stringResource
-import org.latinpray.data.BssicContent
-import org.latinpray.data.Content
 import org.latinpray.shared.notes
+import org.latinpray.util.DisplayLang
 
 const val INDENT = "%"
 const val TRANSLATION = "!"
 const val EMBEDDED = "@"
+
 //const val EMBEDDED_TTILE = "@@"
 const val TRANSLATION_TRAIL = "_tr"
 const val TRANSLATION_INDENT = "\t\t"
@@ -115,7 +117,7 @@ fun preparePrayer(
     prayers: MutableList<Prayer>,
     indent: String = "",
     extras: Boolean = true,
-    listMode : Boolean = false,
+    listMode: Boolean = false,
     title: Boolean = false,
     notesRes: String = ""
 ): String {
@@ -147,7 +149,7 @@ fun preparePrayer(
             if (lang2?.title != null) {
                 result += "### " + lang2.title + "\n\n"
             }
-            result += EMPTY_LINE+"\n\n"
+            result += EMPTY_LINE + "\n\n"
             prayerStart = false
         }
 
@@ -173,8 +175,10 @@ fun preparePrayer(
             }
             val subprayer = prayers.find { p -> p.name == file }
             result += if (subprayer != null) {
-                preparePrayer(dispayLang, subprayer, config, prayers,
-                    indent + (if (list || t)  "" else INDENT), false, list, t, notesRes)
+                preparePrayer(
+                    dispayLang, subprayer, config, prayers,
+                    indent + (if (list || t) "" else INDENT), false, list, t, notesRes
+                )
             } else {
                 "$indent *$it* not found\n\n"
             }
@@ -203,14 +207,14 @@ fun preparePrayer(
                 if (link is Link.Youtube) {
                     val url_title = link.title ?: "Listen on YouTube"
                     val yt_link = "[$url_title](${link.url})"
-                    result += EMPTY_LINE+"\n\n$yt_link\n\n"
+                    result += EMPTY_LINE + "\n\n$yt_link\n\n"
                 }
             }
         }
         if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
-            result += EMPTY_LINE+"\n\n__" + notesRes + ":__\n\n" + lang2.notes
+            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + lang2.notes
         } else if (lang2 == null && lang1?.notes != null && lang1.notes!!.isNotEmpty()) {
-            result += EMPTY_LINE+"\n\n__" + notesRes + ":__\n\n" + lang1.notes
+            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + lang1.notes
         }
     }
 
@@ -238,14 +242,18 @@ val customParagraphComponent: MarkdownComponent = {
         }
     }
 
-    if (styledText.text.startsWith(TRANSLATION+INDENT)) {
+    if (styledText.text.startsWith(TRANSLATION + INDENT)) {
         val style = mainStyle.copy(
             fontSize = mainStyle.fontSize * 0.7f,
             fontWeight = FontWeight.Light,
         )
         styledText = buildAnnotatedString {
             withStyle(style) {
-                append(EMBEDDED_INDENT+TRANSLATION_INDENT+ getPlatform().extraIndent + styledText.text.substring(2))
+                append(
+                    EMBEDDED_INDENT + TRANSLATION_INDENT + getPlatform().extraIndent + styledText.text.substring(
+                        2
+                    )
+                )
             }
         }
     }
@@ -263,7 +271,7 @@ val customParagraphComponent: MarkdownComponent = {
 
     if (styledText.text.startsWith(TRANSLATION)) {
         val style = mainStyle.copy(
-            fontSize =  mainStyle.fontSize * 0.8f,
+            fontSize = mainStyle.fontSize * 0.8f,
             fontWeight = FontWeight.Light,
         )
         styledText = buildAnnotatedString {
@@ -305,7 +313,12 @@ fun MyMarkdownSuccess(
 
     LazyColumn(modifier = modifier, state = scrollState) {
         items(items = state.node.children) { node ->
-            MarkdownElement(node, components, state.content, skipLinkDefinition = state.linksLookedUp)
+            MarkdownElement(
+                node,
+                components,
+                state.content,
+                skipLinkDefinition = state.linksLookedUp
+            )
         }
     }
 
@@ -340,7 +353,8 @@ fun ContentDetails(
 
     //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
     key(changed) {
-        val content = preparePrayer(displayLang, contentItem.content, config, prayers, notesRes = notesRes)
+        val content =
+            preparePrayer(displayLang, contentItem.content, config, prayers, notesRes = notesRes)
         //println("PrayerDetails - after preparePrayer for  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
         Column(
             modifier = Modifier.fillMaxSize()
@@ -348,31 +362,48 @@ fun ContentDetails(
 //            Box(
 //                modifier = Modifier.fillMaxWidth()
 //            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
-                    contentAlignment = Alignment.TopCenter
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                    Text(
+                        text = getTitle(displayLang, contentItem.content, config),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    if (intention != null) {
+                        var nums = ""
+                        if (config.showNumbers) {
+                            nums = intenTotalNum.toString()
+                        }
+                        if (intention.days > 1) {
+                            if (nums.isNotEmpty()) nums += " / "
+                            nums = nums + intenInrowNum
+                        }
+                        if (nums.isNotEmpty()) nums = " (" + nums + ")"
                         Text(
-                            text = getTitle(displayLang, contentItem.content, config),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground
+                            text = intention.intention + nums,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.padding(horizontal = 32.dp)
                         )
-                        if (intention != null) {
-                            var nums = ""
-                            if (config.showNumbers) {
-                                nums = intenTotalNum.toString()
-                            }
-                            if (intention.days > 1) {
-                                if (nums.isNotEmpty()) nums += " / "
-                                nums = nums + intenInrowNum
-                            }
-                            if (nums.isNotEmpty()) nums = " (" + nums + ")"
+                    } else {
+                        var subtitle: String
+                        var bibleContent =
+                            contentItem.content.langs[config.prayerLang] as? BibleBasicContent
+                        if (bibleContent == null) {
+                            bibleContent =
+                                contentItem.content.langs[config.secondLang] as? BibleBasicContent
+                        }
+                        if (bibleContent != null) {
+                            subtitle = bibleContent.subtitle
                             Text(
-                                text = intention.intention + nums,
+                                text = subtitle,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.padding(horizontal = 32.dp)
@@ -380,6 +411,7 @@ fun ContentDetails(
                         }
                     }
                 }
+            }
 //            }
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 val margins = maxWidth * 0.04f
@@ -403,12 +435,13 @@ fun ContentDetails(
                     ),
                     modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
                         .background(color = MaterialTheme.colorScheme.background),
-                        //.verticalScroll(scrollState),
+                    //.verticalScroll(scrollState),
                     components = markdownComponents(
                         paragraph = customParagraphComponent,
                     ),
-                    success = @Composable  { state, components, modifier ->
-                        MyMarkdownSuccess(state, components, modifier,
+                    success = @Composable { state, components, modifier ->
+                        MyMarkdownSuccess(
+                            state, components, modifier,
                             savedScrollPosition,
                             { it ->
                                 savedScrollPosition = it.firstVisibleItemIndex
@@ -486,7 +519,7 @@ fun ContentDetails(
                                     config,
                                     MAX_LEN
                                 ),
-                                color =  navColor
+                                color = navColor
                             )
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,

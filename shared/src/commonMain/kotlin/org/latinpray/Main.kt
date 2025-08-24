@@ -58,7 +58,7 @@ import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
 import org.latinpray.data.ReadingPlan
-import org.latinpray.io.readBibleReadingPlan
+import org.latinpray.io.loadContent
 
 fun loadLocalizedContent(file: String, lang: String): String {
     val f = file.substringBefore('.') + '-' + lang + "." + file.substringAfter('.')
@@ -114,29 +114,6 @@ fun Main() {
     fontScale = defConfig.fontScale
 
     scope.launch {
-        //println("Main scope launched")
-        //println("Loading config from yaml...")
-//        defConfig = readConfigFromAssets("assets/config.yaml")
-//        //println("Loaded config from yaml")
-//        val dsConfig = Config(
-//            defConfig.uiLang,
-//            defConfig.prayerLang,
-//            defConfig.secondLang,
-//            defConfig.preferTranslation,
-//            defConfig.grouping
-//        )
-//        dsConfig.loadConfigProps()
-////        dsConfig.loadConfigProps(getDataStore { keyValueStorePath() })
-////        defConfig = dsConfig
-////        defConfig.dataStore = getDataStore { keyValueStorePath() }
-//        defConfig = dsConfig
-//        if (lang != defConfig.uiLang) {
-//            lang = defConfig.uiLang
-//            getPlatform().changeLang(lang)
-//        }
-//        fontScale = defConfig.fontScale
-        //println("Loaded config from datastore ${defConfig.prayerLang}")
-        //println("Loading prayers...")
         helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
         aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
         privacy = readFileFromAssets("assets/privacy.md")
@@ -145,7 +122,8 @@ fun Main() {
             prayer.langs[defConfig.prayerLang]?.title
         }.toMutableList()
         println("Loaded ${prayers.size} prayers")
-        readingPlan = readBibleReadingPlan("assets/bible/annual-plan.yaml", defConfig)
+        //readingPlan = readBibleReadingPlan("assets/bible/annual-plan.yaml", defConfig)
+        readingPlan = loadContent("assets/bible/annual-plan.yaml")
         println("Loaded reading plan: ${readingPlan?.name}")
         //println("Loaded reading plan")
         //currentPrayer = prayers.first()

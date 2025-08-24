@@ -26,7 +26,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.latinpray.data.bible.books_abbrev_rev
 import org.latinpray.data.bible.books_files
-import org.latinpray.io.loadChapter
+import org.latinpray.data.bible.books_pl_abbrev
+import org.latinpray.io.loadContent
 import org.latinpray.loc.Language
 
 val books = listOf(
@@ -105,6 +106,10 @@ val books = listOf(
     "Ap"
 )
 
+val books_refs = mapOf(
+    Language.Polish.isoFormat to books_pl_abbrev,
+)
+
 data class BookRef(val book: String, val chapter: Int, val verse: Int) {
     constructor(ref: String) :
             this(
@@ -114,7 +119,13 @@ data class BookRef(val book: String, val chapter: Int, val verse: Int) {
             )
 
     override fun toString(): String {
-        return "$book $chapter, $verse"
+        return toString(Language.Latin.isoFormat)
+    }
+
+    fun toString(lang: String): String {
+        val ref = books_abbrev_rev[book]
+        val ref_lang = books_refs[lang]?.get(ref)
+        return "$ref_lang $chapter, $verse"
     }
 }
 
@@ -184,9 +195,10 @@ data class BibleBasicContent(
     override val lang: String,
     override val language: String,
     override val lines: MutableList<String>,
-    override val links: List<Link>?,
-    override val notes: String?,
-    override val tags: Set<String>? = null
+    override val links: List<Link>? = null,
+    override val notes: String? = null,
+    override val tags: Set<String>? = null,
+    val subtitle: String
 ) : BssicContent
 
 data class BibleContent(
@@ -265,43 +277,63 @@ data class ReadingPlan(
                 val endRef = BookRef(todaysReading!!.end)
                 println("Reading for today ends: $endRef")
                 val bibleContent = BibleContent(
-                    1,
-                    "dailybible", mutableMapOf()
+                    id = 1,
+                    name = name,
+                    langs = mutableMapOf()
                 )
+                val lang = Language.Polish.isoFormat
+                val subtitle = "${startRef.toString(lang)} - ${endRef.toString(lang)}"
                 val bibleBasicContent = BibleBasicContent(
-                    title = "${startRef} - ${endRef}",
-                    lang = Language.Polish.isoFormat,
+                    title = description,
+                    subtitle = subtitle,
+                    lang = lang,
                     language = Language.Polish.name,
                     lines = mutableListOf(),
-                    links = null,
-                    notes = null
                 )
                 var moreContent = true
                 val bible = "wujek_b"
                 var book = books_abbrev_rev[startRef.book]
                 var startIndex = startRef.verse - 1
                 val endBook = books_abbrev_rev[endRef.book]
-                var endIndex = 0
+                var endIndex: Int
                 var chapterNo = startRef.chapter
-                val bookfile = books_files[book]
+                var bookfile = books_files[book]
+                var path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$bookfile.yaml"
+                println("Loading book: $book from path: $path")
+                var bookCont: Book = loadContent(path = path)
+                var lastChapter = bookCont.chapters.last().toInt()
                 while (moreContent && bookfile != null) {
                     println("Loading chapter: $book $chapterNo")
-                    val chapterCont =
-                        loadChapter(bibleBasicContent.lang, bible, bookfile, chapterNo)
+                    path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$chapterNo.yaml"
+                    val chapterCont: Chapter = loadContent(path = path)
                     endIndex = chapterCont.verses.size
                     if (chapterNo == endRef.chapter) {
                         endIndex = endRef.verse
                     }
-                    bibleBasicContent.lines.add("### ${chapterCont.title}")
-                    bibleBasicContent.lines.addAll(
-                        chapterCont.lines.subList(startIndex, endIndex)
-                    )
+                    if (endIndex > 0) {
+                        bibleBasicContent.lines.add("### ${bookCont.title}, Rozdział $chapterNo")
+                        bibleBasicContent.lines.addAll(
+                            chapterCont.lines.subList(startIndex, endIndex)
+                        )
+                        bibleBasicContent.lines.add("^^^")
+                    }
 
                     if (book == endBook && chapterNo == endRef.chapter) {
                         moreContent = false
                     }
                     chapterNo++
                     startIndex = 0
+                    if (chapterNo >= lastChapter && book != endBook)  {
+                        chapterNo = 1
+                        val idx = books.indexOf(book)
+                        book = books[idx + 1]
+                        bookfile = books_files[book]
+                        bookfile?.let {
+                            path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$bookfile.yaml"
+                            bookCont = loadContent(path = path)
+                            lastChapter = bookCont.chapters.last().toInt()
+                        }
+                    }
                 }
                 bibleContent.langs[bibleBasicContent.lang] = bibleBasicContent
                 bibleContent.nums = config.loadContentNums(bibleContent)

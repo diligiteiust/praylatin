@@ -516,7 +516,7 @@ data class Config(
         }
         //println("last_date: " + last_date.toString())
         content.nums = ContentNums(last_date, totalNum, inrowNum)
-        println("Loaded content ${content.name} nums: ${content.nums}")
+        //println("Loaded content ${content.name} nums: ${content.nums}")
         return content.nums
     }
 
@@ -576,7 +576,7 @@ data class Config(
         }
 
         putToSharedPrefs(content.name + PRAYER_NUM_KEY.name, "$prayer_curr_date,$totalNum,$inrowNum")
-        println("Saving content ${content.name} nums: $prayer_curr_date,$totalNum,$inrowNum")
+        //println("Saving content ${content.name} nums: $prayer_curr_date,$totalNum,$inrowNum")
 
         if (currentIntention != null) {
             currentIntention.inrowNum = intention_inrowNum

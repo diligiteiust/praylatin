@@ -37,6 +37,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
+import org.latinpray.data.BibleBasicContent
 import org.latinpray.data.Config
 import org.latinpray.data.Content
 import org.latinpray.shared.Res
@@ -113,11 +114,21 @@ fun PrayerListItem(
 
     var subtitle: String? = null
     var title = contentItem.content.langs[config.prayerLang]?.title
+    val bibleContent = contentItem.content.langs[config.prayerLang] as? BibleBasicContent
+    if (bibleContent != null) {
+        subtitle = bibleContent.subtitle
+    }
     var pad = 2.dp
     if (title == null) {
         title = contentItem.content.langs[config.secondLang]?.title
+        val bibleContent = contentItem.content.langs[config.secondLang] as? BibleBasicContent
+        if (bibleContent != null) {
+            subtitle = bibleContent.subtitle
+        }
     } else {
-        subtitle = contentItem.content.langs[config.secondLang]?.title
+        if (subtitle == null) {
+            subtitle = contentItem.content.langs[config.secondLang]?.title
+        }
     }
     if (subtitle == null || subtitle.isEmpty()) {
         pad = 6.dp
