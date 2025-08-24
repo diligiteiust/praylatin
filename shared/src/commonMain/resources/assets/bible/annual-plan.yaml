@@ -1,4 +1,4 @@
-name: Bible Reading Plan
+name: dailybible
 description: Bible Reading Plan
 version: 1.0
 source: https://github.com/BrRoman/vulgate
@@ -42,7 +42,7 @@ plan:
   - type: dayreading
     day: 04/05
     start:  Gn 31, 10
-    end:  Gn 34, 0
+    end:  Gn 33, 20
   - type: dayreading
     day: 05/05
     start:  Gn 34, 1
@@ -126,7 +126,7 @@ plan:
   - type: dayreading
     day: 25/05
     start:  Lev 8, 30
-    end:  Lev 12, 0
+    end:  Lev 11, 45
   - type: dayreading
     day: 26/05
     start:  Lev 12, 1
@@ -298,66 +298,66 @@ plan:
   - type: dayreading
     day: 07/07
     start:  Ru 2, 18
-    end:  1 Reg 2, 24
+    end:  1 Sam 2, 24
   - type: dayreading
     day: 08/07
-    start:  1 Reg 2, 25
-    end:  1 Reg 7, 10
+    start:  1 Sam 2, 25
+    end:  1 Sam 7, 10
   - type: dayreading
     day: 09/07
-    start:  1 Reg 7, 11
-    end:  1 Reg 12, 0
+    start:  1 Sam 7, 11
+    end:  1 Sam 11, 15
   - type: dayreading
     day: 10/07
-    start:  1 Reg 12, 1
-    end:  1 Reg 14, 50
+    start:  1 Sam 12, 1
+    end:  1 Sam 14, 50
   - type: dayreading
     day: 11/07
-    start:  1 Reg 14, 51
-    end:  1 Reg 17, 39
+    start:  1 Sam 14, 51
+    end:  1 Sam 17, 39
   - type: dayreading
     day: 12/07
-    start:  1 Reg 17, 40
-    end:  1 Reg 20, 25
+    start:  1 Sam 17, 40
+    end:  1 Sam 20, 25
   - type: dayreading
     day: 13/07
-    start:  1 Reg 20, 26
-    end:  1 Reg 24, 14
+    start:  1 Sam 20, 26
+    end:  1 Sam 24, 14
   - type: dayreading
     day: 14/07
-    start:  1 Reg 24, 15
-    end:  1 Reg 28, 8
+    start:  1 Sam 24, 15
+    end:  1 Sam 28, 8
   - type: dayreading
     day: 15/07
-    start:  1 Reg 28, 9
-    end:  2 Reg 1, 26
+    start:  1 Sam 28, 9
+    end:  2 Sam 1, 26
   - type: dayreading
     day: 16/07
-    start:  2 Reg 1, 27
-    end:  2 Reg 5, 14
+    start:  2 Sam 1, 27
+    end:  2 Sam 5, 14
   - type: dayreading
     day: 17/07
-    start:  2 Reg 5, 15
-    end:  2 Reg 10, 4
+    start:  2 Sam 5, 15
+    end:  2 Sam 10, 4
   - type: dayreading
     day: 18/07
-    start:  2 Reg 10, 5
-    end:  2 Reg 13, 25
+    start:  2 Sam 10, 5
+    end:  2 Sam 13, 25
   - type: dayreading
     day: 19/07
-    start:  2 Reg 13, 26
-    end:  2 Reg 16, 14
+    start:  2 Sam 13, 26
+    end:  2 Sam 16, 14
   - type: dayreading
     day: 20/07
-    start:  2 Reg 16, 15
-    end:  2 Reg 19, 28
+    start:  2 Sam 16, 15
+    end:  2 Sam 19, 28
   - type: dayreading
     day: 21/07
-    start:  2 Reg 19, 29
-    end:  2 Reg 22, 35
+    start:  2 Sam 19, 29
+    end:  2 Sam 22, 35
   - type: dayreading
     day: 22/07
-    start:  2 Reg 22, 36
+    start:  2 Sam 22, 36
     end:  3 Reg 1, 18
   - type: dayreading
     day: 23/07
@@ -486,7 +486,7 @@ plan:
   - type: dayreading
     day: 23/08
     start:  2 Par 28, 14
-    end:  2 Par 32, 0
+    end:  2 Par 31, 21
   - type: dayreading
     day: 24/08
     start:  2 Par 32, 1
@@ -542,7 +542,7 @@ plan:
   - type: dayreading
     day: 06/09
     start:  Jdt 8, 17
-    end:  Jdt 13, 0
+    end:  Jdt 12, 20
   - type: dayreading
     day: 07/09
     start:  Jdt 13, 1
@@ -558,7 +558,7 @@ plan:
   - type: dayreading
     day: 10/09
     start:  Est 13, 5
-    end:  Jb 2, 0
+    end:  Jb 1, 22
   - type: dayreading
     day: 11/09
     start:  Jb 2, 1
@@ -666,7 +666,7 @@ plan:
   - type: dayreading
     day: 07/10
     start:  Ps 89, 4
-    end:  Ps 96, 0
+    end:  Ps 95, 14
   - type: dayreading
     day: 08/10
     start:  Ps 96, 1
@@ -682,7 +682,7 @@ plan:
   - type: dayreading
     day: 11/10
     start:  Ps 108, 17
-    end:  Ps 117, 0
+    end:  Ps 116, 2
   - type: dayreading
     day: 12/10
     start:  Ps 117, 1
@@ -706,7 +706,7 @@ plan:
   - type: dayreading
     day: 17/10
     start:  Ps 146, 7
-    end:  Pr 3, 0
+    end:  Pr 2, 22
   - type: dayreading
     day: 18/10
     start:  Pr 3, 1
@@ -730,7 +730,7 @@ plan:
   - type: dayreading
     day: 23/10
     start:  Pr 19, 22
-    end:  Pr 23, 0
+    end:  Pr 22, 29
   - type: dayreading
     day: 24/10
     start:  Pr 23, 1
@@ -962,7 +962,7 @@ plan:
   - type: dayreading
     day: 20/12
     start:  Ba 6, 3
-    end:  Ez 2, 0
+    end:  Ez 1, 28
   - type: dayreading
     day: 21/12
     start:  Ez 2, 1
@@ -1030,7 +1030,7 @@ plan:
   - type: dayreading
     day: 06/01
     start:  Dn 9, 9
-    end:  Dn 13, 0
+    end:  Dn 12, 13
   - type: dayreading
     day: 07/01
     start:  Dn 13, 1
@@ -1046,7 +1046,7 @@ plan:
   - type: dayreading
     day: 10/01
     start:  Os 13, 15
-    end:  Am 2, 0
+    end:  Am 1, 15
   - type: dayreading
     day: 11/01
     start:  Am 2, 1
