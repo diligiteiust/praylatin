@@ -4,6 +4,5 @@ language: Polski
 book: Psalmi
 chapter: "116"
 verses:
-  "1": Alleluja.
-  "2": 'Chwalcie Pana wszyscy poganie: chwalcie go wszyscy narodowie.'
-  "3": 'Bo się umocniło nad nami miłosierdzie jego: a prawda Pańska trwa na wieki!'
+  "1": 'Alleluja! Chwalcie Pana wszyscy poganie: chwalcie go wszyscy narodowie.'
+  "2": 'Bo się umocniło nad nami miłosierdzie jego: a prawda Pańska trwa na wieki!'
