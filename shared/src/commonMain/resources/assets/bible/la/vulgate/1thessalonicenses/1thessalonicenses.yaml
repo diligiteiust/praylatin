@@ -1,0 +1,12 @@
+bible: vulgate
+lang: la
+language: Latina
+book: ad Thessalonicenses I
+abbrev: 1Tes,1 Thess,1 Thes,1Th,1 Tes,1Thes,1 Tes
+title: ad Thessalonicenses I
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

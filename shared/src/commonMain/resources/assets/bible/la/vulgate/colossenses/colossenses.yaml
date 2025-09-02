@@ -1,0 +1,11 @@
+bible: vulgate
+lang: la
+language: Latina
+book: ad Colossenses
+abbrev: Kol,Col,Co
+title: ad Colossenses
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4

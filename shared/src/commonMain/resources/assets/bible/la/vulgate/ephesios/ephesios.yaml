@@ -1,0 +1,13 @@
+bible: vulgate
+lang: la
+language: Latina
+book: ad Ephesios
+abbrev: Ef,Eph,Ep,Efes
+title: ad Ephesios
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6

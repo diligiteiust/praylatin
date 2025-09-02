@@ -1,0 +1,12 @@
+bible: vulgate
+lang: la
+language: Latina
+book: Lamentationes
+abbrev: Lm,Lam,La
+title: Lamentationes
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

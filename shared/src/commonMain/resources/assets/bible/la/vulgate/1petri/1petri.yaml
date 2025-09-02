@@ -1,0 +1,12 @@
+bible: vulgate
+lang: la
+language: Latina
+book: I Petri
+abbrev: 1P,1 Pet,1 Pt,1 Pe,1Ptr,1 P
+title: I Petri
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

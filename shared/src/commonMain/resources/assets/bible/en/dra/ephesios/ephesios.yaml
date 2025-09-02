@@ -1,0 +1,13 @@
+bible: dra
+lang: en
+language: English
+book: ad Ephesios
+abbrev: Ef,Eph,Ep,Efes
+title: Ephesians
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6

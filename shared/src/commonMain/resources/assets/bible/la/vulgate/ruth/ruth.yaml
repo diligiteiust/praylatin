@@ -1,0 +1,11 @@
+bible: vulgate
+lang: la
+language: Latina
+book: Ruth
+abbrev: Rt,Ruth,Ru,Rut
+title: Ruth
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4

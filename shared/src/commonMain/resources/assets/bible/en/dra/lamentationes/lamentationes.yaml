@@ -1,0 +1,12 @@
+bible: dra
+lang: en
+language: English
+book: Lamentationes
+abbrev: Lm,Lam,La
+title: Lamentations
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

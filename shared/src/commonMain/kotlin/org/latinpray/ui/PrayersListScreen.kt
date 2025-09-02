@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ucasoft.kcron.kotlinx.datetime.plusHours
 import kotlinx.coroutines.delay
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.coroutines.launch
@@ -68,7 +68,9 @@ import org.latinpray.shared.favorite_prayers
 import org.latinpray.shared.today_and_now
 import org.latinpray.util.truncateToHour
 import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 fun untilNextFullHour(name: String = ""): Duration {
     val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     val nextFullHour = now.plusHours(1).truncateToHour()
@@ -77,7 +79,7 @@ fun untilNextFullHour(name: String = ""): Duration {
     return result
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalTime::class)
 @Composable
 fun PrayersListScreen(
     title: String,
@@ -146,6 +148,7 @@ fun PrayersListScreen(
                 gp.add(todayAndNowStr)
                 val bible: Content? = readingPlan?.bibleForToday(config)
                 if (bible != null) {
+                    //println("Adding bible for today: ${bible.name}")
                     gp.add(ContentItem(bible, bible.prayedToday(), todayAndNowStr))
                 }
                 prayers.forEach { prayer ->

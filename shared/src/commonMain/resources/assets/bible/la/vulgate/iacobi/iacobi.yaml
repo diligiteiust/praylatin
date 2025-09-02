@@ -1,0 +1,12 @@
+bible: vulgate
+lang: la
+language: Latina
+book: Iacobi
+abbrev: Jk,Jas,Ja,Sant,Stgo,St,Iac
+title: Iacobi
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

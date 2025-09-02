@@ -1,0 +1,81 @@
+title: Douay-Rheims Bible
+subtitle: Translation of the Bible from the Latin Vulgate into English made by members of the Catholic seminary English College, Douai, France. It is the foundation on which nearly all English Catholic versions are still based.
+lang: en
+language: English
+source: https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles
+transcription: DOUAY-RHEIMS 1899 AMERICAN EDITION (DRA)
+bible: dra
+books:
+  - genesis
+  - exodus
+  - leviticus
+  - numeri
+  - deuteronomium
+  - iosue
+  - iudicum
+  - ruth
+  - 1samuelis
+  - 2samuelis
+  - 1regum
+  - 2regum
+  - 1paralipomenon
+  - 2paralipomenon
+  - esdrae
+  - nehemiae
+  - tobiae
+  - iudith
+  - esther
+  - iob
+  - psalmi
+  - proverbia
+  - ecclesiastes
+  - canticum
+  - sapientia
+  - ecclesiasticus
+  - isaias
+  - ieremias
+  - lamentationes
+  - baruch
+  - ezechiel
+  - daniel
+  - osee
+  - ioel
+  - amos
+  - abdias
+  - ionas
+  - michaeas
+  - nahum
+  - habacuc
+  - sophonias
+  - aggaeus
+  - zacharias
+  - malachias
+  - 1machabaeorum
+  - 2machabaeorum
+  - matthaeus
+  - marcus
+  - lucas
+  - ioannes
+  - actus
+  - romanos
+  - 1corinthios
+  - 2corinthios
+  - galatas
+  - ephesios
+  - philippenses
+  - colossenses
+  - 1thessalonicenses
+  - 2thessalonicenses
+  - 1timotheum
+  - 2timotheum
+  - titum
+  - philemonem
+  - hebraeos
+  - iacobi
+  - 1petri
+  - 2petri
+  - 1ioannis
+  - 2ioannis
+  - 3ioannis
+  - iudae
+  - apocalypsis

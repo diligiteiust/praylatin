@@ -1,0 +1,12 @@
+bible: dra
+lang: en
+language: English
+book: Iacobi
+abbrev: Jk,Jas,Ja,Sant,Stgo,St,Iac
+title: James
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5

@@ -1,0 +1,11 @@
+bible: vulgate
+lang: la
+language: Latina
+book: ad Philippenses
+abbrev: Flp,Phil,Php,Phlp
+title: ad Philippenses
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4

@@ -1,0 +1,11 @@
+bible: vulgate
+lang: la
+language: Latina
+book: ad Timotheum II
+abbrev: 2Tm,2 Tim,2 Tm,2 Ti,2T,2Tim,2 Tm
+title: ad Timotheum II
+chapters:
+  - 1
+  - 2
+  - 3
+  - 4

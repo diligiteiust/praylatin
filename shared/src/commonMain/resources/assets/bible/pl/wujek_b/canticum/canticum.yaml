@@ -2,7 +2,7 @@ bible: wujek_b
 lang: pl
 language: Polski
 book: Canticum Canticorum
-abbrev: Pnp,Song,SS,So,Sg,Cant,Can,Ct
+abbrev: Pnp,Song,SS,Sg,Cant,Can,Ct
 title: Księga Pieśni nad pieśniami
 chapters:
   - 1
