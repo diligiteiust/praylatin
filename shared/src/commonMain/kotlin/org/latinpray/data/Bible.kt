@@ -15,7 +15,9 @@
 
 package org.latinpray.data
 
-import kotlinx.datetime.Clock
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
+import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
@@ -29,6 +31,9 @@ import org.latinpray.data.bible.books_files
 import org.latinpray.data.bible.books_pl_abbrev
 import org.latinpray.io.loadContent
 import org.latinpray.loc.Language
+import kotlin.time.ExperimentalTime
+
+val BIBLE_ASSTES="assets/bible/"
 
 val books = listOf(
     "Rdz",
@@ -128,6 +133,8 @@ data class BookRef(val book: String, val chapter: Int, val verse: Int) {
         return "$ref_lang $chapter, $verse"
     }
 }
+
+data class ReadingRange(val start: BookRef, val end: BookRef)
 
 @Serializable
 sealed class Reading {
@@ -229,6 +236,75 @@ fun parseRef(ref: String, part: REF_PART): String {
     }
 }
 
+fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: BibleBasicContent) {
+    var moreContent = true
+    var book = books_abbrev_rev[range.start.book]
+    var startIndex = range.start.verse - 1
+    val endBook = books_abbrev_rev[range.end.book]
+    var endIndex: Int
+    var chapterNo = range.start.chapter
+    var bookfile = books_files[book]
+    var path = "${BIBLE_ASSTES}${bible}/${bookfile}/${bookfile}.yaml"
+    println("Loading book: $book from path: $path")
+    var bookCont: Book = loadContent(path = path)
+    var lastChapter = bookCont.chapters.last().toInt()
+    while (moreContent && bookfile != null) {
+        println("Loading chapter: $book $chapterNo")
+        path = "${BIBLE_ASSTES}${bible}/${bookfile}/${chapterNo}.yaml"
+        val chapterCont: Chapter = loadContent(path = path)
+        endIndex = chapterCont.verses.size
+        if (chapterNo == range.end.chapter) {
+            endIndex = range.end.verse
+        }
+        if (endIndex > 0) {
+            bibleBasicContent.lines.add("### ${bookCont.title}, Rozdział $chapterNo")
+            bibleBasicContent.lines.addAll(
+                chapterCont.lines.subList(startIndex, endIndex)
+            )
+            bibleBasicContent.lines.add("^^^")
+        }
+
+        if (book == endBook && chapterNo == range.end.chapter) {
+            moreContent = false
+        }
+        chapterNo++
+        startIndex = 0
+        if (chapterNo >= lastChapter && book != endBook)  {
+            chapterNo = 1
+            val idx = books.indexOf(book)
+            book = books[idx + 1]
+            bookfile = books_files[book]
+            bookfile?.let {
+                path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$bookfile.yaml"
+                bookCont = loadContent(path = path)
+                lastChapter = bookCont.chapters.last().toInt()
+            }
+        }
+    }
+}
+
+
+fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleContent,
+                     title: String = "") {
+
+    config.bibles.forEach { bible ->
+        val startRef = ranges[0].start
+        val endRef = ranges[ranges.size - 1].end
+        val subtitle = "${startRef.toString(bible.lang)} - ${endRef.toString(bible.lang)}"
+        val bibleBasicContent = BibleBasicContent(
+            title = title,
+            subtitle = subtitle,
+            lang = bible.lang,
+            language = bible.language,
+            lines = mutableListOf(),
+        )
+        ranges.forEach { range ->
+            loadBibleContent("${bible.lang}/${bible.bible}", range, bibleBasicContent)
+        }
+        content.langs[bibleBasicContent.lang] = bibleBasicContent
+    }
+}
+
 @Serializable
 data class ReadingPlan(
     val name: String,
@@ -250,7 +326,10 @@ data class ReadingPlan(
     var todaysReading: Reading.Dayreading? = null
 
     @Transient
-    var todaysContent: Content? = null
+    var todaysContent: BibleContent? = null
+
+    @Transient
+    private val lock = SynchronizedObject()
 
     init {
         plan.forEach { reading ->
@@ -262,85 +341,44 @@ data class ReadingPlan(
         }
     }
 
-    fun bibleForToday(config: Config): Content? {
-        val today = readingDateFormat.format(Clock.System.todayIn(TimeZone.currentSystemDefault()))
-        println("Looking for reading for today: $today")
-        if (todaysReading == null || todaysReading!!.day != today) {
-            todaysContent = null
-            planMap[today]?.let {
-                todaysReading = it as Reading.Dayreading?
-                println("Found reading for today: $it")
-            }
-            if (todaysReading != null) {
-                val startRef = BookRef(todaysReading!!.start)
-                println("Reading for today starts: $startRef")
-                val endRef = BookRef(todaysReading!!.end)
-                println("Reading for today ends: $endRef")
-                val bibleContent = BibleContent(
-                    id = 1,
-                    name = name,
-                    langs = mutableMapOf()
-                )
-                val lang = Language.Polish.isoFormat
-                val subtitle = "${startRef.toString(lang)} - ${endRef.toString(lang)}"
-                val bibleBasicContent = BibleBasicContent(
-                    title = description,
-                    subtitle = subtitle,
-                    lang = lang,
-                    language = Language.Polish.name,
-                    lines = mutableListOf(),
-                )
-                var moreContent = true
-                val bible = "wujek_b"
-                var book = books_abbrev_rev[startRef.book]
-                var startIndex = startRef.verse - 1
-                val endBook = books_abbrev_rev[endRef.book]
-                var endIndex: Int
-                var chapterNo = startRef.chapter
-                var bookfile = books_files[book]
-                var path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$bookfile.yaml"
-                println("Loading book: $book from path: $path")
-                var bookCont: Book = loadContent(path = path)
-                var lastChapter = bookCont.chapters.last().toInt()
-                while (moreContent && bookfile != null) {
-                    println("Loading chapter: $book $chapterNo")
-                    path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$chapterNo.yaml"
-                    val chapterCont: Chapter = loadContent(path = path)
-                    endIndex = chapterCont.verses.size
-                    if (chapterNo == endRef.chapter) {
-                        endIndex = endRef.verse
-                    }
-                    if (endIndex > 0) {
-                        bibleBasicContent.lines.add("### ${bookCont.title}, Rozdział $chapterNo")
-                        bibleBasicContent.lines.addAll(
-                            chapterCont.lines.subList(startIndex, endIndex)
-                        )
-                        bibleBasicContent.lines.add("^^^")
-                    }
+    @OptIn(ExperimentalTime::class)
 
-                    if (book == endBook && chapterNo == endRef.chapter) {
-                        moreContent = false
-                    }
-                    chapterNo++
-                    startIndex = 0
-                    if (chapterNo >= lastChapter && book != endBook)  {
-                        chapterNo = 1
-                        val idx = books.indexOf(book)
-                        book = books[idx + 1]
-                        bookfile = books_files[book]
-                        bookfile?.let {
-                            path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$bookfile.yaml"
-                            bookCont = loadContent(path = path)
-                            lastChapter = bookCont.chapters.last().toInt()
-                        }
-                    }
+    fun bibleForToday(config: Config): Content? {
+        synchronized(lock) {
+            val today =
+                readingDateFormat.format(Clock.System.todayIn(TimeZone.currentSystemDefault()))
+            println("Looking for reading for today: $today")
+            if (todaysReading == null || todaysReading!!.day != today) {
+                todaysContent = null
+                planMap[today]?.let {
+                    todaysReading = it as Reading.Dayreading?
+                    println("Found reading for today: $it")
                 }
-                bibleContent.langs[bibleBasicContent.lang] = bibleBasicContent
-                bibleContent.nums = config.loadContentNums(bibleContent)
-                todaysContent = bibleContent
+                if (todaysReading != null) {
+                    val startRef = BookRef(todaysReading!!.start)
+                    println("Reading for today starts: $startRef")
+                    val endRef = BookRef(todaysReading!!.end)
+                    println("Reading for today ends: $endRef")
+                    todaysContent = BibleContent(
+                        id = 1,
+                        name = name,
+                        langs = mutableMapOf()
+                    )
+                    todaysContent?.let {
+                        loadBibleContent(
+                            config = config,
+                            ranges = listOf(ReadingRange(startRef, endRef)),
+                            content = it,
+                            title = description
+                        )
+                        it.nums = config.loadContentNums(it)
+                    }
+//                    val bible = "wujek_b"
+//                    val lang = Language.Polish.isoFormat
+                }
+            } else {
+                println("Reading for today already found: $todaysReading")
             }
-        } else {
-            println("Reading for today already found: $todaysReading")
         }
         return todaysContent
     }

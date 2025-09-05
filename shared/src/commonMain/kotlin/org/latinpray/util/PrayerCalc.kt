@@ -15,17 +15,18 @@
 
 package org.latinpray.util
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.number
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.todayIn
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
 import org.latinpray.data.PrayerIntention
+import kotlin.time.ExperimentalTime
 
 /* Allows to say prayers until 6AM next day after the day on which the prayer should be said.
    Otherwise the inrowNum is reset.
@@ -57,23 +58,24 @@ enum class DisplayLang {
 
 fun LocalDateTime.truncateToHour(): LocalDateTime {
     return LocalDateTime(
-        year = this.year,
-        monthNumber = this.monthNumber,
-        dayOfMonth = this.dayOfMonth,
-        hour = this.hour,
+        year = year,
+        month = month.number,
+        day = day,
+        hour = hour,
         minute = 0,
         second = 0,
         nanosecond = 0
     )
 }
 
+@OptIn(ExperimentalTime::class)
 fun calcPrayerTime(last_date: LocalDate): PrayerTime {
-    val curr_date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
+    val curr_date: LocalDate = kotlin.time.Clock.System.todayIn(TimeZone.currentSystemDefault())
 
     if (curr_date <= last_date) return PrayerTime.TODAY
     if (last_date.daysUntil(curr_date) == 1) return PrayerTime.YESTERDAY
 
-    val curr_time_millis = Clock.System.now()
+    val curr_time_millis = kotlin.time.Clock.System.now()
     val last_date_millis =
         last_date.atTime(0, 0).toInstant(TimeZone.currentSystemDefault())
     val diff = curr_time_millis - last_date_millis

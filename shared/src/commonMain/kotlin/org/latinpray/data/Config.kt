@@ -22,7 +22,6 @@ import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -30,9 +29,12 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlin.time.Clock
 import org.latinpray.createSettings
+import org.latinpray.loc.Language
 import org.latinpray.util.PrayerTime
 import org.latinpray.util.calcPrayerTime
+import kotlin.time.ExperimentalTime
 
 @Serializable
 data class Config(
@@ -153,7 +155,29 @@ data class Config(
                 "true"
             ) { externalModification() }
         }
-    //var dataStore: DataStore<Preferences>? = null
+
+    @Transient
+    var firstBible = Bible(
+        title = "Biblia Sacra Juxta Vulgatam Clementinam",
+        subtitle = "Editio Electronica, Plurimis Consultis Editionibus Preaparate A Michaele Tvveedale",
+        lang = Language.Latin.isoFormat,
+        language = Language.Latin.name,
+        source = "https://github.com/BrRoman/vulgate",
+        transcription = "The Bishops’ Conference of England and Wales gives its approval to the publication of Biblia Sacra juxta Vulgatam Clementinam. Published with approbation. CBCEW, 9th January 2006.",
+        bible = "vulgate",
+        books = mutableListOf())
+
+    @Transient
+    var secondBible = Bible(
+        title = "Biblia to iest Księgi Starego y Nowego Testamentv",
+        subtitle = "Wedłvg łacińskiego przekłádu stárègo, w kościele powszechnym przyiętègo, ná Polski ięzyk z nowu z pilnośćią przełożonè, Z DOKŁADANIEM TEXTV ZYDOWSKIEGO y Gréckiégo, y z wykłádem Kátholickim trudnieyszych mieysc, do obrony Wiáry świętéy powszechnéy przeciw kácérztwóm tych czásów należących",
+        lang = Language.Polish.isoFormat,
+        language = Language.Polish.name,
+        source = "https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles",
+        transcription = "PRZEZ D. JAKVBA WVYKA Z WĄGROWCA THEOLOGA SOCIETATIS IESV. Z DOZWOLENIEM STOLICE APOSTOLSKIEY, a nakłádem Ieº M. Kśiędzá Arcybiskupá Gniéźnieńskiégo, etć. wydáné. Transcrypcja typu B",
+        bible = "wujek_b",
+        books = mutableListOf())
+    var bibles = listOf(firstBible, secondBible)
 
     fun addExternalPrayerModificationListener(prayer: Prayer) {
         synchronized(sharedSetingsSync) {
@@ -535,6 +559,7 @@ data class Config(
 //        return inrowNum + 1
 //    }
 
+    @OptIn(ExperimentalTime::class)
     fun incContentNum(content: Content, intentions: List<PrayerIntention>) {
 
         val prayerNums = loadContentNums(content)

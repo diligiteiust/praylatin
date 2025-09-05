@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
@@ -45,6 +44,7 @@ import org.latinpray.shared.daily_prayers
 import org.latinpray.shared.today_and_now
 import org.latinpray.theme.Gray600
 import org.latinpray.theme.darken
+import kotlin.time.ExperimentalTime
 
 data class ContentItem(
     val content: Content,
@@ -54,6 +54,7 @@ data class ContentItem(
     var nextContent: ContentItem? = null,
 )
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun PrayerListItem(
     contentItem: ContentItem,
@@ -71,7 +72,7 @@ fun PrayerListItem(
 
     var backgroundColor by remember { mutableStateOf( if (contentItem.darker) { darkerSurface } else { normalSurface} ) }
     var textColor by remember { mutableStateOf( if (contentItem.darker) { Gray600 } else { onBackground } ) }
-    var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
+    var currentHour by remember { mutableStateOf(kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
 
     val updateColors: () -> Unit = {
         contentItem.darker = contentItem.content.prayedToday()
@@ -91,7 +92,7 @@ fun PrayerListItem(
         scope.launch {
             while (true) {
                 delay(untilNextFullHour(contentItem.content.name))
-                val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                val now = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 //println("Checking time: ${now.hour}, previous: ${currentHour}")
                 if (now.hour != currentHour) {
                     currentHour = now.hour
@@ -102,7 +103,7 @@ fun PrayerListItem(
         }
 
         OnResume {
-            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            val now = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             //println("OnResume, Checking time: ${now.hour}, previous: ${currentHour}")
             if (now.hour != currentHour) {
                 currentHour = now.hour

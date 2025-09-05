@@ -15,12 +15,13 @@
 
 package org.latinpray.data
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Transient
+import kotlin.time.ExperimentalTime
+import kotlin.time.Clock
 
 interface BssicContent {
     val title: String
@@ -45,6 +46,7 @@ abstract class Content(
     @Transient
     var externalChangeListeners = ArrayList<() -> Unit>()
 
+    @OptIn(ExperimentalTime::class)
     fun prayedToday(): Boolean {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
         return nums.lastRecorded.daysUntil(today) <= 0

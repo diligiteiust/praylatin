@@ -18,16 +18,13 @@ package org.latinpray.data
 import com.ucasoft.kcron.core.builders.Builder
 import com.ucasoft.kcron.kotlinx.datetime.CronLocalDateTime
 import com.ucasoft.kcron.kotlinx.datetime.CronLocalDateTimeProvider
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import kotlin.time.ExperimentalTime
 
 @Serializable
 sealed class Link {
@@ -55,13 +52,15 @@ data class Prayer(
     val dates: MutableSet<Builder<LocalDateTime, CronLocalDateTime, CronLocalDateTimeProvider>> = mutableSetOf(),
 ): Content() {
 
+    @OptIn(ExperimentalTime::class)
     fun isTodayAndNow(): Boolean {
-        return isTodayAndNow(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour)
+        return isTodayAndNow(kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour)
     }
 
+    @OptIn(ExperimentalTime::class)
     fun isTodayAndNow(curHour: Int): Boolean {
         dates.forEach { builder ->
-            if (builder.nextRun?.date == Clock.System.todayIn(TimeZone.currentSystemDefault())
+            if (builder.nextRun?.date == kotlin.time.Clock.System.todayIn(TimeZone.currentSystemDefault())
                 && builder.nextRun?.time?.hour == curHour) {
                 return true
             }
