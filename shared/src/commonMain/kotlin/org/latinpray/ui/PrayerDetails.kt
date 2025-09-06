@@ -395,7 +395,11 @@ fun ContentDetails(
                     } else {
                         var subtitle: String
                         var bibleContent =
-                            contentItem.content.langs[config.prayerLang] as? BibleBasicContent
+                            contentItem.content.langs[config.uiLang] as? BibleBasicContent
+                        if (bibleContent == null) {
+                            bibleContent =
+                                contentItem.content.langs[config.prayerLang] as? BibleBasicContent
+                        }
                         if (bibleContent == null) {
                             bibleContent =
                                 contentItem.content.langs[config.secondLang] as? BibleBasicContent

@@ -115,14 +115,14 @@ fun PrayerListItem(
 
     var subtitle: String? = null
     var title = contentItem.content.langs[config.prayerLang]?.title
-    val bibleContent = contentItem.content.langs[config.prayerLang] as? BibleBasicContent
+    val bibleContent = contentItem.content.langs[config.uiLang] as? BibleBasicContent
     if (bibleContent != null) {
         subtitle = bibleContent.subtitle
     }
     var pad = 2.dp
     if (title == null) {
         title = contentItem.content.langs[config.secondLang]?.title
-        val bibleContent = contentItem.content.langs[config.secondLang] as? BibleBasicContent
+        val bibleContent = contentItem.content.langs[config.uiLang] as? BibleBasicContent
         if (bibleContent != null) {
             subtitle = bibleContent.subtitle
         }
