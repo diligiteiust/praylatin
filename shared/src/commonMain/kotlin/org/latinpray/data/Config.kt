@@ -177,6 +177,7 @@ data class Config(
         transcription = "PRZEZ D. JAKVBA WVYKA Z WĄGROWCA THEOLOGA SOCIETATIS IESV. Z DOZWOLENIEM STOLICE APOSTOLSKIEY, a nakłádem Ieº M. Kśiędzá Arcybiskupá Gniéźnieńskiégo, etć. wydáné. Transcrypcja typu B",
         bible = "wujek_b",
         books = mutableListOf())
+    @Transient
     var bibles = listOf(firstBible, secondBible)
 
     fun addExternalPrayerModificationListener(prayer: Prayer) {

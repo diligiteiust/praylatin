@@ -27,7 +27,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.latinpray.data.bible.books_abbrev_rev
+import org.latinpray.data.bible.books_en_abbrev
+import org.latinpray.data.bible.books_es_abbrev
 import org.latinpray.data.bible.books_files
+import org.latinpray.data.bible.books_la_abbrev
 import org.latinpray.data.bible.books_pl_abbrev
 import org.latinpray.io.loadContent
 import org.latinpray.loc.Language
@@ -113,6 +116,9 @@ val books = listOf(
 
 val books_refs = mapOf(
     Language.Polish.isoFormat to books_pl_abbrev,
+    Language.Latin.isoFormat to books_la_abbrev,
+    Language.English.isoFormat to books_en_abbrev,
+    Language.Spanish.isoFormat to books_es_abbrev
 )
 
 data class BookRef(val book: String, val chapter: Int, val verse: Int) {

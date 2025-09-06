@@ -142,7 +142,7 @@ val books_pl_abbrev: Map<String, String> = mapOf(
   "Hbr" to "Hbr",
   "So" to "So",
   "Rdz" to "Rdz",
-  "1Sm" to " 1Sm",
+  "1Sm" to "1Sm",
   "Na" to "Na",
   "Ne" to "Ne",
   "1Tm" to "1 Tm",
