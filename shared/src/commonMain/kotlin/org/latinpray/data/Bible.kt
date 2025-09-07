@@ -257,6 +257,7 @@ fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: Bibl
     while (moreContent && bookfile != null) {
         println("Loading chapter: $book $chapterNo")
         path = "${BIBLE_ASSTES}${bible}/${bookfile}/${chapterNo}.yaml"
+        println("Loading chapter: $chapterNo from path: $path")
         val chapterCont: Chapter = loadContent(path = path)
         endIndex = chapterCont.verses.size
         if (chapterNo == range.end.chapter) {
@@ -281,7 +282,7 @@ fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: Bibl
             book = books[idx + 1]
             bookfile = books_files[book]
             bookfile?.let {
-                path = "assets/bible/${bibleBasicContent.lang}/$bible/$bookfile/$bookfile.yaml"
+                path = "assets/bible/$bible/$bookfile/$bookfile.yaml"
                 bookCont = loadContent(path = path)
                 lastChapter = bookCont.chapters.last().toInt()
             }
@@ -305,7 +306,12 @@ fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleC
             lines = mutableListOf(),
         )
         ranges.forEach { range ->
-            loadBibleContent("${bible.lang}/${bible.bible}", range, bibleBasicContent)
+            try {
+                loadBibleContent("${bible.lang}/${bible.bible}", range, bibleBasicContent)
+            } catch (e: Exception) {
+                println("Error loading bible content: ${bible.lang}/${bible.bible}, range: $range")
+                println("Error loading bible content: ${e.message}")
+            }
         }
         content.langs[bibleBasicContent.lang] = bibleBasicContent
     }
