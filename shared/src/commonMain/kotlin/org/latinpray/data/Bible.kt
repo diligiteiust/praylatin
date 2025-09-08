@@ -17,6 +17,8 @@ package org.latinpray.data
 
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -26,6 +28,7 @@ import kotlinx.datetime.todayIn
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import org.jetbrains.compose.resources.getString
 import org.latinpray.data.bible.books_abbrev_rev
 import org.latinpray.data.bible.books_en_abbrev
 import org.latinpray.data.bible.books_es_abbrev
@@ -34,6 +37,8 @@ import org.latinpray.data.bible.books_la_abbrev
 import org.latinpray.data.bible.books_pl_abbrev
 import org.latinpray.io.loadContent
 import org.latinpray.loc.Language
+import org.latinpray.shared.Res
+import org.latinpray.shared.bible_chapter
 import kotlin.time.ExperimentalTime
 
 val BIBLE_ASSTES="assets/bible/"
@@ -242,7 +247,7 @@ fun parseRef(ref: String, part: REF_PART): String {
     }
 }
 
-fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: BibleBasicContent) {
+suspend fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: BibleBasicContent) {
     var moreContent = true
     var book = books_abbrev_rev[range.start.book]
     var startIndex = range.start.verse - 1
@@ -251,6 +256,7 @@ fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: Bibl
     var chapterNo = range.start.chapter
     var bookfile = books_files[book]
     var path = "${BIBLE_ASSTES}${bible}/${bookfile}/${bookfile}.yaml"
+    val chaptString = getString(Res.string.bible_chapter)
     println("Loading book: $book from path: $path")
     var bookCont: Book = loadContent(path = path)
     var lastChapter = bookCont.chapters.last().toInt()
@@ -264,7 +270,7 @@ fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: Bibl
             endIndex = range.end.verse
         }
         if (endIndex > 0) {
-            bibleBasicContent.lines.add("### ${bookCont.title}, Rozdział $chapterNo")
+            bibleBasicContent.lines.add("### ${bookCont.title}, ${chaptString} $chapterNo")
             bibleBasicContent.lines.addAll(
                 chapterCont.lines.subList(startIndex, endIndex)
             )
@@ -291,8 +297,8 @@ fun loadBibleContent(bible: String, range: ReadingRange, bibleBasicContent: Bibl
 }
 
 
-fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleContent,
-                     title: String = "") {
+suspend fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleContent,
+                             title: String = "") {
 
     config.bibles.forEach { bible ->
         val startRef = ranges[0].start
@@ -323,6 +329,7 @@ data class ReadingPlan(
     val description: String,
     val version: String,
     val source: String,
+    val langs: MutableMap<String, String>,
     val plan: List<Reading>
 ) {
     @OptIn(FormatStringsInDatetimeFormats::class)
@@ -341,7 +348,7 @@ data class ReadingPlan(
     var todaysContent: BibleContent? = null
 
     @Transient
-    private val lock = SynchronizedObject()
+    private val lock = Mutex()
 
     init {
         plan.forEach { reading ->
@@ -354,9 +361,8 @@ data class ReadingPlan(
     }
 
     @OptIn(ExperimentalTime::class)
-
-    fun bibleForToday(config: Config): Content? {
-        synchronized(lock) {
+    suspend fun bibleForToday(config: Config): Content? {
+        lock.withLock {
             val today =
                 readingDateFormat.format(Clock.System.todayIn(TimeZone.currentSystemDefault()))
             println("Looking for reading for today: $today")
@@ -376,12 +382,13 @@ data class ReadingPlan(
                         name = name,
                         langs = mutableMapOf()
                     )
+                    val descr = langs[config.uiLang] ?: description
                     todaysContent?.let {
                         loadBibleContent(
                             config = config,
                             ranges = listOf(ReadingRange(startRef, endRef)),
                             content = it,
-                            title = description
+                            title = descr
                         )
                         it.nums = config.loadContentNums(it)
                     }

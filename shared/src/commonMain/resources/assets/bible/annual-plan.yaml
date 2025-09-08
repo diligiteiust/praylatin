@@ -1,5 +1,10 @@
 name: dailybible
-description: Bible Reading Plan
+description: Bible annual reading plan
+langs:
+  "en": "Bible annual reading plan"
+  "pl": "Roczny plan czytania Biblii"
+  "es": "Plan de lectura anual de la Biblia"
+  "la": "Ratio lectionis Biblicae annua"
 version: 1.0
 source: https://github.com/BrRoman/vulgate
 plan:

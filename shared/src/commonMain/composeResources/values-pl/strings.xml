@@ -44,4 +44,6 @@
     <string name="added_to_favorites">Modlitwa dodana do ulubionych</string>
     <string name="removed_from_favorites">Modlitwa usunięta z ulubionych</string>
     <string name="today_list">Lista modlitw Dzisiaj</string>
+    <string name="bible_settings_title">Biblia</string>
+    <string name="bible_chapter">Rozdział</string>
 </resources>

@@ -43,7 +43,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
-import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Done
@@ -85,6 +84,7 @@ import org.latinpray.shared.bookmark_add
 import org.latinpray.shared.bookmark_check
 import org.latinpray.shared.calendar_add_on
 import org.latinpray.shared.calendar_month
+import org.latinpray.shared.data_info_alert_24dp
 import org.latinpray.shared.intention_active
 import org.latinpray.shared.intention_add
 import org.latinpray.shared.intention_days
@@ -427,7 +427,7 @@ fun PrayerDetailsScreen(
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.AutoStories,
+                            painter = painterResource(Res.drawable.data_info_alert_24dp),
                             contentDescription = "Intentions",
                             tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(30.dp)

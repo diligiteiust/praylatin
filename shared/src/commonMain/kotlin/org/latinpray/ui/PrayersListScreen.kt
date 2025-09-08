@@ -49,6 +49,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ucasoft.kcron.kotlinx.datetime.plusHours
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
@@ -95,6 +96,7 @@ fun PrayersListScreen(
     val (fraction) = remember { mutableStateOf(0.50f) }
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
     var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
+    var bible: Content? by remember { mutableStateOf(null) }
 
     val scope = rememberCoroutineScope()
     scope.launch {
@@ -118,11 +120,15 @@ fun PrayersListScreen(
         }
     }
 
+    scope.launch {
+        bible = readingPlan?.bibleForToday(config)
+    }
+
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
     val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
     val todayAndNowStr = stringResource(Res.string.today_and_now)
 
-    val groupedPrayers: MutableList<Any> = remember(prayers, config, currentHour) {
+    val groupedPrayers: MutableList<Any> = remember(prayers, config, currentHour, bible) {
         val gp = mutableListOf<Any>()
         if (config.grouping) {
             val tags = mutableSetOf<String>()
@@ -146,10 +152,8 @@ fun PrayersListScreen(
             tags.remove(HIDE_TAG)
             if (config.todayAndNow) {
                 gp.add(todayAndNowStr)
-                val bible: Content? = readingPlan?.bibleForToday(config)
-                if (bible != null) {
-                    //println("Adding bible for today: ${bible.name}")
-                    gp.add(ContentItem(bible, bible.prayedToday(), todayAndNowStr))
+                bible?.let {
+                    gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
                 }
                 prayers.forEach { prayer ->
                     //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")

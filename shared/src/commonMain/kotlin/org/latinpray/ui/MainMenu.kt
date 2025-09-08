@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
@@ -40,6 +41,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.shared.Res
 import org.latinpray.shared.about_screen_title
+import org.latinpray.shared.bible_settings_title
 import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.settings_screen_title
 import org.latinpray.shared.text_decrease_24dp_e8eaed_fill0_wght400_grad0_opsz24
@@ -67,6 +69,20 @@ fun MainMenu(
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = "Application Setting",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        )
+        DropdownMenuItem(
+            onClick = {
+                isExpanded.value = false
+                navController.navigate(MainScreens.SettingsScreen.name)
+            },
+            text = { Text(text = stringResource(Res.string.bible_settings_title)) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.AutoStories,
+                    contentDescription = "Bible Settings",
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
