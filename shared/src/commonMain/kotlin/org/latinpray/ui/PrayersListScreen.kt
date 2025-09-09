@@ -120,8 +120,10 @@ fun PrayersListScreen(
         }
     }
 
-    scope.launch {
-        bible = readingPlan?.bibleForToday(config)
+    if (config.biblePlan) {
+        scope.launch {
+            bible = readingPlan?.bibleForToday(config)
+        }
     }
 
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
@@ -152,8 +154,10 @@ fun PrayersListScreen(
             tags.remove(HIDE_TAG)
             if (config.todayAndNow) {
                 gp.add(todayAndNowStr)
-                bible?.let {
-                    gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
+                if (config.biblePlan) {
+                    bible?.let {
+                        gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
+                    }
                 }
                 prayers.forEach { prayer ->
                     //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")

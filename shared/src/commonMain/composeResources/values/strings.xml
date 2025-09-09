@@ -44,6 +44,10 @@
     <string name="added_to_favorites">Prayer added to favorites</string>
     <string name="removed_from_favorites">Prayer removed from favorites</string>
     <string name="today_list">Today list</string>
-    <string name="bible_settings_title">Bible</string>
+    <string name="bible_settings_menu">Bible</string>
     <string name="bible_chapter">Chapter</string>
+    <string name="bible_settings_title">Bible Settings</string>
+    <string name="bible_readingplan_setting">Bible reading plan</string>
+    <string name="first_bible_setting">First Bible</string>
+    <string name="second_bible_setting">Second Bible</string>
 </resources>

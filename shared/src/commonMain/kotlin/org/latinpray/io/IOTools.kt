@@ -24,8 +24,11 @@ import com.ucasoft.kcron.core.common.WeekDays
 import kotlinx.serialization.decodeFromString
 import okio.buffer
 import org.latinpray.data.BasicPrayer
+import org.latinpray.data.Bible
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.data.loadBibleContent
+import org.latinpray.loc.Language
 import org.latinpray.loc.getLanguage
 
 val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
@@ -138,3 +141,26 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
     return prayers.values.toMutableList()
 }
 
+@OptIn(DelicateIterableApi::class)
+fun biblesList(): MutableMap<String, Bible>  {
+    val bibles = mutableMapOf<String, Bible>()
+
+    val langs = listAssetsInDirectory("assets/bible/")
+    langs.forEach { lang ->
+        if (!lang.endsWith(".yaml")) {
+            val allBibles = listAssetsInDirectory("assets/bible/$lang/")
+            allBibles.forEach { bible ->
+                //println("Loading bible: ${bible} for lang: $lang")
+                try {
+                    val path = "assets/bible/$lang/$bible/${bible}.yaml"
+                    val basicBible = loadContent<Bible>(path)
+                    bibles[basicBible.getName()] = basicBible
+                } catch (e: Exception) {
+                    println("Error loading bible content: ${lang}/${bible}")
+                    println("Error loading bible content: ${e.message}")
+                }
+            }
+        }
+    }
+    return bibles
+}

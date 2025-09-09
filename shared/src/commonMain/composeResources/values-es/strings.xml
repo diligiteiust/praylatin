@@ -44,6 +44,10 @@
     <string name="added_to_favorites">Oración añadida a favoritos</string>
     <string name="removed_from_favorites">Oración eliminada de favoritos</string>
     <string name="today_list">Lista de hoy</string>
-    <string name="bible_settings_title">Biblia</string>
+    <string name="bible_settings_menu">Biblia</string>
     <string name="bible_chapter">Capítulo</string>
+    <string name="bible_settings_title">Ajustes Bíblicos</string>
+    <string name="bible_readingplan_setting">Plan de lectura de la Biblia</string>
+    <string name="first_bible_setting">Primera Biblia</string>
+    <string name="second_bible_setting">Segunda Biblia</string>
 </resources>

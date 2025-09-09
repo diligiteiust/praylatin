@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +49,8 @@ fun LangSelection(
     langs: MutableMap<String, String>,
     selectedItem: String,
     onItemSelected: (String) -> Unit,
-    withInput: Boolean = false
+    withInput: Boolean = false,
+    width: Dp = 200.dp
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedLang by remember { mutableStateOf(selectedItem) }
@@ -67,7 +69,7 @@ fun LangSelection(
         Box {
             OutlinedButton(
                 onClick = { expanded = true },
-                modifier = Modifier.width(200.dp),
+                modifier = Modifier.width(width),
                 shape = RectangleShape,
             ) {
                 Text(

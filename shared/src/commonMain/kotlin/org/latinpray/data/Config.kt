@@ -48,6 +48,7 @@ data class Config(
     var sharedPrefs: Boolean = false,
     var showNumbers: Boolean = false,
     var todayAndNow: Boolean = true,
+    var biblePlan: Boolean = true,
 ) {
 
     @Transient
@@ -111,6 +112,9 @@ data class Config(
     private val TODAYANDNOW_PROP_KEY = booleanPreferencesKey("todayandnow")
 
     @Transient
+    private val BIBLEPLAN_PROP_KEY = booleanPreferencesKey("bibleplan")
+
+    @Transient
     private val PRAYER_NUM_KEY = stringPreferencesKey("_num")
 
     @Transient
@@ -157,28 +161,30 @@ data class Config(
         }
 
     @Transient
-    var firstBible = Bible(
-        title = "Biblia Sacra Juxta Vulgatam Clementinam",
+    var firstBible: Bible? = Bible(
+        title = "Biblia Sacra Vulgata",
         subtitle = "Editio Electronica, Plurimis Consultis Editionibus Preaparate A Michaele Tvveedale",
         lang = Language.Latin.isoFormat,
         language = Language.Latin.name,
         source = "https://github.com/BrRoman/vulgate",
         transcription = "The Bishops’ Conference of England and Wales gives its approval to the publication of Biblia Sacra juxta Vulgatam Clementinam. Published with approbation. CBCEW, 9th January 2006.",
         bible = "vulgate",
+        chapter = "Capitulum",
         books = mutableListOf())
 
     @Transient
-    var secondBible = Bible(
-        title = "Biblia to iest Księgi Starego y Nowego Testamentv",
+    var secondBible: Bible? = Bible(
+        title = "Biblia Jakuba Wujka, B",
         subtitle = "Wedłvg łacińskiego przekłádu stárègo, w kościele powszechnym przyiętègo, ná Polski ięzyk z nowu z pilnośćią przełożonè, Z DOKŁADANIEM TEXTV ZYDOWSKIEGO y Gréckiégo, y z wykłádem Kátholickim trudnieyszych mieysc, do obrony Wiáry świętéy powszechnéy przeciw kácérztwóm tych czásów należących",
         lang = Language.Polish.isoFormat,
         language = Language.Polish.name,
         source = "https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles",
         transcription = "PRZEZ D. JAKVBA WVYKA Z WĄGROWCA THEOLOGA SOCIETATIS IESV. Z DOZWOLENIEM STOLICE APOSTOLSKIEY, a nakłádem Ieº M. Kśiędzá Arcybiskupá Gniéźnieńskiégo, etć. wydáné. Transcrypcja typu B",
         bible = "wujek_b",
+        chapter = "Rozdział",
         books = mutableListOf())
     @Transient
-    var bibles = listOf(firstBible, secondBible)
+    var bibles = mutableListOf<Bible>(firstBible as Bible, secondBible as Bible)
 
     fun addExternalPrayerModificationListener(prayer: Prayer) {
         synchronized(sharedSetingsSync) {
@@ -207,6 +213,7 @@ data class Config(
         donation = getDonationPref()
         showNumbers = getShowNumbersPref()
         todayAndNow = getTodayAndNowPref()
+        biblePlan = getBiblePlanPref()
         loadSubstitutions()
         loadDailyPrayers()
         loadFavorites()
@@ -355,6 +362,9 @@ data class Config(
     private fun getTodayAndNowPref(): Boolean =
         getPref(TODAYANDNOW_PROP_KEY.name, todayAndNow)
 
+    private fun getBiblePlanPref(): Boolean =
+        getPref(BIBLEPLAN_PROP_KEY.name, biblePlan)
+
     private fun getPrayerLangPref(): String =
         getPref(PRAYERLANG_PROP_KEY.name, prayerLang)
 
@@ -388,6 +398,7 @@ data class Config(
         saveDonation(donation)
         saveShowNumbers(showNumbers)
         saveTodayAndNow(todayAndNow)
+        saveBiblePlan(biblePlan)
         saveSubstitutions()
         saveDailyPrayers()
         saveFavorites()
@@ -456,6 +467,11 @@ data class Config(
     fun saveTodayAndNow(pref: Boolean) {
         todayAndNow = pref
         setPref(TODAYANDNOW_PROP_KEY.name, todayAndNow)
+    }
+
+    fun saveBiblePlan(pref: Boolean) {
+        biblePlan = pref
+        setPref(BIBLEPLAN_PROP_KEY.name, biblePlan)
     }
 
     fun saveFontScale(scale: Float) {

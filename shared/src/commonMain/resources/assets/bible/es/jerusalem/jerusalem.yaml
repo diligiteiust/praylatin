@@ -5,6 +5,7 @@ language: Español
 source: https://www.bibliacatolica.com.br/la-biblia-de-jerusalen/
 transcription: Bíblia de Jerusalem
 bible: jerusalem
+chapter: Capítulo
 books:
   - genesis
   - exodus

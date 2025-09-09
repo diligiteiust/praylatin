@@ -1,10 +1,11 @@
-title: Biblia Sacra Juxta Vulgatam Clementinam
+title: Biblia Sacra Vulgata
 subtitle: Editio Electronica, Plurimis Consultis Editionibus Preaparate A Michaele Tvveedale
 lang: la
 language: Latina
 source: https://github.com/BrRoman/vulgate
 transcription: The Bishops’ Conference of England and Wales gives its approval to the publication of Biblia Sacra juxta Vulgatam Clementinam. Published with approbation. CBCEW, 9th January 2006.
 bible: vulgate
+chapter: Capitulum
 books:
   - genesis
   - exodus

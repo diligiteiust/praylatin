@@ -59,6 +59,8 @@ import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
 import org.latinpray.data.ReadingPlan
 import org.latinpray.io.loadContent
+import org.latinpray.shared.bible_settings_title
+import org.latinpray.ui.BibleSettings
 
 fun loadLocalizedContent(file: String, lang: String): String {
     val f = file.substringBefore('.') + '-' + lang + "." + file.substringAfter('.')
@@ -206,8 +208,6 @@ fun Main() {
                         composable(route = MainScreens.SettingsScreen.name) {
                             SettingsScreen(
                                 title = stringResource(Res.string.settings_screen_title),
-                                //animatedContentScope = this,
-                                //sharedTransitionScope = sharedTransitionScope,
                                 config = defConfig,
                                 goBack = {
                                             if (reloadPrayersFlag) {
@@ -215,13 +215,11 @@ fun Main() {
                                                 scope.launch {
                                                     println("Reloading prayers...")
                                                     prayers = reloadPrayers(defConfig)
-                                                    //currentContent = prayers.first()
                                                 }
                                             }
                                             navController.popBackStack()
                                          },
                                 uiLangChange = { config ->
-                                    //defConfig = config
                                     lang = defConfig.uiLang
                                     getPlatform().changeLang(lang)
                                     println("New lang: $lang")
@@ -232,6 +230,26 @@ fun Main() {
                                 },
                                 reloadPrayers = { config ->
                                     //defConfig = config
+                                    reloadPrayersFlag = true
+                                    println("Reload prayers flag set to true...")
+                                }
+                            )
+                        }
+                        composable(route = MainScreens.BibleSettingsScreen.name) {
+                            BibleSettings(
+                                title = stringResource(Res.string.bible_settings_title),
+                                config = defConfig,
+                                goBack = {
+                                    if (reloadPrayersFlag) {
+                                        reloadPrayersFlag = false
+                                        scope.launch {
+                                            println("Reloading prayers...")
+                                            prayers = reloadPrayers(defConfig)
+                                        }
+                                    }
+                                    navController.popBackStack()
+                                },
+                                reloadPrayers = { config ->
                                     reloadPrayersFlag = true
                                     println("Reload prayers flag set to true...")
                                 }

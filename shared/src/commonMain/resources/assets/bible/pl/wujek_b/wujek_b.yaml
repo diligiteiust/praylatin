@@ -1,10 +1,11 @@
-title: Biblia to iest Księgi Starego y Nowego Testamentv
+title: Biblia Jakuba Wujka, B
 subtitle: Wedłvg łacińskiego przekłádu stárègo, w kościele powszechnym przyiętègo, ná Polski ięzyk z nowu z pilnośćią przełożonè, Z DOKŁADANIEM TEXTV ZYDOWSKIEGO y Gréckiégo, y z wykłádem Kátholickim trudnieyszych mieysc, do obrony Wiáry świętéy powszechnéy przeciw kácérztwóm tych czásów należących
 lang: pl
 language: Polski
 source: https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles
 transcription: PRZEZ D. JAKVBA WVYKA Z WĄGROWCA THEOLOGA SOCIETATIS IESV. Z DOZWOLENIEM STOLICE APOSTOLSKIEY, a nakłádem Ieº M. Kśiędzá Arcybiskupá Gniéźnieńskiégo, etć. wydáné. Transcrypcja typu B
 bible: wujek_b
+chapter: Rozdział
 books:
   - genesis
   - exodus

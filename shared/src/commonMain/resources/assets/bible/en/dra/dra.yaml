@@ -5,6 +5,7 @@ language: English
 source: https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles
 transcription: DOUAY-RHEIMS 1899 AMERICAN EDITION (DRA)
 bible: dra
+chapter: Chapter
 books:
   - genesis
   - exodus

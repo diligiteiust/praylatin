@@ -41,6 +41,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.shared.Res
 import org.latinpray.shared.about_screen_title
+import org.latinpray.shared.bible_settings_menu
 import org.latinpray.shared.bible_settings_title
 import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.settings_screen_title
@@ -76,9 +77,9 @@ fun MainMenu(
         DropdownMenuItem(
             onClick = {
                 isExpanded.value = false
-                navController.navigate(MainScreens.SettingsScreen.name)
+                navController.navigate(MainScreens.BibleSettingsScreen.name)
             },
-            text = { Text(text = stringResource(Res.string.bible_settings_title)) },
+            text = { Text(text = stringResource(Res.string.bible_settings_menu)) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.AutoStories,
