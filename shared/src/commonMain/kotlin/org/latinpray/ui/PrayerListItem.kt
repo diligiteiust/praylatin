@@ -114,25 +114,19 @@ fun PrayerListItem(
     }
 
     var pad = 2.dp
-    var subtitle: String? = null
     var title = contentItem.content.langs[config.prayerLang]?.title
-    var bibleContent = contentItem.content.langs[config.uiLang] as? BibleBasicContent
-    if (bibleContent == null) {
-        bibleContent = contentItem.content.langs[config.prayerLang] as? BibleBasicContent
-    }
-    if (bibleContent != null) {
-        subtitle = bibleContent.subtitle
-    }
+    var subtitle = contentItem.content.langs[config.secondLang]?.title
     if (title == null) {
         title = contentItem.content.langs[config.secondLang]?.title
-        bibleContent = contentItem.content.langs[config.uiLang] as? BibleBasicContent
-        if (bibleContent != null) {
-            subtitle = bibleContent.subtitle
-        }
-    } else {
-        if (subtitle == null) {
-            subtitle = contentItem.content.langs[config.secondLang]?.title
-        }
+        subtitle = null
+    }
+    var bibleContent = contentItem.content.langs[config.firstBible?.getName()] as? BibleBasicContent
+    if (bibleContent == null) {
+        bibleContent = contentItem.content.langs[config.secondBible?.getName()] as? BibleBasicContent
+    }
+    if (bibleContent != null) {
+        title = bibleContent.title
+        subtitle = bibleContent.subtitle
     }
     if (subtitle == null || subtitle.isEmpty()) {
         pad = 6.dp

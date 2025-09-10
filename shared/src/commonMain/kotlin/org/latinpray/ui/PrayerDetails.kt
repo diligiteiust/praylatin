@@ -68,6 +68,7 @@ import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.BibleBasicContent
+import org.latinpray.data.BibleContent
 import org.latinpray.data.BssicContent
 import org.latinpray.data.Config
 import org.latinpray.data.Content
@@ -93,7 +94,7 @@ val MULTI_REGEX = Regex("[0-9]+x")
 var MAX_LEN = 15
 
 @Composable
-fun DpToPx(dp: Dp): Float {
+fun dpToPx(dp: Dp): Float {
     val density = LocalDensity.current.density
     return dp.value * density
 }
@@ -103,6 +104,14 @@ fun getTitle(dispayLang: DisplayLang, content: Content, config: Config, maxLen: 
     if (pr == null || (dispayLang == DisplayLang.SECOND)) {
         pr = content.langs[config.secondLang]
     }
+    var bibleContent = content.langs[config.firstBible?.getName()] as? BibleBasicContent
+    if (bibleContent == null) {
+        bibleContent = content.langs[config.secondBible?.getName()] as? BibleBasicContent
+    }
+    if (bibleContent != null) {
+        pr = bibleContent
+    }
+
     var result = pr?.title ?: ""
     if (result.length > maxLen) {
         result = result.substring(0, maxLen) + "..."
@@ -121,33 +130,42 @@ fun preparePrayer(
     title: Boolean = false,
     notesRes: String = ""
 ): String {
+
+    var lang1: String? = config.prayerLang
+    var lang2: String? = config.secondLang
+
+    if (content is BibleContent) {
+        lang1 = config.firstBible?.getName()
+        lang2 = config.secondBible?.getName()
+    }
+
     var list = listMode
-    var lang2: BssicContent? = null
-    var lang1 = content.langs[config.prayerLang]
+    var langCont2: BssicContent? = null
+    var langCont1 = content.langs[lang1]
     // If content for the primary language is not found,
     // we use content for secondary language as primary
-    if (lang1 == null || (dispayLang == DisplayLang.SECOND)) {
-        lang1 = content.langs[config.secondLang]
+    if (langCont1 == null || (dispayLang == DisplayLang.SECOND)) {
+        langCont1 = content.langs[lang2]
     } else {
-        lang2 = if (dispayLang != DisplayLang.FIRST) content.langs[config.secondLang] else null
+        langCont2 = if (dispayLang != DisplayLang.FIRST) content.langs[lang2] else null
     }
-    // If prefered translation is enabled, we try to find content with translation
+    // If preferred translation is enabled, we try to find content with translation
     // instead of the standard content
     //println ("firstLang: ${firstLang}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${prayer.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
-    if ((dispayLang == DisplayLang.BOTH) && config.preferTranslation && content.langs[config.secondLang + TRANSLATION_TRAIL] != null) {
-        lang2 = content.langs[config.secondLang + TRANSLATION_TRAIL]
+    if ((dispayLang == DisplayLang.BOTH) && config.preferTranslation && content.langs[lang2 + TRANSLATION_TRAIL] != null) {
+        langCont2 = content.langs[lang2 + TRANSLATION_TRAIL]
         //println("Using translation for prayer: ${prayer.name} - ${lang2?.title}")
     }
 
     var result = ""
     var prayerStart = true
 
-    lang1?.lines?.forEachIndexed { i, it ->
+    langCont1?.lines?.forEachIndexed { i, it ->
         // Display prayer title at the very beginning
         if (prayerStart && title) {
-            result += "## " + lang1.title + "\n\n"
-            if (lang2?.title != null) {
-                result += "### " + lang2.title + "\n\n"
+            result += "## " + langCont1.title + "\n\n"
+            if (langCont2?.title != null) {
+                result += "### " + langCont2.title + "\n\n"
             }
             result += EMPTY_LINE + "\n\n"
             prayerStart = false
@@ -185,13 +203,13 @@ fun preparePrayer(
             return@forEachIndexed
         }
         result += indent + "" + (it ?: "") + "\n\n"
-        if (lang2?.lines != null
-            && lang2.lines.size > i
-            && lang2.lines[i]?.isNotEmpty() == true
-            && lang2.lines[i]?.trim()?.startsWith(EMBEDDED) == false
-            && lang2.lines[i]?.trim() != EMPTY_LINE
+        if (langCont2?.lines != null
+            && langCont2.lines.size > i
+            && langCont2.lines[i]?.isNotEmpty() == true
+            && langCont2.lines[i]?.trim()?.startsWith(EMBEDDED) == false
+            && langCont2.lines[i]?.trim() != EMPTY_LINE
         ) {
-            var line = lang2.lines[i]
+            var line = langCont2.lines[i]
             if (line?.startsWith(QUOTE) == true) {
                 line = line.substring(1).trim()
             }
@@ -202,8 +220,8 @@ fun preparePrayer(
     }
 
     if (extras) {
-        if (lang1?.links != null && (lang1.links as Collection<Any?>).isNotEmpty()) {
-            (lang1.links as Iterable<Any?>).forEach { link ->
+        if (langCont1?.links != null && (langCont1.links as Collection<Any?>).isNotEmpty()) {
+            (langCont1.links as Iterable<Any?>).forEach { link ->
                 if (link is Link.Youtube) {
                     val url_title = link.title ?: "Listen on YouTube"
                     val yt_link = "[$url_title](${link.url})"
@@ -211,10 +229,10 @@ fun preparePrayer(
                 }
             }
         }
-        if (lang2?.notes != null && lang2.notes!!.isNotEmpty()) {
-            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + lang2.notes
-        } else if (lang2 == null && lang1?.notes != null && lang1.notes!!.isNotEmpty()) {
-            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + lang1.notes
+        if (langCont2?.notes != null && langCont2.notes!!.isNotEmpty()) {
+            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + langCont2.notes
+        } else if (langCont2 == null && langCont1?.notes != null && langCont1.notes!!.isNotEmpty()) {
+            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + langCont1.notes
         }
     }
 
@@ -395,14 +413,9 @@ fun ContentDetails(
                     } else {
                         var subtitle: String
                         var bibleContent =
-                            contentItem.content.langs[config.uiLang] as? BibleBasicContent
+                            contentItem.content.langs[config.firstBible?.getName()] as? BibleBasicContent
                         if (bibleContent == null) {
-                            bibleContent =
-                                contentItem.content.langs[config.prayerLang] as? BibleBasicContent
-                        }
-                        if (bibleContent == null) {
-                            bibleContent =
-                                contentItem.content.langs[config.secondLang] as? BibleBasicContent
+                            bibleContent = contentItem.content.langs[config.secondBible?.getName()] as? BibleBasicContent
                         }
                         if (bibleContent != null) {
                             subtitle = bibleContent.subtitle
@@ -419,7 +432,7 @@ fun ContentDetails(
 //            }
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 val margins = maxWidth * 0.04f
-                MAX_LEN = ((DpToPx(maxWidth) / textWidth) / 2.3).toInt()
+                MAX_LEN = ((dpToPx(maxWidth) / textWidth) / 2.3).toInt()
                 //println("Preparing markdown for:  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                 Markdown(
                     content = content,

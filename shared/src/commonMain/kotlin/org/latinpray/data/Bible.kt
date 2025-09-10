@@ -15,8 +15,6 @@
 
 package org.latinpray.data
 
-import kotlinx.atomicfu.locks.SynchronizedObject
-import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.Clock
@@ -28,7 +26,6 @@ import kotlinx.datetime.todayIn
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import org.jetbrains.compose.resources.getString
 import org.latinpray.data.bible.books_abbrev_rev
 import org.latinpray.data.bible.books_en_abbrev
 import org.latinpray.data.bible.books_es_abbrev
@@ -37,8 +34,6 @@ import org.latinpray.data.bible.books_la_abbrev
 import org.latinpray.data.bible.books_pl_abbrev
 import org.latinpray.io.loadContent
 import org.latinpray.loc.Language
-import org.latinpray.shared.Res
-import org.latinpray.shared.bible_chapter
 import kotlin.time.ExperimentalTime
 
 val BIBLE_ASSTES="assets/bible/"
@@ -254,7 +249,7 @@ fun parseRef(ref: String, part: REF_PART): String {
     }
 }
 
-suspend fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicContent: BibleBasicContent) {
+fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicContent: BibleBasicContent) {
     val basePath = "${BIBLE_ASSTES}${bible.lang}/${bible.bible}"
     var moreContent = true
     var book = books_abbrev_rev[range.start.book]
@@ -304,7 +299,7 @@ suspend fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicConten
 }
 
 
-suspend fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleContent,
+fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleContent,
                              title: String = "") {
 
     config.bibles.forEach { bible ->
@@ -326,7 +321,7 @@ suspend fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content
                 println("Error loading bible content: ${e.message}")
             }
         }
-        content.langs[bibleBasicContent.lang] = bibleBasicContent
+        content.langs[bible.getName()] = bibleBasicContent
     }
 }
 
@@ -380,10 +375,17 @@ data class ReadingPlan(
             val today =
                 readingDateFormat.format(Clock.System.todayIn(TimeZone.currentSystemDefault()))
             //println("Looking for reading for today: $today")
-            if (todaysReading == null || todaysReading!!.day != today || uiLang != config.uiLang
-                || firstBible != config.firstBible || secondBible != config.secondBible) {
+            if (todaysReading == null
+                || todaysReading!!.day != today
+                || uiLang != config.uiLang
+                || firstBible != config.firstBible
+                || secondBible != config.secondBible) {
+
                 uiLang = config.uiLang
                 todaysContent = null
+                firstBible = config.firstBible
+                secondBible = config.secondBible
+
                 planMap[today]?.let {
                     todaysReading = it as Reading.Dayreading?
                     //println("Found reading for today: $it")
