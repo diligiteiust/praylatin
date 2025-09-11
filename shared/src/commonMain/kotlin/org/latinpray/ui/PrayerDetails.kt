@@ -104,9 +104,9 @@ fun getTitle(dispayLang: DisplayLang, content: Content, config: Config, maxLen: 
     if (pr == null || (dispayLang == DisplayLang.SECOND)) {
         pr = content.langs[config.secondLang]
     }
-    var bibleContent = content.langs[config.firstBible?.getName()] as? BibleBasicContent
+    var bibleContent = content.langs[config.firstBible] as? BibleBasicContent
     if (bibleContent == null) {
-        bibleContent = content.langs[config.secondBible?.getName()] as? BibleBasicContent
+        bibleContent = content.langs[config.secondBible] as? BibleBasicContent
     }
     if (bibleContent != null) {
         pr = bibleContent
@@ -135,8 +135,8 @@ fun preparePrayer(
     var lang2: String? = config.secondLang
 
     if (content is BibleContent) {
-        lang1 = config.firstBible?.getName()
-        lang2 = config.secondBible?.getName()
+        lang1 = config.firstBible
+        lang2 = config.secondBible
     }
 
     var list = listMode
@@ -413,9 +413,9 @@ fun ContentDetails(
                     } else {
                         var subtitle: String
                         var bibleContent =
-                            contentItem.content.langs[config.firstBible?.getName()] as? BibleBasicContent
+                            contentItem.content.langs[config.firstBible] as? BibleBasicContent
                         if (bibleContent == null) {
-                            bibleContent = contentItem.content.langs[config.secondBible?.getName()] as? BibleBasicContent
+                            bibleContent = contentItem.content.langs[config.secondBible] as? BibleBasicContent
                         }
                         if (bibleContent != null) {
                             subtitle = bibleContent.subtitle

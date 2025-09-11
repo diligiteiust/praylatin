@@ -120,9 +120,9 @@ fun PrayerListItem(
         title = contentItem.content.langs[config.secondLang]?.title
         subtitle = null
     }
-    var bibleContent = contentItem.content.langs[config.firstBible?.getName()] as? BibleBasicContent
+    var bibleContent = contentItem.content.langs[config.firstBible] as? BibleBasicContent
     if (bibleContent == null) {
-        bibleContent = contentItem.content.langs[config.secondBible?.getName()] as? BibleBasicContent
+        bibleContent = contentItem.content.langs[config.secondBible] as? BibleBasicContent
     }
     if (bibleContent != null) {
         title = bibleContent.title

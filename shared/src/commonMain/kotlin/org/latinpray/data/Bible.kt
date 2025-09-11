@@ -302,7 +302,14 @@ fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicContent: Bible
 fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleContent,
                              title: String = "") {
 
-    config.bibles.forEach { bible ->
+    val bibles = mutableListOf<Bible>()
+    config.allBibles[config.firstBible]?.let {
+        bibles.add(it)
+    }
+    config.allBibles[config.secondBible]?.let {
+        bibles.add(it)
+    }
+    bibles.forEach { bible ->
         val startRef = ranges[0].start
         val endRef = ranges[ranges.size - 1].end
         val subtitle = "${startRef.toString(bible.lang)} - ${endRef.toString(bible.lang)}"
@@ -355,9 +362,9 @@ data class ReadingPlan(
     @Transient
     private var uiLang = Language.English.isoFormat
     @Transient
-    private var firstBible: Bible? = null
+    private var firstBible: String? = null
     @Transient
-    private var secondBible: Bible? = null
+    private var secondBible: String? = null
 
     init {
         plan.forEach { reading ->

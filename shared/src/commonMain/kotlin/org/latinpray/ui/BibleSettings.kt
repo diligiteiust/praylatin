@@ -37,9 +37,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,23 +54,11 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
-import org.latinpray.io.biblesList
 import org.latinpray.shared.Res
 import org.latinpray.shared.bible_readingplan_setting
 import org.latinpray.shared.first_bible_setting
 import org.latinpray.shared.off_option
-import org.latinpray.shared.settings_grouping
-import org.latinpray.shared.settings_prayer_lang
-import org.latinpray.shared.settings_prefer_translation
-import org.latinpray.shared.settings_second_lang
-import org.latinpray.shared.settings_substitutions
-import org.latinpray.shared.settings_ui_lang
-import org.latinpray.shared.shared_prayer_lists
-import org.latinpray.shared.show_numbers
-import org.latinpray.shared.reset_shared_data
 import org.latinpray.shared.second_bible_setting
-import org.latinpray.shared.today_list
-import org.latinpray.sharedPrefsSupported
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -156,27 +142,20 @@ fun BibleSettings(
                     )
                 )
             }
-            val allBibles = biblesList()
+            //val allBibles = biblesList()
             val allKeys = mutableMapOf<String, String>()
-            allBibles.keys.forEach {
+            config.allBibles.keys.forEach {
                 allKeys[it] = it
             }
             LangSelection(
                 title = stringResource(Res.string.first_bible_setting),
                 langs = allKeys,
-                selectedItem = config.firstBible?.getName() ?: "English - Douay-Rheims Bible",
-                onItemSelected = { lang ->
+                selectedItem = config.firstBible ?: "English - Douay-Rheims Bible",
+                onItemSelected = { bible ->
                     scope.launch {
                         //println("Selected bible: $lang")
-                        config.firstBible = allBibles[lang]
+                        config.saveFirstBible(bible)
                         //println("Selected bible: ${config.firstBible?.getName()}")
-                        config.bibles.clear()
-                        config.firstBible?.let {
-                            config.bibles.add(it)
-                        }
-                        config.secondBible?.let {
-                            config.bibles.add(it)
-                        }
                         reloadPrayers(config)
                     }
                 },
@@ -187,17 +166,10 @@ fun BibleSettings(
             LangSelection(
                 title = stringResource(Res.string.second_bible_setting),
                 langs = secondBibleKeys,
-                selectedItem = config.secondBible?.getName() ?: "English - Douay-Rheims Bible",
-                onItemSelected = { lang ->
+                selectedItem = config.secondBible ?: "English - Douay-Rheims Bible",
+                onItemSelected = { bible ->
                     scope.launch {
-                        config.secondBible = allBibles[lang]
-                        config.bibles.clear()
-                        config.firstBible?.let {
-                            config.bibles.add(it)
-                        }
-                        config.secondBible?.let {
-                            config.bibles.add(it)
-                        }
+                        config.saveSecondBible(bible)
                         reloadPrayers(config)
                     }
                 },

@@ -31,10 +31,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.time.Clock
 import org.latinpray.createSettings
+import org.latinpray.io.biblesList
 import org.latinpray.loc.Language
 import org.latinpray.util.PrayerTime
 import org.latinpray.util.calcPrayerTime
 import kotlin.time.ExperimentalTime
+
+const val FIRSTBIBLE_DEF = "English - Douay-Rheims Bible"
+const val SECONDBIBLE_DEF = "Latina - Biblia Sacra Vulgata"
 
 @Serializable
 data class Config(
@@ -49,6 +53,8 @@ data class Config(
     var showNumbers: Boolean = false,
     var todayAndNow: Boolean = true,
     var biblePlan: Boolean = true,
+    var firstBible: String? = FIRSTBIBLE_DEF,
+    var secondBible: String? = SECONDBIBLE_DEF
 ) {
 
     @Transient
@@ -56,7 +62,12 @@ data class Config(
 
     @Transient
     val allUIlangs: MutableMap<String, String> =
-        mutableMapOf("en" to "English", "la" to "Latinae", "pl" to "Polski", "es" to "Español")
+        mutableMapOf(
+            Language.English.isoFormat to Language.English.name,
+            Language.Polish.isoFormat to Language.Polish.name,
+            Language.Latin.isoFormat to Language.Latin.name,
+            Language.Spanish.isoFormat to Language.Spanish.name
+        )
 
     @Transient
     val substitutions = mutableMapOf(
@@ -115,6 +126,12 @@ data class Config(
     private val BIBLEPLAN_PROP_KEY = booleanPreferencesKey("bibleplan")
 
     @Transient
+    private val FIRSTBIBLE_PROP_KEY = booleanPreferencesKey("firstbible")
+
+    @Transient
+    private val SECONDBIBLE_PROP_KEY = booleanPreferencesKey("secondbible")
+
+    @Transient
     private val PRAYER_NUM_KEY = stringPreferencesKey("_num")
 
     @Transient
@@ -160,31 +177,34 @@ data class Config(
             ) { externalModification() }
         }
 
-    @Transient
-    var firstBible: Bible? = Bible(
-        title = "Biblia Sacra Vulgata",
-        subtitle = "Editio Electronica, Plurimis Consultis Editionibus Preaparate A Michaele Tvveedale",
-        lang = Language.Latin.isoFormat,
-        language = Language.Latin.name,
-        source = "https://github.com/BrRoman/vulgate",
-        transcription = "The Bishops’ Conference of England and Wales gives its approval to the publication of Biblia Sacra juxta Vulgatam Clementinam. Published with approbation. CBCEW, 9th January 2006.",
-        bible = "vulgate",
-        chapter = "Capitulum",
-        books = mutableListOf())
+//    @Transient
+//    var firstBible: String? = "English - Douay-Rheims Bible"
+//        Bible(
+//        title = "Biblia Sacra Vulgata",
+//        subtitle = "Editio Electronica, Plurimis Consultis Editionibus Preaparate A Michaele Tvveedale",
+//        lang = Language.Latin.isoFormat,
+//        language = Language.Latin.name,
+//        source = "https://github.com/BrRoman/vulgate",
+//        transcription = "The Bishops’ Conference of England and Wales gives its approval to the publication of Biblia Sacra juxta Vulgatam Clementinam. Published with approbation. CBCEW, 9th January 2006.",
+//        bible = "vulgate",
+//        chapter = "Capitulum",
+//        books = mutableListOf())
+
+//    @Transient
+//    var secondBible: String? = "Latina - Biblia Sacra Vulgata"
+//        Bible(
+//        title = "Biblia Jakuba Wujka, B",
+//        subtitle = "Wedłvg łacińskiego przekłádu stárègo, w kościele powszechnym przyiętègo, ná Polski ięzyk z nowu z pilnośćią przełożonè, Z DOKŁADANIEM TEXTV ZYDOWSKIEGO y Gréckiégo, y z wykłádem Kátholickim trudnieyszych mieysc, do obrony Wiáry świętéy powszechnéy przeciw kácérztwóm tych czásów należących",
+//        lang = Language.Polish.isoFormat,
+//        language = Language.Polish.name,
+//        source = "https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles",
+//        transcription = "PRZEZ D. JAKVBA WVYKA Z WĄGROWCA THEOLOGA SOCIETATIS IESV. Z DOZWOLENIEM STOLICE APOSTOLSKIEY, a nakłádem Ieº M. Kśiędzá Arcybiskupá Gniéźnieńskiégo, etć. wydáné. Transcrypcja typu B",
+//        bible = "wujek_b",
+//        chapter = "Rozdział",
+//        books = mutableListOf())
 
     @Transient
-    var secondBible: Bible? = Bible(
-        title = "Biblia Jakuba Wujka, B",
-        subtitle = "Wedłvg łacińskiego przekłádu stárègo, w kościele powszechnym przyiętègo, ná Polski ięzyk z nowu z pilnośćią przełożonè, Z DOKŁADANIEM TEXTV ZYDOWSKIEGO y Gréckiégo, y z wykłádem Kátholickim trudnieyszych mieysc, do obrony Wiáry świętéy powszechnéy przeciw kácérztwóm tych czásów należących",
-        lang = Language.Polish.isoFormat,
-        language = Language.Polish.name,
-        source = "https://github.com/poteznytomista/bibliothecasancta/tree/main/bibles",
-        transcription = "PRZEZ D. JAKVBA WVYKA Z WĄGROWCA THEOLOGA SOCIETATIS IESV. Z DOZWOLENIEM STOLICE APOSTOLSKIEY, a nakłádem Ieº M. Kśiędzá Arcybiskupá Gniéźnieńskiégo, etć. wydáné. Transcrypcja typu B",
-        bible = "wujek_b",
-        chapter = "Rozdział",
-        books = mutableListOf())
-    @Transient
-    var bibles = mutableListOf<Bible>(firstBible as Bible, secondBible as Bible)
+    val allBibles = biblesList()
 
     fun addExternalPrayerModificationListener(prayer: Prayer) {
         synchronized(sharedSetingsSync) {
@@ -214,6 +234,8 @@ data class Config(
         showNumbers = getShowNumbersPref()
         todayAndNow = getTodayAndNowPref()
         biblePlan = getBiblePlanPref()
+        firstBible = getFirstBiblePref()
+        secondBible = getSecondBiblePref()
         loadSubstitutions()
         loadDailyPrayers()
         loadFavorites()
@@ -365,6 +387,12 @@ data class Config(
     private fun getBiblePlanPref(): Boolean =
         getPref(BIBLEPLAN_PROP_KEY.name, biblePlan)
 
+    private fun getFirstBiblePref(): String =
+        getPref(FIRSTBIBLE_PROP_KEY.name, firstBible ?: FIRSTBIBLE_DEF)
+
+    private fun getSecondBiblePref(): String =
+        getPref(SECONDBIBLE_PROP_KEY.name, secondBible ?: SECONDBIBLE_DEF)
+
     private fun getPrayerLangPref(): String =
         getPref(PRAYERLANG_PROP_KEY.name, prayerLang)
 
@@ -399,6 +427,8 @@ data class Config(
         saveShowNumbers(showNumbers)
         saveTodayAndNow(todayAndNow)
         saveBiblePlan(biblePlan)
+        saveFirstBible(firstBible)
+        saveSecondBible(secondBible)
         saveSubstitutions()
         saveDailyPrayers()
         saveFavorites()
@@ -472,6 +502,16 @@ data class Config(
     fun saveBiblePlan(pref: Boolean) {
         biblePlan = pref
         setPref(BIBLEPLAN_PROP_KEY.name, biblePlan)
+    }
+
+    fun saveFirstBible(pref: String?) {
+        firstBible = pref
+        setPref(FIRSTBIBLE_PROP_KEY.name, firstBible ?: "none")
+    }
+
+    fun saveSecondBible(pref: String?) {
+        secondBible = pref
+        setPref(SECONDBIBLE_PROP_KEY.name, secondBible ?: "none")
     }
 
     fun saveFontScale(scale: Float) {
