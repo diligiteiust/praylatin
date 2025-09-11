@@ -61,7 +61,7 @@ fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
 }
 
 inline fun <reified T> loadContent(path: String): T {
-    println("Loading content from: $path")
+    //println("Loading content from: $path")
     val yamlContent = defaultAssetFileProvider.get(path).buffer().readUtf8()
     val yaml = Yaml(configuration = Yaml.default.configuration.copy(
         strictMode = false,

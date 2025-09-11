@@ -69,6 +69,7 @@ fun PrayerListItem(
 
     contentItem.darker = contentItem.content.prayedToday()
             && (contentItem.tag == dailyPrayersStr || contentItem.tag == todayAndNowStr)
+    //println("Rendering prayer ${contentItem.content.name}, darker: ${contentItem.darker}")
 
     var backgroundColor by remember { mutableStateOf( if (contentItem.darker) { darkerSurface } else { normalSurface} ) }
     var textColor by remember { mutableStateOf( if (contentItem.darker) { Gray600 } else { onBackground } ) }

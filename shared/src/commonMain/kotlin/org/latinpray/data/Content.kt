@@ -49,6 +49,7 @@ abstract class Content(
     @OptIn(ExperimentalTime::class)
     fun prayedToday(): Boolean {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        //println("name: $name, today: $today, lastRecorded: ${nums.lastRecorded}")
         return nums.lastRecorded.daysUntil(today) <= 0
     }
 
