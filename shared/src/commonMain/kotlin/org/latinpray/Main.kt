@@ -35,14 +35,17 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
+import org.latinpray.data.ReadingPlan
 import org.latinpray.data.offers
 import org.latinpray.data.privacy
 import org.latinpray.data.terms
+import org.latinpray.io.loadContent
 import org.latinpray.io.prayersList
 import org.latinpray.io.readConfigFromAssets
 import org.latinpray.io.readFileFromAssets
 import org.latinpray.loc.LocalizedApp
 import org.latinpray.shared.Res
+import org.latinpray.shared.bible_settings_title
 import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.prayers_screen_title
 import org.latinpray.shared.settings_screen_title
@@ -51,16 +54,13 @@ import org.latinpray.theme.TABLET_CONTENT_FONT_FACTOR
 import org.latinpray.theme.TABLET_HEADLINE_FONT_FACTOR
 import org.latinpray.theme.TABLET_UI_FONT_FACTOR
 import org.latinpray.ui.AboutScreen
+import org.latinpray.ui.BibleSettings
 import org.latinpray.ui.ContentItem
 import org.latinpray.ui.HelpScreen
 import org.latinpray.ui.MainScreens
 import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
-import org.latinpray.data.ReadingPlan
-import org.latinpray.io.loadContent
-import org.latinpray.shared.bible_settings_title
-import org.latinpray.ui.BibleSettings
 
 fun loadLocalizedContent(file: String, lang: String): String {
     val f = file.substringBefore('.') + '-' + lang + "." + file.substringAfter('.')
@@ -130,23 +130,23 @@ fun Main() {
         //println("Loaded reading plan")
         //currentPrayer = prayers.first()
         //if (getPlatform().isIOS) {
-            Purchases.sharedInstance.getOfferings(
-                onError = { error ->
-                    // An error occurred
-                    println("Error: $error")
-                    //Text(text = "Error: $error")
-                },
-                onSuccess = { offerings ->
-                    offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let { it ->
-                        offers = it
-                        println("Offers: $offers")
-                        offers!!.forEach { offer ->
-                            println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
-                        }
-                        // Display packages for sale
+        Purchases.sharedInstance.getOfferings(
+            onError = { error ->
+                // An error occurred
+                println("Error: $error")
+                //Text(text = "Error: $error")
+            },
+            onSuccess = { offerings ->
+                offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let { it ->
+                    offers = it
+                    println("Offers: $offers")
+                    offers!!.forEach { offer ->
+                        println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
                     }
+                    // Display packages for sale
                 }
-            )
+            }
+        )
         //}
     }
 
@@ -178,8 +178,6 @@ fun Main() {
                                 title = stringResource(Res.string.prayers_screen_title),
                                 prayers = prayers,
                                 config = defConfig,
-                                //animatedVisibilityScope = this,
-                                //sharedTransitionScope = sharedTransitionScope,
                                 onClick = { content ->
                                     currentContent = content
                                     navController.navigate(MainScreens.PrayerDetailsScreen.name)
@@ -200,9 +198,11 @@ fun Main() {
                                 startContent = currentContent!!,
                                 config = defConfig,
                                 prayers = prayers,
-                                //animatedContentScope = this,
-                                //sharedTransitionScope = sharedTransitionScope,
-                                goBack = { navController.popBackStack() }
+                                goBack = {
+                                    if (!navController.popBackStack()) {
+                                        navController.navigate(MainScreens.PrayersScreen.name)
+                                    }
+                                }
                             )
                         }
                         composable(route = MainScreens.SettingsScreen.name) {
@@ -210,15 +210,17 @@ fun Main() {
                                 title = stringResource(Res.string.settings_screen_title),
                                 config = defConfig,
                                 goBack = {
-                                            if (reloadPrayersFlag) {
-                                                reloadPrayersFlag = false
-                                                scope.launch {
-                                                    println("Reloading prayers...")
-                                                    prayers = reloadPrayers(defConfig)
-                                                }
-                                            }
-                                            navController.popBackStack()
-                                         },
+                                    if (reloadPrayersFlag) {
+                                        reloadPrayersFlag = false
+                                        scope.launch {
+                                            println("Reloading prayers...")
+                                            prayers = reloadPrayers(defConfig)
+                                        }
+                                    }
+                                    if (!navController.popBackStack()) {
+                                        navController.navigate(MainScreens.PrayersScreen.name)
+                                    }
+                                },
                                 uiLangChange = { config ->
                                     lang = defConfig.uiLang
                                     getPlatform().changeLang(lang)
@@ -247,7 +249,9 @@ fun Main() {
                                             prayers = reloadPrayers(defConfig)
                                         }
                                     }
-                                    navController.popBackStack()
+                                    if (!navController.popBackStack()) {
+                                        navController.navigate(MainScreens.PrayersScreen.name)
+                                    }
                                 },
                                 reloadPrayers = { config ->
                                     reloadPrayersFlag = true
@@ -258,7 +262,11 @@ fun Main() {
                         composable(route = MainScreens.AboutScreen.name) {
                             AboutScreen(
                                 content = aboutContent,
-                                goBack = { navController.popBackStack() },
+                                goBack = {
+                                    if (!navController.popBackStack()) {
+                                        navController.navigate(MainScreens.PrayersScreen.name)
+                                    }
+                                },
                                 sharedTransitionScope = sharedTransitionScope
                             )
                         }
@@ -269,7 +277,11 @@ fun Main() {
                                 config = defConfig,
                                 //animatedContentScope = this,
                                 sharedTransitionScope = sharedTransitionScope,
-                                goBack = { navController.popBackStack() }
+                                goBack = {
+                                    if (!navController.popBackStack()) {
+                                        navController.navigate(MainScreens.PrayersScreen.name)
+                                    }
+                                }
                             )
                         }
                     }

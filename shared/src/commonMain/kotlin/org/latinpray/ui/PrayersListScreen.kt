@@ -49,16 +49,15 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ucasoft.kcron.kotlinx.datetime.plusHours
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
-import org.latinpray.data.Content
 import org.latinpray.data.HIDE_TAG
 import org.latinpray.data.Prayer
 import org.latinpray.data.ReadingPlan
@@ -96,7 +95,7 @@ fun PrayersListScreen(
     val (fraction) = remember { mutableStateOf(0.50f) }
     val expanded: MutableState<Boolean> = remember { mutableStateOf(false) }
     var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
-    var bible: Content? by remember { mutableStateOf(null) }
+    //var bible: Content? by remember { mutableStateOf(null) }
 
     val scope = rememberCoroutineScope()
     scope.launch {
@@ -120,17 +119,17 @@ fun PrayersListScreen(
         }
     }
 
-    if (config.biblePlan) {
-        scope.launch {
-            bible = readingPlan?.bibleForToday(config)
-        }
-    }
+//    if (config.biblePlan) {
+//        scope.launch {
+//            bible = readingPlan?.bibleForToday(config)
+//        }
+//    }
 
     val dailyPrayersStr = stringResource(Res.string.daily_prayers)
     val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
     val todayAndNowStr = stringResource(Res.string.today_and_now)
 
-    val groupedPrayers: MutableList<Any> = remember(prayers, config, currentHour, bible) {
+    val groupedPrayers: MutableList<Any> = remember(prayers, config, currentHour) {
         val gp = mutableListOf<Any>()
         if (config.grouping) {
             val tags = mutableSetOf<String>()
@@ -155,8 +154,11 @@ fun PrayersListScreen(
             if (config.todayAndNow) {
                 gp.add(todayAndNowStr)
                 if (config.biblePlan) {
-                    bible?.let {
-                        gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
+                    runBlocking {
+                        val bible = readingPlan?.bibleForToday(config)
+                        bible?.let {
+                            gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
+                        }
                     }
                 }
                 prayers.forEach { prayer ->
