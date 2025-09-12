@@ -27,7 +27,7 @@ android {
     compileSdk = 36
     defaultConfig {
         applicationId = "org.latinpray.android"
-        minSdk = 28
+        minSdk = 35
         //targetSdk = 35
         versionCode = properties["app.version.code"].toString().toInt()
         versionName = properties["app.version.name"].toString()

@@ -100,7 +100,7 @@ android {
     namespace = "org.latinpray"
     compileSdk = 36
     defaultConfig {
-        minSdk = 28
+        minSdk = 35
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
