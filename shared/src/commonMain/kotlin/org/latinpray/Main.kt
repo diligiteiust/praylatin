@@ -93,7 +93,7 @@ fun Main() {
     //var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var prayers by remember { mutableStateOf(mutableListOf<Prayer>()) }
     var readingPlan: ReadingPlan? by remember { mutableStateOf(null) }
-    var currentContent: ContentItem? = null
+    var currentContent: ContentItem? by remember { mutableStateOf(null) }
     defConfig.prayersChangedCallback = {
         scope.launch {
             //println("Prayers changed")
@@ -194,16 +194,20 @@ fun Main() {
                             )
                         }
                         composable(route = MainScreens.PrayerDetailsScreen.name) {
-                            PrayerDetailsScreen(
-                                startContent = currentContent!!,
-                                config = defConfig,
-                                prayers = prayers,
-                                goBack = {
-                                    if (!navController.popBackStack()) {
-                                        navController.navigate(MainScreens.PrayersScreen.name)
+                            if (currentContent == null) {
+                                navController.navigate(MainScreens.PrayersScreen.name)
+                            } else {
+                                PrayerDetailsScreen(
+                                    startContent = currentContent!!,
+                                    config = defConfig,
+                                    prayers = prayers,
+                                    goBack = {
+                                        if (!navController.popBackStack()) {
+                                            navController.navigate(MainScreens.PrayersScreen.name)
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                         composable(route = MainScreens.SettingsScreen.name) {
                             SettingsScreen(
