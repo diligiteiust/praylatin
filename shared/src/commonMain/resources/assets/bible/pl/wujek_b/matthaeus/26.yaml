@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Matthaeus
 chapter: "26"
+summary:
+  Historya męki Pana Chrystusowej , począwszy od weiścia do rady kapłanów, o poimaniu i wszystkiem
+  aż do trzykroć zaprzenia Piotrowego.
 verses:
   "1": 'I stało się, gdy dokończył Jezus tych wszystkich mów, rzekł uczniom swoim:'
   "2": Wiecie, iż po dwu dniu Pascha będzie, a Syn człowieczy będzie wydan, aby był ukrzyżowan.

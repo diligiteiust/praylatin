@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "1"
+summary:
+  Opisuje majętność Jobowę, rozmowę czartowską z Bogiem, gdzie sobie uprosił majętność Joba 
+  sprawiedliwego. A gdy czart wszystko mu odjął i syny pomordował, Job Pana Boga chwali z tego.
 verses:
   "1": Mąż był w ziemi Hus, imieniem Job, a był to mąż szczery i prosty i bojący się Boga, odstępujący od złego.
   "2": I urodziło mu się siedm synów a trzy córki.

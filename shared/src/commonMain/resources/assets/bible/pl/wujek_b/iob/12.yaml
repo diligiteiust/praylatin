@@ -3,6 +3,8 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "12"
+summary:
+  Okazuje Job swą cierpliwość i moc Bożą, ktemu téż, gdzie ma miejsce mądrość.
 verses:
   "1": 'A Job odpowiadając, rzekł:'
   "2": Toście wy tedy sami ludzi, a z wami umrze mądrość?

@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Matthaeus
 chapter: "27"
+summary:
+  Ostatek Historyi o męce Chrystusowéj, począwszy od przywiedzienia do Piłata aż do pogrzebienia 
+  i potem strzeżenia ciała jego w grobie.
 verses:
   "1": A gdy było rano, weszli w radę wszyscy przedniejsi kapłani i starsi ludu przeciwko Jezusowi, aby go o śmierć przyprawili.
   "2": I związawszy przywiedli go i podali Poncyuszowi Piłatowi, Staroście.

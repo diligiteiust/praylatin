@@ -3,6 +3,8 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "20"
+summary:
+  Szczęśliwość ludzi złych krótka.
 verses:
   "1": 'I odpowiadając Sophar Naamathczyk rzekł:'
   "2": Dlatego myśli moje rozliczne następują jedna za drugą, a myśl się rozrywa.

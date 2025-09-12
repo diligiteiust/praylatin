@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "3"
+summary:
+  Job przeklina dzień narodzenia swego, i żywot niniejszy okazuje być nędzny, 
+  i okazuje, jako wiele złych rzeczy uchodzi, kto z tego świata schodzi.
 verses:
   "1": Potem Job otworzył usta swe i złorzeczył dniowi swemu,
   "2": 'I mówił:'

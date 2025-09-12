@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "17"
+summary:
+  Powiada Job, że cierpliwie oczekawa odpłaty Bożéj,
+  w boleściach ciaia, we frasunku dusze.
 verses:
   "1": 'Duch mój umniejszy się: dni moje się skrócą, a tylko mi grób zostaje.'
   "2": Nie zgrzeszyłem, a w gorzkościach mieszka oko moje.

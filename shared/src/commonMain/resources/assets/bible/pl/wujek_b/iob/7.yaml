@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "7"
+summary:
+  Job powiada, że ludzki żywot jest wielce pracami złożony, a k temu bardzo krótki, przetóż woła do
+  Boga modląc się.
 verses:
   "1": 'Bojowanie jest żywot człowieczy na ziemi: a jako dni najemnicze dni jego.'
   "2": 'Jako niewolnik pragnie cienia, i jako najemnik czeka końca prace swojéj:'

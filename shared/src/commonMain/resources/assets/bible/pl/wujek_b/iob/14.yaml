@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "14"
+summary:
+  Job obaczywszy ułomność człowieczą, dziwuje się dobroci Bożéj przeciw jemu, 
+  że po tym żywocie oczekawa innego, i oznajmia ciał ludzkich zmartwychwstanie.
 verses:
   "1": Człowiek urodzony z niewiasty, żywiąc przez czas krótki, napełnion bywa wielą nędz.
   "2": Który wychodzi jako kwiat i skruszony bywa, a ucieka jako cień i nigdy nie trwa w tymże stanie.

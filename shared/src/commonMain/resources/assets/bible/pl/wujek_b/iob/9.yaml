@@ -3,6 +3,8 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "9"
+summary:
+  Job wypisuje wszechmocność Boską, a że ludzie w sprawiedliwości przyrównani ku Bogu za nic nie stoją.
 verses:
   "1": 'Odpowiadając Job, rzekł:'
   "2": Prawdziwie wiem, iż tak jest, a iż nie będzie usprawiedliwion człowiek przyrównany Bogu.

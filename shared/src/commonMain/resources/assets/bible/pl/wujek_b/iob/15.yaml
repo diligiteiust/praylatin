@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "15"
+summary:
+  Eliphaz Joba strofuje z chluby, że się poczytał być mądrym, a chciał z Bogiem gadać, 
+  opisuje przeklęctwo złych a pokrytych ludzi.
 verses:
   "1": 'A odpowiadając Eliphaz Themańczyk, rzekł:'
   "2": Izali mądry odpowie jakoby na wiatr mówiąc, i napełni gorącością żołądek swój.

@@ -202,6 +202,7 @@ data class Chapter(
     val book: String,
     val chapter: String,
     val verses: MutableMap<String, String>,
+    val summary: String? = null,
     override val links: List<Link>? = null,
     override val notes: String? = null,
     override val tags: Set<String>? = null
@@ -304,6 +305,10 @@ fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicContent: Bible
         }
         if (endIndex > 0) {
             bibleBasicContent.lines.add("### ${bookCont.title}, ${bible.chapter} $chapterNo")
+            chapterCont.summary?.let {
+                bibleBasicContent.lines.add("_${it}_")
+                bibleBasicContent.lines.add("^^^")
+            }
             bibleBasicContent.lines.addAll(
                 chapterCont.lines.subList(startIndex, endIndex)
             )

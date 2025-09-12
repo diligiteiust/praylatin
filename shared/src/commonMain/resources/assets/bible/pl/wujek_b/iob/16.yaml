@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "16"
+summary:
+  Job boleść swą wypowiada a oznajmia, że to cierpi bez winy, 
+  czując się być czystym od wszéj nieprawości.
 verses:
   "1": 'A odpowiadając Job, rzekł:'
   "2": 'Słyszałem często rzeczy takowe: cieszyciele przykrzy jesteście wy wszyscy.'

@@ -3,6 +3,9 @@ lang: pl
 language: Polski
 book: Lucas
 chapter: "23"
+summary:
+  Pan Jezus Piłatowi rano wydan, wypytan, niewinnym nalezion, wszakże Barabasz wypuszczon, 
+  a Pan na śmierć osądzon, ukrzyżowan, nagrawan, umarł, i z krzyża zjęt i pogrzebion.
 verses:
   "1": I powstawszy wszystko ich mnóstwo, wiedli go do Piłata.
   "2": 'I poczęli nań skarżyć, mówiąc: Tegośmy naleźli podwracającego naród nasz, i zakazującego dani dawać Cesarzowi i mówiącego, że on jest Chrystusem królem.'

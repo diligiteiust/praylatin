@@ -3,6 +3,10 @@ lang: pl
 language: Polski
 book: Iob
 chapter: "11"
+summary:
+  Sophar twierdzi to, że Job dla wielu grzechów, które i wylicza, jest od Boga karan, 
+  "okazując Boga być nieogarnionego: obiecując mu téż zaś, jeźli się obaczy a nawróci ku Bogu," 
+  wiele dobrego.
 verses:
   "1": 'A odpowiadając Sophar Naamathczyk, rzekł:'
   "2": Czyli, który wiele mówi, nie będzie słuchał? albo mąż wielomowny będzie usprawiedliwiony?
