@@ -75,6 +75,7 @@ import org.latinpray.data.Content
 import org.latinpray.data.Link
 import org.latinpray.data.Prayer
 import org.latinpray.data.PrayerIntention
+import org.latinpray.data.loadBibleContent
 import org.latinpray.getPlatform
 import org.latinpray.shared.Res
 import org.latinpray.shared.notes
@@ -191,7 +192,15 @@ fun preparePrayer(
                 t = true
                 file = file.substring(1)
             }
-            val subprayer = prayers.find { p -> p.name == file }
+            var subprayer: Content? = prayers.find { p -> p.name == file }
+            if (subprayer == null) {
+                // Maybe Bible content is embedded
+                subprayer = loadBibleContent(file, config)
+                //t = true
+//                if (subprayer != null) {
+//                    prayers.add(subprayer)
+//                }
+            }
             result += if (subprayer != null) {
                 preparePrayer(
                     dispayLang, subprayer, config, prayers,

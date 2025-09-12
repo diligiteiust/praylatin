@@ -140,7 +140,15 @@ data class BookRef(val book: String, val chapter: Int, val verse: Int) {
     }
 }
 
-data class ReadingRange(val start: BookRef, val end: BookRef)
+data class ReadingRange(val start: BookRef, val end: BookRef) {
+    override fun toString(): String {
+        return "${start} - ${end}"
+    }
+
+    fun toString(lang: String): String {
+        return "${start.toString(lang)} - ${end.toString(lang)}"
+    }
+}
 
 @Serializable
 sealed class Reading {
@@ -249,7 +257,30 @@ fun parseRef(ref: String, part: REF_PART): String {
     }
 }
 
-fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicContent: BibleBasicContent) {
+fun parseRange(range: String): ReadingRange {
+    val split = range.trim().split("-")
+    return ReadingRange(
+        start = BookRef(split[0].trim()),
+        end = BookRef(split[1].trim())
+    )
+}
+
+fun rangesToString(ranges: List<ReadingRange>): String {
+    return ranges.joinToString("; ") { it.toString() }
+}
+
+fun rangesToString(lang: String, ranges: List<ReadingRange>): String {
+    return ranges.joinToString("; ") { it.toString(lang) }
+}
+
+
+fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicContent: BibleBasicContent,
+                     addSubtitle: Boolean = false) {
+
+    if (addSubtitle) {
+        bibleBasicContent.lines.add("#### ${range.toString(bible.lang)}")
+    }
+
     val basePath = "${BIBLE_ASSTES}${bible.lang}/${bible.bible}"
     var moreContent = true
     var book = books_abbrev_rev[range.start.book]
@@ -300,7 +331,7 @@ fun loadBibleContent(bible: Bible, range: ReadingRange, bibleBasicContent: Bible
 
 
 fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleContent,
-                             title: String = "") {
+                             title: String = "", addTitle: Boolean = false, addSubtitle: Boolean = false) {
 
     val bibles = mutableListOf<Bible>()
     config.allBibles[config.firstBible]?.let {
@@ -320,9 +351,12 @@ fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleC
             language = bible.language,
             lines = mutableListOf(),
         )
+        if (addTitle) {
+            bibleBasicContent.lines.add("##### ${rangesToString(bible.lang, ranges)}")
+        }
         ranges.forEach { range ->
             try {
-                loadBibleContent(bible, range, bibleBasicContent)
+                loadBibleContent(bible, range, bibleBasicContent, addSubtitle)
             } catch (e: Exception) {
                 println("Error loading bible content: ${bible.lang}/${bible.bible}, range: $range")
                 println("Error loading bible content: ${e.message}")
@@ -330,6 +364,33 @@ fun loadBibleContent(config: Config, ranges: List<ReadingRange>, content: BibleC
         }
         content.langs[bible.getName()] = bibleBasicContent
     }
+}
+
+fun loadBibleContent(ranges: String, config: Config): BibleContent? {
+    var result: BibleContent? = null
+    val parsedRanges = mutableListOf<ReadingRange>()
+    ranges.split(";").forEach { range ->
+        var parsedRange: ReadingRange? = null
+        try {
+            parsedRange = parseRange(range)
+        } catch (e: Exception) {
+            println("Error parsing range: $range")
+            println("Error parsing range: ${e.message}")
+        }
+        parsedRange?.let {
+            parsedRanges.add(it)
+        }
+    }
+    if (parsedRanges.isNotEmpty()) {
+        result =  BibleContent(
+            id = 2,
+            name = ranges,
+            langs = mutableMapOf()
+        )
+        loadBibleContent(config, parsedRanges, result, rangesToString(parsedRanges),
+            addTitle = false, addSubtitle = true)
+    }
+    return result
 }
 
 @Serializable
