@@ -36,6 +36,7 @@ import org.latinpray.loc.Language
 import org.latinpray.util.PrayerTime
 import org.latinpray.util.calcPrayerTime
 import kotlin.time.ExperimentalTime
+import kotlinx.atomicfu.locks.reentrantLock
 
 const val FIRSTBIBLE_DEF = "English - Douay-Rheims Bible"
 const val SECONDBIBLE_DEF = "Latina - Biblia Sacra Vulgata"
@@ -256,10 +257,21 @@ data class Config(
         return result
     }
 
+    @Transient
+    val lock = reentrantLock()
     fun externalModification() {
         //println("External modification")
-        loadConfigProps()
-        prayersChangedCallback()
+        if (lock.tryLock()) {
+            println("External modification")
+            try {
+                loadConfigProps()
+                prayersChangedCallback()
+            } finally {
+                lock.unlock()
+            }
+        } else {
+            println("External modification locked")
+        }
     }
 
     private fun getPref(key: String, def: Boolean): Boolean {
