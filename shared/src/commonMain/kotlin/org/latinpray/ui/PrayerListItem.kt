@@ -82,15 +82,14 @@ fun PrayerListItem(
     }
 
     if (contentItem.tag == dailyPrayersStr || contentItem.tag == todayAndNowStr) {
-        contentItem.content.addExternalChangeListener {
-            updateColors()
+        val scope = rememberCoroutineScope()
+        scope.launch {
+            contentItem.content.addExternalChangeListener {
+                updateColors()
 //            prayerItem.darker = prayerItem.prayer.prayedToday()
 //            backgroundColor = if (prayerItem.darker) { darkerSurface } else { normalSurface }
 //            textColor = if (prayerItem.darker) { Gray600 } else { onBackground }
-        }
-
-        val scope = rememberCoroutineScope()
-        scope.launch {
+            }
             while (true) {
                 delay(untilNextFullHour(contentItem.content.name))
                 val now = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())

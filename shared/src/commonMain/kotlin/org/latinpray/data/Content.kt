@@ -15,13 +15,16 @@
 
 package org.latinpray.data
 
+import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Transient
-import kotlin.time.ExperimentalTime
 import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 interface BssicContent {
     val title: String
@@ -35,16 +38,23 @@ interface BssicContent {
 
 abstract class Content(
     var nums: ContentNums = ContentNums(
-        lastRecorded = LocalDate(1970, 1,1),
+        lastRecorded = LocalDate(1970, 1, 1),
         totalNum = 0,
         inrowNum = 0
     )
-)  {
+) {
     abstract val id: Int
     abstract val name: String
     abstract val langs: MutableMap<String, BssicContent>
+
     @Transient
     var externalChangeListeners = ArrayList<() -> Unit>()
+
+    @Transient
+    val mutex = Mutex()
+
+    @Transient
+    val lock = reentrantLock()
 
     @OptIn(ExperimentalTime::class)
     fun prayedToday(): Boolean {
@@ -53,14 +63,22 @@ abstract class Content(
         return nums.lastRecorded.daysUntil(today) <= 0
     }
 
-    fun addExternalChangeListener(listener: () -> Unit) {
-        externalChangeListeners.add(listener)
+    suspend fun addExternalChangeListener(listener: () -> Unit) {
+        mutex.withLock {
+            externalChangeListeners.add(listener)
+        }
     }
 
     fun externalChange(prNums: ContentNums) {
-        nums = prNums
-        externalChangeListeners.forEach { listener ->
-            listener()
+        if (lock.tryLock()) {
+            try {
+                nums = prNums
+                externalChangeListeners.forEach { listener ->
+                    listener()
+                }
+            } finally {
+                lock.unlock()
+            }
         }
     }
 
