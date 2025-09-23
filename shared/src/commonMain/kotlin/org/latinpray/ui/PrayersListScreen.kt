@@ -179,8 +179,9 @@ fun PrayersListScreen(
                     prayers.firstOrNull { it.name == prayer }?.let {
                         val contItem = ContentItem(it, it.prayedToday(), dailyPrayersStr)
                         gp.add(contItem)
-                        if (lastPr != null)
-                            lastPr!!.nextContent = contItem
+                        lastPr?.let {
+                            it.nextContent = contItem
+                        }
                         contItem.prevContent = lastPr
                         lastPr = contItem
                     }

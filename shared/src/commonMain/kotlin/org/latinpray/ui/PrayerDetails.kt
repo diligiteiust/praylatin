@@ -487,13 +487,13 @@ fun ContentDetails(
             if (contentItem.prevContent != null || contentItem.nextContent != null) {
                 val navColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.5f)
                 Row() {
-                    if (contentItem.prevContent != null) {
+                    contentItem.prevContent?.let { prevItem ->
                         //println("PrayerDetails prevPrayer != null - before previous, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                         TextButton(
                             onClick = {
                                 //currentPrayer = currentPrayer.prevPrayer!!
                                 //println("PrayerDetails onClick previous, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
-                                prayerChangedCallback(contentItem.prevContent!!)
+                                prayerChangedCallback(prevItem)
                                 savedScrollPosition = 0
 //                                endProcessed = false
 //                                coroutineScope.launch {
@@ -513,7 +513,7 @@ fun ContentDetails(
                             Text(
                                 text = getTitle(
                                     displayLang,
-                                    contentItem.prevContent!!.content,
+                                    prevItem.content,
                                     config,
                                     MAX_LEN
                                 ),
@@ -521,14 +521,14 @@ fun ContentDetails(
                             )
                         }
                     }
-                    if (contentItem.nextContent != null) {
+                    contentItem.nextContent?.let { nextItem ->
                         //println("PrayerDetails nextPrayer != null - before next, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                         Spacer(Modifier.weight(1f))
                         TextButton(
                             onClick = {
                                 //currentPrayer = currentPrayer.nextPrayer!!
                                 //println("PrayerDetails onClick next, prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
-                                prayerChangedCallback(contentItem.nextContent!!)
+                                prayerChangedCallback(nextItem)
                                 savedScrollPosition = 0
 //                                endProcessed = false
 //                                coroutineScope.launch {
@@ -541,7 +541,7 @@ fun ContentDetails(
                             Text(
                                 text = getTitle(
                                     displayLang,
-                                    contentItem.nextContent!!.content,
+                                    nextItem.content,
                                     config,
                                     MAX_LEN
                                 ),
