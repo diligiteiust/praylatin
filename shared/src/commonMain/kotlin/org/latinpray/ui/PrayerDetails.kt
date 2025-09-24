@@ -46,6 +46,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -53,6 +56,10 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.withSaveLayer
 import com.mikepenz.markdown.annotator.annotatorSettings
 import com.mikepenz.markdown.annotator.buildMarkdownAnnotatedString
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
@@ -376,7 +383,7 @@ fun ContentDetails(
     //println("PrayerDetails, $intenTotalNum, $intenInrowNum")
     //var currentPrayer by remember { mutableStateOf( prayer) }
     val notesRes = stringResource(Res.string.notes)
-
+    val contentColor = MaterialTheme.colorScheme.onBackground
 
     //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
     key(changed) {
@@ -385,13 +392,22 @@ fun ContentDetails(
         //println("PrayerDetails - after preparePrayer for  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
         Column(
             modifier = Modifier.fillMaxSize()
+                .drawWithCache {
+                    val colFilter = ColorFilter.tint(contentColor)
+                    val rect = Rect(offset = Offset.Zero, size = size)
+                    val paint = Paint()
+                    paint.colorFilter = colFilter
+                    onDrawWithContent {
+                        drawIntoCanvas { canvas ->
+                            canvas.withSaveLayer(rect, paint) { drawContent() }
+                        }
+                    }
+                }
         ) {
-//            Box(
-//                modifier = Modifier.fillMaxWidth()
-//            ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
+                    .padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp)
+                        ,
                 contentAlignment = Alignment.TopCenter
             ) {
                 Column(
@@ -438,7 +454,6 @@ fun ContentDetails(
                     }
                 }
             }
-//            }
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 val margins = maxWidth * 0.04f
                 MAX_LEN = ((dpToPx(maxWidth) / textWidth) / 2.3).toInt()
@@ -460,7 +475,8 @@ fun ContentDetails(
                         link = MaterialTheme.typography.labelMedium
                     ),
                     modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
-                        .background(color = MaterialTheme.colorScheme.background),
+                        .background(color = MaterialTheme.colorScheme.background)
+                    ,
                     //.verticalScroll(scrollState),
                     components = markdownComponents(
                         paragraph = customParagraphComponent,
