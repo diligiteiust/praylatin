@@ -396,7 +396,6 @@ fun ContentDetails(
                     val rect = Rect(offset = Offset.Zero, size = size)
                     val paint = Paint()
                     paint.colorFilter = colFilter
-                    paint.alpha = 0.99f
                     onDrawWithContent {
                         drawIntoCanvas { canvas ->
                             canvas.withSaveLayer(rect, paint) { drawContent() }
