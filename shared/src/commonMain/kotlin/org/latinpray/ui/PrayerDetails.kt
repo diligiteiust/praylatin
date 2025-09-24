@@ -15,7 +15,6 @@
 
 package org.latinpray.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -397,6 +396,7 @@ fun ContentDetails(
                     val rect = Rect(offset = Offset.Zero, size = size)
                     val paint = Paint()
                     paint.colorFilter = colFilter
+                    paint.alpha = 0.99f
                     onDrawWithContent {
                         drawIntoCanvas { canvas ->
                             canvas.withSaveLayer(rect, paint) { drawContent() }
@@ -475,7 +475,7 @@ fun ContentDetails(
                         link = MaterialTheme.typography.labelMedium
                     ),
                     modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
-                        .background(color = MaterialTheme.colorScheme.background)
+                        //.background(color = MaterialTheme.colorScheme.background)
                     ,
                     //.verticalScroll(scrollState),
                     components = markdownComponents(
