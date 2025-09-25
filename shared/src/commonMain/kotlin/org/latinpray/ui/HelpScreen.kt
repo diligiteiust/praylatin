@@ -136,7 +136,7 @@ fun HelpScreen(
                     quote = MaterialTheme.typography.bodySmall,
                     h2 = MaterialTheme.typography.titleMedium,
                     h3 = MaterialTheme.typography.titleSmall,
-                    link = MaterialTheme.typography.labelMedium
+                    //link = MaterialTheme.typography.labelMedium
                 ),
                 modifier = Modifier.fillMaxWidth().padding(8.dp)
                     .background(color = MaterialTheme.colorScheme.background),

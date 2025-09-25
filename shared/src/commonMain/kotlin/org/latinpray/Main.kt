@@ -31,11 +31,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.revenuecat.purchases.kmp.Purchases
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
+import org.latinpray.data.HIDE_TAG
 import org.latinpray.data.Prayer
 import org.latinpray.data.ReadingPlan
+import org.latinpray.data.allTags
 import org.latinpray.data.offers
 import org.latinpray.data.privacy
 import org.latinpray.data.terms
@@ -46,9 +52,12 @@ import org.latinpray.io.readFileFromAssets
 import org.latinpray.loc.LocalizedApp
 import org.latinpray.shared.Res
 import org.latinpray.shared.bible_settings_title
+import org.latinpray.shared.daily_prayers
+import org.latinpray.shared.favorite_prayers
 import org.latinpray.shared.help_screen_title
 import org.latinpray.shared.prayers_screen_title
 import org.latinpray.shared.settings_screen_title
+import org.latinpray.shared.today_and_now
 import org.latinpray.theme.AppTheme
 import org.latinpray.theme.TABLET_CONTENT_FONT_FACTOR
 import org.latinpray.theme.TABLET_HEADLINE_FONT_FACTOR
@@ -58,9 +67,13 @@ import org.latinpray.ui.BibleSettings
 import org.latinpray.ui.ContentItem
 import org.latinpray.ui.HelpScreen
 import org.latinpray.ui.MainScreens
+import org.latinpray.ui.OnResume
 import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
+import org.latinpray.ui.untilNextFullHour
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 fun loadLocalizedContent(file: String, lang: String): String {
     val f = file.substringBefore('.') + '-' + lang + "." + file.substringAfter('.')
@@ -74,12 +87,13 @@ fun loadLocalizedContent(file: String, lang: String): String {
 
 fun reloadPrayers(config: Config): MutableList<Prayer> {
     //println("Reloading prayers...")
-    return prayersList(mutableListOf<Prayer>(), config).sortedBy { prayer ->
+    val result = prayersList(mutableListOf<Prayer>(), config).sortedBy { prayer ->
         prayer.langs[config.prayerLang]?.title
     }.toMutableList()
+    return result
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalTime::class)
 @Composable
 fun Main() {
     //println("Main")
@@ -150,6 +164,123 @@ fun Main() {
         //}
     }
 
+    var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
+    scope.launch {
+        while (true) {
+            delay(untilNextFullHour("Prayers List"))
+            val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            //println("Checking time: ${now.hour}, previous: ${currentHour}")
+            if (now.hour != currentHour) {
+                currentHour = now.hour
+                //println("New time: ${currentHour}")
+            }
+        }
+    }
+
+    OnResume {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        //println("OnResume, Checking time: ${now.hour}, previous: ${currentHour}")
+        if (now.hour != currentHour) {
+            currentHour = now.hour
+            //println("OnResume, New time: ${currentHour}")
+        }
+    }
+    val dailyPrayersStr = stringResource(Res.string.daily_prayers)
+    val favoritePrayersStr = stringResource(Res.string.favorite_prayers)
+    val todayAndNowStr = stringResource(Res.string.today_and_now)
+
+
+    val groupedPrayers: MutableList<Any> = remember(prayers, defConfig, currentHour) {
+        val gp = mutableListOf<Any>()
+        if (defConfig.grouping) {
+            val tags = mutableSetOf<String>()
+            prayers.forEach { prayer ->
+                if ((prayer.langs[defConfig.prayerLang] != null && prayer.langs[defConfig.prayerLang]?.tags != null)
+                    || (prayer.langs[defConfig.secondLang] != null && prayer.langs[defConfig.secondLang]?.tags != null)
+                ) {
+                    val tmp_tags = mutableSetOf<String>()
+                    if (prayer.langs[defConfig.prayerLang]?.tags != null) {
+                        tmp_tags.addAll(prayer.langs[defConfig.prayerLang]?.tags!!)
+                    } else if (prayer.langs[defConfig.secondLang]?.tags != null) {
+                        tmp_tags.addAll(prayer.langs[defConfig.secondLang]?.tags!!)
+                    }
+
+                    tmp_tags.forEach { tag ->
+                        tags.add(allTags.getTagForLanguage(defConfig.uiLang, tag))
+                    }
+                    //tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
+                }
+            }
+            tags.remove(HIDE_TAG)
+            if (defConfig.todayAndNow) {
+                gp.add(todayAndNowStr)
+                if (defConfig.biblePlan) {
+                    runBlocking {
+                        val bible = readingPlan?.bibleForToday(defConfig)
+                        bible?.let {
+                            gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
+                        }
+                    }
+                }
+                prayers.forEach { prayer ->
+                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
+                    if ((prayer.langs[defConfig.prayerLang] != null || prayer.langs[defConfig.secondLang] != null)
+                        && prayer.isTodayAndNow(currentHour)
+                    ) {
+                        gp.add(ContentItem(prayer, prayer.prayedToday(), todayAndNowStr))
+                        //println("Added 1st prayer ${prayer.name} to group: $tag")
+                    }
+                }
+
+            }
+            if (defConfig.dailyPrayers.isNotEmpty()) {
+                gp.add(dailyPrayersStr)
+                var lastPr: ContentItem? = null
+                defConfig.dailyPrayers.forEach { prayer ->
+                    prayers.firstOrNull { it.name == prayer }?.let { pr ->
+                        val contItem = ContentItem(pr, pr.prayedToday(), dailyPrayersStr)
+                        lastPr?.let { lPr ->
+                            lPr.nextContent = contItem
+                            contItem.prevContent = lPr
+                        }
+                        lastPr = contItem
+                        gp.add(contItem)
+                    }
+                }
+            }
+            if (defConfig.favorites.isNotEmpty()) {
+                gp.add(favoritePrayersStr)
+                defConfig.favorites.forEach { prayer ->
+                    prayers.firstOrNull { it.name == prayer }?.let {
+                        gp.add(ContentItem(it, false, favoritePrayersStr))
+                    }
+                }
+            }
+            tags.sorted().forEach { tag ->
+                gp.add(tag)
+                prayers.forEach { prayer ->
+                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
+                    if ((prayer.langs[defConfig.prayerLang] != null)
+                        && (prayer.langs[defConfig.prayerLang]?.tags?.contains(allTags.getTagForLanguage(defConfig.prayerLang, tag)) == true)
+                        && (prayer.langs[defConfig.prayerLang]?.tags?.contains(HIDE_TAG) == false)
+                    ) {
+                        gp.add(ContentItem(prayer, false, tag))
+                        //println("Added 1st prayer ${prayer.name} to group: $tag")
+                    } else if ((prayer.langs[defConfig.secondLang] != null)
+                        && (prayer.langs[defConfig.secondLang]?.tags?.contains(allTags.getTagForLanguage(defConfig.secondLang, tag)) == true)
+                        && prayer.langs[defConfig.secondLang]?.tags?.contains(HIDE_TAG) == false
+                    ) {
+                        gp.add(ContentItem(prayer, false, tag))
+                        //println("Added 2nd prayer ${prayer.name} to group: $tag")
+                    }
+                }
+            }
+            gp
+        } else {
+            prayers.toMutableList()
+        }
+    }
+
     val uiFontFactor = if (getPlatform().isTablet()) TABLET_UI_FONT_FACTOR else 1.0f
     val headlineFontFactor = if (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
     val contentFontFactor = if (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
@@ -179,10 +310,14 @@ fun Main() {
                                 prayers = prayers,
                                 config = defConfig,
                                 onClick = { content ->
+                                    //println("\n\nClicked prayer")
                                     currentContent = content
+                                    //println("Selected prayer")
+                                    //println("Selected prayer: ${content.content.name}")
                                     navController.navigate(MainScreens.PrayerDetailsScreen.name)
                                 },
                                 navController = navController,
+                                groupedPrayers = groupedPrayers,
                                 fontChange = { scale ->
                                     fontScale += scale
                                     scope.launch {
@@ -197,6 +332,7 @@ fun Main() {
                             if (currentContent == null) {
                                 navController.navigate(MainScreens.PrayersScreen.name)
                             } else {
+                                //println("Prayer details screen: ${currentContent?.content?.name}")
                                 PrayerDetailsScreen(
                                     startContent = currentContent!!,
                                     config = defConfig,
@@ -217,7 +353,7 @@ fun Main() {
                                     if (reloadPrayersFlag) {
                                         reloadPrayersFlag = false
                                         scope.launch {
-                                            println("Reloading prayers...")
+                                            //println("Reloading prayers...")
                                             prayers = reloadPrayers(defConfig)
                                         }
                                     }
@@ -237,7 +373,7 @@ fun Main() {
                                 reloadPrayers = { config ->
                                     //defConfig = config
                                     reloadPrayersFlag = true
-                                    println("Reload prayers flag set to true...")
+                                    //println("Reload prayers flag set to true...")
                                 }
                             )
                         }
@@ -249,7 +385,7 @@ fun Main() {
                                     if (reloadPrayersFlag) {
                                         reloadPrayersFlag = false
                                         scope.launch {
-                                            println("Reloading prayers...")
+                                            //println("Reloading prayers...")
                                             prayers = reloadPrayers(defConfig)
                                         }
                                     }
@@ -259,7 +395,7 @@ fun Main() {
                                 },
                                 reloadPrayers = { config ->
                                     reloadPrayersFlag = true
-                                    println("Reload prayers flag set to true...")
+                                    //println("Reload prayers flag set to true...")
                                 }
                             )
                         }

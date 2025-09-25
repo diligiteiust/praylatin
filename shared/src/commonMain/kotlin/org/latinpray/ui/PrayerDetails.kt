@@ -350,7 +350,7 @@ fun MyMarkdownSuccess(
                 node,
                 components,
                 state.content,
-                skipLinkDefinition = state.linksLookedUp
+                //skipLinkDefinition = state.linksLookedUp
             )
         }
     }
@@ -471,7 +471,7 @@ fun ContentDetails(
                         quote = MaterialTheme.typography.bodySmall,
                         h2 = MaterialTheme.typography.titleMedium,
                         h3 = MaterialTheme.typography.titleSmall,
-                        link = MaterialTheme.typography.labelMedium
+                        //link = MaterialTheme.typography.labelMedium
                     ),
                     modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
                         //.background(color = MaterialTheme.colorScheme.background)

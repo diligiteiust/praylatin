@@ -54,7 +54,8 @@ fun AppTheme(
 //            secondary = Color(0xdbceb4),
 //            tertiary = Color(0xcbb893),
             background = Gray900,
-            onBackground = Gray400,
+            //onBackground = Gray400,
+            onBackground = GoldenLightGrey,
 //            surface = Color(0x312917),
 //            onSurface = Color(0xf0ebe0),
 //            onPrimary = Color(0x312917),
@@ -73,8 +74,8 @@ fun AppTheme(
 //            tertiary = Color(0x211b0f),
             onTertiary = Blue900,
 //
-//            background = Color(0xf0ebe0),
-//            onBackground = Color(0x312917),
+            background = GoldenWhite,
+            onBackground = GoldenDarkGrey,
 //
 //            surface = Color(0xf0ebe0),
 //            onSurface = Color(0x312917),
@@ -89,7 +90,7 @@ fun AppTheme(
 //            inverseSurface = Color(0xf0ebe0),
 //            inverseOnSurface = Color(0x312917),
 //            inversePrimary = Color(0xf0ebe0),
-//            surfaceVariant = Color(0xdbceb4),
+            surfaceVariant = GoldenLightGrey,
 //            onSurfaceVariant = Color(0x473b22),
 //            surfaceTint = Color(0x312917),
         )

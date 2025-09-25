@@ -318,6 +318,7 @@ fun PrayerDetailsScreen(
     prayers: MutableList<Prayer>,
     goBack: () -> Unit,
 ) {
+    //println("PrayerDetailsScreen - initialization")
     var contentItem by remember { mutableStateOf(startContent) }
     var prayer: Prayer? by remember { mutableStateOf(null) }
     prayer = contentItem.content as? Prayer
@@ -388,6 +389,8 @@ fun PrayerDetailsScreen(
             prayerIntentions = prayerIntentions
         )
     }
+
+    //println("PrayerDetailsScreen - drawing")
 
     Column(
         modifier = Modifier
