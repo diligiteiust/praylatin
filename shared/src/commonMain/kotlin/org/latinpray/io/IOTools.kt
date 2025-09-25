@@ -21,14 +21,13 @@ import com.charleskorn.kaml.Yaml
 import com.ucasoft.kcron.Cron
 import com.ucasoft.kcron.core.builders.DelicateIterableApi
 import com.ucasoft.kcron.core.common.WeekDays
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.decodeFromString
 import okio.buffer
 import org.latinpray.data.BasicPrayer
 import org.latinpray.data.Bible
 import org.latinpray.data.Config
 import org.latinpray.data.Prayer
-import org.latinpray.data.loadBibleContent
-import org.latinpray.loc.Language
 import org.latinpray.loc.getLanguage
 
 val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
@@ -80,7 +79,7 @@ fun readConfigFromAssets(assetsFile: String): Config {
 }
 
 @OptIn(DelicateIterableApi::class)
-fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {
+suspend fun prayersList(scope: CoroutineScope, initialPrayers: MutableList<Prayer>, config: Config): MutableList<Prayer>  {
     val prayers = emptyMap<String, Prayer>().toMutableMap()
     initialPrayers.forEach { prayer ->
         //println("initial prayer: ${prayer.name}")
@@ -108,7 +107,7 @@ fun prayersList(initialPrayers: MutableList<Prayer>, config: Config): MutableLis
                 //println("Creating new prayer $name")
                 prayer = Prayer(i++, name, mutableMapOf(basicPrayer.lang to basicPrayer))
                 prayer.nums = config.loadContentNums(prayer)
-                config.addExternalPrayerModificationListener(prayer)
+                config.addExternalPrayerModificationListener(scope, prayer)
                 //println("Loaded prayer nums: ${prayer.name} - ${prayer.nums}")
                 prayers[name] = prayer
             }

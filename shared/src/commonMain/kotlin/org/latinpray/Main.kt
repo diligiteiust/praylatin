@@ -31,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.revenuecat.purchases.kmp.Purchases
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -85,9 +86,9 @@ fun loadLocalizedContent(file: String, lang: String): String {
     }
 }
 
-fun reloadPrayers(config: Config): MutableList<Prayer> {
+suspend fun reloadPrayers(scope: CoroutineScope, config: Config): MutableList<Prayer> {
     //println("Reloading prayers...")
-    val result = prayersList(mutableListOf<Prayer>(), config).sortedBy { prayer ->
+    val result = prayersList(scope, mutableListOf<Prayer>(), config).sortedBy { prayer ->
         prayer.langs[config.prayerLang]?.title
     }.toMutableList()
     return result
@@ -111,7 +112,7 @@ fun Main() {
     defConfig.prayersChangedCallback = {
         scope.launch {
             //println("Prayers changed")
-            prayers = reloadPrayers(defConfig)
+            prayers = reloadPrayers(scope, defConfig)
             //currentPrayer = prayers.first()
         }
     }
@@ -134,7 +135,7 @@ fun Main() {
         aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
         privacy = readFileFromAssets("assets/privacy.md")
         terms = readFileFromAssets("assets/terms.md")
-        prayers = prayersList(prayers, defConfig).sortedBy { prayer ->
+        prayers = prayersList(scope, prayers, defConfig).sortedBy { prayer ->
             prayer.langs[defConfig.prayerLang]?.title
         }.toMutableList()
         println("Loaded ${prayers.size} prayers")
@@ -354,7 +355,7 @@ fun Main() {
                                         reloadPrayersFlag = false
                                         scope.launch {
                                             //println("Reloading prayers...")
-                                            prayers = reloadPrayers(defConfig)
+                                            prayers = reloadPrayers(scope, defConfig)
                                         }
                                     }
                                     if (!navController.popBackStack()) {
@@ -386,7 +387,7 @@ fun Main() {
                                         reloadPrayersFlag = false
                                         scope.launch {
                                             //println("Reloading prayers...")
-                                            prayers = reloadPrayers(defConfig)
+                                            prayers = reloadPrayers(scope, defConfig)
                                         }
                                     }
                                     if (!navController.popBackStack()) {

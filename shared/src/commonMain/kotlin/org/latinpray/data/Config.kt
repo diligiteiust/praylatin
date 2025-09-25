@@ -20,8 +20,6 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
-import kotlinx.atomicfu.locks.SynchronizedObject
-import kotlinx.atomicfu.locks.synchronized
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -37,6 +35,10 @@ import org.latinpray.util.PrayerTime
 import org.latinpray.util.calcPrayerTime
 import kotlin.time.ExperimentalTime
 import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 const val FIRSTBIBLE_DEF = "English - Douay-Rheims Bible"
 const val SECONDBIBLE_DEF = "Latina - Biblia Sacra Vulgata"
@@ -155,7 +157,7 @@ data class Config(
     val sharedSettings: ObservableSettings = createSettings()
 
     @Transient
-    val sharedSetingsSync: SynchronizedObject = SynchronizedObject()
+    val sharedSetingsSync = Mutex()
 
     @Transient
     var prayersChangedCallback: () -> Unit = {}
@@ -207,11 +209,14 @@ data class Config(
     @Transient
     val allBibles = biblesList()
 
-    fun addExternalPrayerModificationListener(prayer: Prayer) {
-        synchronized(sharedSetingsSync) {
-            sharedSettings.addStringListener(prayer.name + PRAYER_NUM_KEY.name, "") {
+    suspend fun addExternalPrayerModificationListener(scope: CoroutineScope, prayer: Prayer) {
+        val extChange: (String) -> Unit = {
+            scope.launch {
                 prayer.externalChange(loadContentNums(prayer))
             }
+        }
+        sharedSetingsSync.withLock {
+            sharedSettings.addStringListener(prayer.name + PRAYER_NUM_KEY.name, "", extChange)
         }
     }
 

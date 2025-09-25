@@ -15,7 +15,6 @@
 
 package org.latinpray.data
 
-import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.LocalDate
@@ -53,8 +52,8 @@ abstract class Content(
     @Transient
     val mutex = Mutex()
 
-    @Transient
-    val lock = reentrantLock()
+//    @Transient
+//    val lock = reentrantLock()
 
     @OptIn(ExperimentalTime::class)
     fun prayedToday(): Boolean {
@@ -69,15 +68,11 @@ abstract class Content(
         }
     }
 
-    fun externalChange(prNums: ContentNums) {
-        if (lock.tryLock()) {
-            try {
-                nums = prNums
-                externalChangeListeners.forEach { listener ->
-                    listener()
-                }
-            } finally {
-                lock.unlock()
+    suspend fun externalChange(prNums: ContentNums) {
+        mutex.withLock {
+            nums = prNums
+            externalChangeListeners.forEach { listener ->
+                listener()
             }
         }
     }
