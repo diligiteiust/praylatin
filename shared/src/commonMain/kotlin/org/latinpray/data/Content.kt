@@ -178,7 +178,7 @@ fun getGrouppedContent(config: Config, prayers: MutableList<Prayer>, readingPlan
                 }
             }
         }
-        println("Returning grouped content ${gp.size}")
+        //println("Returning grouped content ${gp.size}")
         return gp
     } else {
         return prayers.toList()
