@@ -34,15 +34,13 @@ import com.revenuecat.purchases.kmp.Purchases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.Config
-import org.latinpray.data.HIDE_TAG
 import org.latinpray.data.Prayer
 import org.latinpray.data.ReadingPlan
-import org.latinpray.data.allTags
 import org.latinpray.data.offers
 import org.latinpray.data.privacy
 import org.latinpray.data.terms
@@ -73,6 +71,7 @@ import org.latinpray.ui.PrayerDetailsScreen
 import org.latinpray.ui.PrayersListScreen
 import org.latinpray.ui.SettingsScreen
 import org.latinpray.ui.untilNextFullHour
+import org.latinpray.data.getGrouppedContent
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -87,12 +86,15 @@ fun loadLocalizedContent(file: String, lang: String): String {
 }
 
 suspend fun reloadPrayers(scope: CoroutineScope, config: Config): MutableList<Prayer> {
-    //println("Reloading prayers...")
+    println("Reloading prayers...")
     val result = prayersList(scope, mutableListOf<Prayer>(), config).sortedBy { prayer ->
         prayer.langs[config.prayerLang]?.title
     }.toMutableList()
     return result
 }
+
+val mutex = Mutex()
+var initialized = false
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalTime::class)
 @Composable
@@ -107,19 +109,15 @@ fun Main() {
     //println("Loaded config from yaml")
     //var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
     var prayers by remember { mutableStateOf(mutableListOf<Prayer>()) }
+    var reloadPrayersFlag by remember { mutableStateOf(false) }
     var readingPlan: ReadingPlan? by remember { mutableStateOf(null) }
     var currentContent: ContentItem? by remember { mutableStateOf(null) }
-    defConfig.prayersChangedCallback = {
-        scope.launch {
-            //println("Prayers changed")
-            prayers = reloadPrayers(scope, defConfig)
-            //currentPrayer = prayers.first()
-        }
-    }
     var helpContent by remember { mutableStateOf("") }
     var aboutContent by remember { mutableStateOf("") }
     var lang: String by remember { mutableStateOf(defConfig.uiLang) }
     var fontScale by remember { mutableStateOf(defConfig.fontScale) }
+    var uiTheme by remember { mutableStateOf(defConfig.uiTheme) }
+    var allPrayerLangs by remember { mutableStateOf(defConfig.allPrayerLangs) }
 
     //defConfig = readConfigFromAssets("assets/config.yaml")
     defConfig.loadConfigProps()
@@ -129,43 +127,63 @@ fun Main() {
         getPlatform().changeLang(lang)
     }
     fontScale = defConfig.fontScale
+    uiTheme = defConfig.uiTheme
+    val uiFontFactor = if (getPlatform().isTablet()) TABLET_UI_FONT_FACTOR else 1.0f
+    val headlineFontFactor = if (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
+    val contentFontFactor = if (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
 
-    scope.launch {
-        helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
-        aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
-        privacy = readFileFromAssets("assets/privacy.md")
-        terms = readFileFromAssets("assets/terms.md")
-        prayers = prayersList(scope, prayers, defConfig).sortedBy { prayer ->
-            prayer.langs[defConfig.prayerLang]?.title
-        }.toMutableList()
-        println("Loaded ${prayers.size} prayers")
-        //readingPlan = readBibleReadingPlan("assets/bible/annual-plan.yaml", defConfig)
-        readingPlan = loadContent("assets/bible/annual-plan.yaml")
-        println("Loaded reading plan: ${readingPlan?.name}")
-        //println("Loaded reading plan")
-        //currentPrayer = prayers.first()
-        //if (getPlatform().isIOS) {
-        Purchases.sharedInstance.getOfferings(
-            onError = { error ->
-                // An error occurred
-                println("Error: $error")
-                //Text(text = "Error: $error")
-            },
-            onSuccess = { offerings ->
-                offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let { it ->
-                    offers = it
-                    println("Offers: $offers")
-                    offers!!.forEach { offer ->
-                        println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
-                    }
-                    // Display packages for sale
-                }
+    if (!initialized) {
+        initialized = true
+        defConfig.prayersChangedCallback = {
+            scope.launch {
+                //println("Prayers changed")
+                prayers = reloadPrayers(scope, defConfig)
+                //currentPrayer = prayers.first()
             }
-        )
-        //}
+        }
+        scope.launch {
+            helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
+            aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
+            privacy = readFileFromAssets("assets/privacy.md")
+            terms = readFileFromAssets("assets/terms.md")
+            prayers = prayersList(scope, prayers, defConfig).sortedBy { prayer ->
+                prayer.langs[defConfig.prayerLang]?.title
+            }.toMutableList()
+            //println("Loaded ${prayers.size} prayers")
+            allPrayerLangs = defConfig.allPrayerLangs
+
+            //readingPlan = readBibleReadingPlan("assets/bible/annual-plan.yaml", defConfig)
+            readingPlan = loadContent("assets/bible/annual-plan.yaml")
+            //println("Loaded reading plan: ${readingPlan?.name}")
+            //println("Loaded reading plan")
+            //currentPrayer = prayers.first()
+            //if (getPlatform().isIOS) {
+            Purchases.sharedInstance.getOfferings(
+                onError = { error ->
+                    // An error occurred
+                    println("Error: $error")
+                    //Text(text = "Error: $error")
+                },
+                onSuccess = { offerings ->
+                    offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let { it ->
+                        offers = it
+                        println("Offers: $offers")
+                        offers!!.forEach { offer ->
+                            println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
+                        }
+                        // Display packages for sale
+                    }
+                }
+            )
+            //}
+        }
     }
 
-    var currentHour by remember { mutableStateOf(Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour ) }
+    var currentHour by remember {
+        mutableStateOf(
+            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour
+        )
+    }
     scope.launch {
         while (true) {
             delay(untilNextFullHour("Prayers List"))
@@ -191,106 +209,13 @@ fun Main() {
     val todayAndNowStr = stringResource(Res.string.today_and_now)
 
 
-    val groupedPrayers: MutableList<Any> = remember(prayers, defConfig, currentHour) {
-        val gp = mutableListOf<Any>()
-        if (defConfig.grouping) {
-            val tags = mutableSetOf<String>()
-            prayers.forEach { prayer ->
-                if ((prayer.langs[defConfig.prayerLang] != null && prayer.langs[defConfig.prayerLang]?.tags != null)
-                    || (prayer.langs[defConfig.secondLang] != null && prayer.langs[defConfig.secondLang]?.tags != null)
-                ) {
-                    val tmp_tags = mutableSetOf<String>()
-                    if (prayer.langs[defConfig.prayerLang]?.tags != null) {
-                        tmp_tags.addAll(prayer.langs[defConfig.prayerLang]?.tags!!)
-                    } else if (prayer.langs[defConfig.secondLang]?.tags != null) {
-                        tmp_tags.addAll(prayer.langs[defConfig.secondLang]?.tags!!)
-                    }
-
-                    tmp_tags.forEach { tag ->
-                        tags.add(allTags.getTagForLanguage(defConfig.uiLang, tag))
-                    }
-                    //tags.addAll(prayer.langs[config.prayerLang]?.tags!!)
-                }
-            }
-            tags.remove(HIDE_TAG)
-            if (defConfig.todayAndNow) {
-                gp.add(todayAndNowStr)
-                if (defConfig.biblePlan) {
-                    runBlocking {
-                        val bible = readingPlan?.bibleForToday(defConfig)
-                        bible?.let {
-                            gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
-                        }
-                    }
-                }
-                prayers.forEach { prayer ->
-                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
-                    if ((prayer.langs[defConfig.prayerLang] != null || prayer.langs[defConfig.secondLang] != null)
-                        && prayer.isTodayAndNow(currentHour)
-                    ) {
-                        gp.add(ContentItem(prayer, prayer.prayedToday(), todayAndNowStr))
-                        //println("Added 1st prayer ${prayer.name} to group: $tag")
-                    }
-                }
-
-            }
-            if (defConfig.dailyPrayers.isNotEmpty()) {
-                gp.add(dailyPrayersStr)
-                var lastPr: ContentItem? = null
-                defConfig.dailyPrayers.forEach { prayer ->
-                    prayers.firstOrNull { it.name == prayer }?.let { pr ->
-                        val contItem = ContentItem(pr, pr.prayedToday(), dailyPrayersStr)
-                        lastPr?.let { lPr ->
-                            lPr.nextContent = contItem
-                            contItem.prevContent = lPr
-                        }
-                        lastPr = contItem
-                        gp.add(contItem)
-                    }
-                }
-            }
-            if (defConfig.favorites.isNotEmpty()) {
-                gp.add(favoritePrayersStr)
-                defConfig.favorites.forEach { prayer ->
-                    prayers.firstOrNull { it.name == prayer }?.let {
-                        gp.add(ContentItem(it, false, favoritePrayersStr))
-                    }
-                }
-            }
-            tags.sorted().forEach { tag ->
-                gp.add(tag)
-                prayers.forEach { prayer ->
-                    //println("Checking prayer ${prayer.name} for tag $tag with tags ${prayer.langs[config.prayerLang]?.tags} or ${prayer.langs[config.secondLang]?.tags}")
-                    if ((prayer.langs[defConfig.prayerLang] != null)
-                        && (prayer.langs[defConfig.prayerLang]?.tags?.contains(allTags.getTagForLanguage(defConfig.prayerLang, tag)) == true)
-                        && (prayer.langs[defConfig.prayerLang]?.tags?.contains(HIDE_TAG) == false)
-                    ) {
-                        gp.add(ContentItem(prayer, false, tag))
-                        //println("Added 1st prayer ${prayer.name} to group: $tag")
-                    } else if ((prayer.langs[defConfig.secondLang] != null)
-                        && (prayer.langs[defConfig.secondLang]?.tags?.contains(allTags.getTagForLanguage(defConfig.secondLang, tag)) == true)
-                        && prayer.langs[defConfig.secondLang]?.tags?.contains(HIDE_TAG) == false
-                    ) {
-                        gp.add(ContentItem(prayer, false, tag))
-                        //println("Added 2nd prayer ${prayer.name} to group: $tag")
-                    }
-                }
-            }
-            gp
-        } else {
-            prayers.toMutableList()
-        }
-    }
-
-    val uiFontFactor = if (getPlatform().isTablet()) TABLET_UI_FONT_FACTOR else 1.0f
-    val headlineFontFactor = if (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
-    val contentFontFactor = if (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
-    var reloadPrayersFlag = false
+    var groupedContent by remember (prayers, currentHour, lang) { mutableStateOf(getGrouppedContent(defConfig, prayers, readingPlan, currentHour, todayAndNowStr, favoritePrayersStr, dailyPrayersStr)) }
 
     AppTheme(
         uiFontFactor = uiFontFactor * fontScale,
         headlineFontFactor = headlineFontFactor * fontScale,
-        contentFontFactor = contentFontFactor * fontScale
+        contentFontFactor = contentFontFactor * fontScale,
+        theme = uiTheme
     ) {
         LocalizedApp(
             language = lang
@@ -318,7 +243,7 @@ fun Main() {
                                     navController.navigate(MainScreens.PrayerDetailsScreen.name)
                                 },
                                 navController = navController,
-                                groupedPrayers = groupedPrayers,
+                                groupedPrayers = groupedContent,
                                 fontChange = { scale ->
                                     fontScale += scale
                                     scope.launch {
@@ -365,17 +290,21 @@ fun Main() {
                                 uiLangChange = { config ->
                                     lang = defConfig.uiLang
                                     getPlatform().changeLang(lang)
-                                    println("New lang: $lang")
+                                    //println("New lang: $lang")
                                     helpContent =
                                         loadLocalizedContent("assets/help.md", defConfig.uiLang)
                                     aboutContent =
                                         loadLocalizedContent("assets/about.md", defConfig.uiLang)
                                 },
+                                uiThemeChange = { config ->
+                                    uiTheme = defConfig.uiTheme
+                                },
                                 reloadPrayers = { config ->
                                     //defConfig = config
                                     reloadPrayersFlag = true
                                     //println("Reload prayers flag set to true...")
-                                }
+                                },
+                                allPrayerLangs = allPrayerLangs
                             )
                         }
                         composable(route = MainScreens.BibleSettingsScreen.name) {

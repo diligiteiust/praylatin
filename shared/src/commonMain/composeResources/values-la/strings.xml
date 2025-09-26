@@ -50,4 +50,5 @@
     <string name="bible_readingplan_setting">Ratio legendi Bibliam</string>
     <string name="first_bible_setting">Prima Biblia</string>
     <string name="second_bible_setting">Biblia Secunda</string>
+    <string name="settings_ui_colors">Colores</string>
 </resources>

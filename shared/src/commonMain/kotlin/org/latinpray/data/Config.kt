@@ -50,6 +50,7 @@ data class Config(
     var secondLang: String,
     var preferTranslation: Boolean,
     var grouping: Boolean,
+    var uiTheme: String = "Default",
     var fontScale: Float = 1.0f,
     var donation: String? = null,
     var sharedPrefs: Boolean = false,
@@ -84,7 +85,10 @@ data class Config(
     val favorites: MutableList<String> = mutableListOf()
 
     @Transient
-    private val UILANF_PROP_KEY = stringPreferencesKey("uiLang")
+    private val UILANG_PROP_KEY = stringPreferencesKey("uiLang")
+
+    @Transient
+    private val UITHM_PROP_KEY = stringPreferencesKey("uiTheme")
 
     @Transient
     private val PRAYERLANG_PROP_KEY = stringPreferencesKey("prayerLang")
@@ -163,7 +167,7 @@ data class Config(
     var prayersChangedCallback: () -> Unit = {}
         set(value) {
             field = value
-            println("Setting prayers changed callback")
+            //println("Setting prayers changed callback")
             sharedSettings.addStringListener(DAILY_PROP_KEY.name, "true") { externalModification() }
             sharedSettings.addStringListener(SUBS_PROP_KEY.name, "true") { externalModification() }
             sharedSettings.addStringListener(
@@ -227,6 +231,7 @@ data class Config(
         prayerLang = getPrayerLangPref()
         //println("Loaded prayer lang $prayerLang")
         uiLang = getUILang()
+        uiTheme = getUITheme()
         //println("Loaded ui lang $uiLang")
         secondLang = getSecondLangPref()
         //println("Loaded second lang $secondLang")
@@ -414,7 +419,10 @@ data class Config(
         getPref(PRAYERLANG_PROP_KEY.name, prayerLang)
 
     private fun getUILang(): String =
-        getPref(UILANF_PROP_KEY.name, uiLang)
+        getPref(UILANG_PROP_KEY.name, uiLang)
+
+    private fun getUITheme(): String =
+        getPref(UITHM_PROP_KEY.name, uiTheme)
 
     private fun getSecondLangPref(): String =
         getPref(SECONDLANG_PROP_KEY.name, secondLang)
@@ -435,6 +443,7 @@ data class Config(
     ) {
         saveSharedPrefs(sharedPrefs)
         saveUILang(uiLang)
+        saveUITheme(uiTheme)
         savePrayerLang(prayerLang)
         saveSecondLang(secondLang)
         savePreferTranslation(preferTranslation)
@@ -483,7 +492,12 @@ data class Config(
 
     fun saveUILang(lang: String) {
         uiLang = lang
-        setPref(UILANF_PROP_KEY.name, uiLang)
+        setPref(UILANG_PROP_KEY.name, uiLang)
+    }
+
+    fun saveUITheme(theme: String) {
+        uiTheme = theme
+        setPref(UITHM_PROP_KEY.name, uiTheme)
     }
 
     fun savePrayerLang(lang: String) {

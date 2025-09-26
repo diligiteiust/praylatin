@@ -67,8 +67,10 @@ import org.latinpray.shared.settings_ui_lang
 import org.latinpray.shared.shared_prayer_lists
 import org.latinpray.shared.show_numbers
 import org.latinpray.shared.reset_shared_data
+import org.latinpray.shared.settings_ui_colors
 import org.latinpray.shared.today_list
 import org.latinpray.sharedPrefsSupported
+import org.latinpray.theme.allThemes
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -76,8 +78,10 @@ fun SettingsScreen(
     title: String,
     goBack: () -> Unit,
     uiLangChange: (config: Config) -> Unit,
+    uiThemeChange: (config: Config) -> Unit,
     reloadPrayers: (config: Config) -> Unit,
     config: Config,
+    allPrayerLangs: MutableMap<String, String>
 ) {
     val (fraction) = remember { mutableStateOf(0.25f) }
     val scope = rememberCoroutineScope()
@@ -148,9 +152,27 @@ fun SettingsScreen(
                     }
                 }
             )
+            val themes = mutableMapOf<String, String>()
+            allThemes.keys.forEach {
+                themes[it] = it
+            }
+            LangSelection(
+                title = stringResource(Res.string.settings_ui_colors),
+                langs = themes,
+                selectedItem = config.uiTheme,
+                onItemSelected = { th ->
+                    if (th != config.uiTheme) {
+                        scope.launch {
+                            config.saveUITheme(th)
+                            uiThemeChange(config)
+                            goBack()
+                        }
+                    }
+                }
+            )
             LangSelection(
                 title = stringResource(Res.string.settings_prayer_lang),
-                langs = config.allPrayerLangs,
+                langs = allPrayerLangs,
                 selectedItem = config.prayerLang,
                 onItemSelected = { lang ->
                     scope.launch {
@@ -159,7 +181,7 @@ fun SettingsScreen(
                     }
                 }
             )
-            val secondLang = config.allPrayerLangs.toMutableMap()
+            val secondLang = allPrayerLangs.toMutableMap()
             secondLang["off"] = stringResource(Res.string.off_option)
             LangSelection(
                 title = stringResource(Res.string.settings_second_lang),

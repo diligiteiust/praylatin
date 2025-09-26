@@ -50,4 +50,5 @@
     <string name="bible_readingplan_setting">Bible reading plan</string>
     <string name="first_bible_setting">First Bible</string>
     <string name="second_bible_setting">Second Bible</string>
+    <string name="settings_ui_colors">Colors</string>
 </resources>

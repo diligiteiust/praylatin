@@ -50,4 +50,5 @@
     <string name="bible_readingplan_setting">Plan de lectura de la Biblia</string>
     <string name="first_bible_setting">Primera Biblia</string>
     <string name="second_bible_setting">Segunda Biblia</string>
+    <string name="settings_ui_colors">Colores</string>
 </resources>

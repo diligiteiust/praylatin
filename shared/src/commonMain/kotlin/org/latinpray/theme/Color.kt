@@ -32,6 +32,9 @@ val RedA200 = Color(0xFFFF5252)
 val RedA400 = Color(0xFFFF1744)
 val RedA700 = Color(0xFFD50000)
 
+val LightRedGrey = Color(0xFFFFC4BD)
+val DarkRedGrey = Color(0xFF7B3B32)
+
 val Pink50 = Color(0xFFFCE4EC)
 val Pink100 = Color(0xFFF8BBD0)
 val Pink200 = Color(0xFFF48FB1)
@@ -122,6 +125,11 @@ val LightBlueA200 = Color(0xFF40C4FF)
 val LightBlueA400 = Color(0xFF00B0FF)
 val LightBlueA700 = Color(0xFF0091EA)
 
+val RoyalBlue = Color(0xFF4169E1)
+val GoldenBlueBlend = Color(0xFF5E6BC4)
+val LightGreyBlue = Color(0xFFB7C9E2)
+val DarkGreyBlue = Color(0xFF2C357E)
+
 val Cyan50 = Color(0xFFE0F7FA)
 val Cyan100 = Color(0xFFB2EBF2)
 val Cyan200 = Color(0xFF80DEEA)
@@ -182,6 +190,9 @@ val LightGreenA200 = Color(0xFFB2FF59)
 val LightGreenA400 = Color(0xFF76FF03)
 val LightGreenA700 = Color(0xFF64DD17)
 
+val LightGreyGreen = Color(0xFFB7C1A1)
+val DarkGreyGreen = Color(0xFF2F502C)
+
 val Lime50 = Color(0xFFF9FBE7)
 val Lime100 = Color(0xFFF0F4C3)
 val Lime200 = Color(0xFFE6EE9C)
@@ -211,6 +222,11 @@ val YellowA100 = Color(0xFFFFFF8D)
 val YellowA200 = Color(0xFFFFFF00)
 val YellowA400 = Color(0xFFFFEA00)
 val YellowA700 = Color(0xFFFFD600)
+
+val YellowGray = Color(0xFFC7C2A3) // A specific yellow-grey color
+val LightYellowGray = Color(0xFFE4E1C6) // A lighter variation
+val DarkYellowGray = Color(0xFF585605) // A darker variation
+val MutedYellow = Color(0xFFFFC107)
 
 val Amber50 = Color(0xFFFFF8E1)
 val Amber100 = Color(0xFFFFECB3)
@@ -257,6 +273,11 @@ val DeepOrangeA200 = Color(0xFFFF6E40)
 val DeepOrangeA400 = Color(0xFFFF3D00)
 val DeepOrangeA700 = Color(0xFFDD2C00)
 
+val LightOrange = Color(0xFFFF980A) // A prominent, accessible orange
+val DarkOrange = Color(0xFFE04B00) // A deeper orange for contrast
+val LightGreyOrange = Color(0xFFFFE1C6) // A prominent, accessible orange
+val DarkGreyOrange = Color(0xFFA85605) // A deeper orange for contrast
+
 val Brown50 = Color(0xFFEFEBE9)
 val Brown100 = Color(0xFFD7CCC8)
 val Brown200 = Color(0xFFBCAAA4)
@@ -292,6 +313,8 @@ val BlueGray900 = Color(0xFF263238)
 
 val Black = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)
+val OffWhite = Color(0xFFF5F5F5)
+val OffBlack = Color(0xFF1C1C1C)
 
 val Shadow11 = Color(0xff001787)
 val Shadow10 = Color(0xff00119e)
@@ -308,6 +331,6 @@ val Shadow0 = Color(0xfff4f2ff)
 
 val Gold = Color(0xFFFFD700)
 val GoldenGrey = Color(0xFFB9B2A5)
-val GoldenLightGrey = Color(0xFFC4C4BD)
 val GoldenWhite = Color(0xFFFDFDF6)
+val GoldenLightGrey = Color(0xFFC4C4BD)
 val GoldenDarkGrey = Color(0xFF3B3B32)
