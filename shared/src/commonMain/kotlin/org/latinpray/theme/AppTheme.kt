@@ -69,6 +69,20 @@ object GoldenTheme: ThemeIfc {
     )
 }
 
+object AmberTheme: ThemeIfc {
+    override val darkColorTheme: ColorScheme = darkColorScheme(
+        background = AmberAn1BackBarely,
+        onBackground = AmberAn1,
+        onTertiary = Blue200,
+    )
+    override val lightColorTheme: ColorScheme = lightColorScheme(
+        background = AmberAn1DarkSmoky,
+        onTertiary = Blue900,
+        onBackground = AmberAn1Soft2,
+        surfaceVariant = GoldenLightGrey,
+    )
+}
+
 object YellowTheme: ThemeIfc {
     override val darkColorTheme: ColorScheme = darkColorScheme(
         background = OffBlack,
@@ -137,6 +151,7 @@ object OrangeTheme: ThemeIfc {
 val allThemes = mapOf(
     "Default" to DefaultTheme,
     "Golden" to GoldenTheme,
+    "Amber" to AmberTheme,
     "Yellow" to YellowTheme,
     "Orange" to OrangeTheme,
     "Red" to RedTheme,
