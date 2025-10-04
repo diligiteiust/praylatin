@@ -267,6 +267,9 @@ fun Main() {
                                         if (!navController.popBackStack()) {
                                             navController.navigate(MainScreens.PrayersScreen.name)
                                         }
+                                    },
+                                    reloadGrouped = {
+                                        groupedContent = getGrouppedContent(defConfig, prayers, readingPlan, currentHour, todayAndNowStr, favoritePrayersStr, dailyPrayersStr)
                                     }
                                 )
                             }

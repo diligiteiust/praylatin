@@ -317,6 +317,7 @@ fun PrayerDetailsScreen(
     config: Config,
     prayers: MutableList<Prayer>,
     goBack: () -> Unit,
+    reloadGrouped: () -> Unit,
 ) {
     //println("PrayerDetailsScreen - initialization")
     var contentItem by remember { mutableStateOf(startContent) }
@@ -487,6 +488,7 @@ fun PrayerDetailsScreen(
                                     dlgMessage = removed_from_daily
                                 }
                                 showMessage = true
+                                reloadGrouped()
                             }
                         }
                     ) {
@@ -519,6 +521,7 @@ fun PrayerDetailsScreen(
                                     dlgMessage = removed_from_favorites
                                 }
                                 showMessage = true
+                                reloadGrouped()
                             }
                         }
                     ) {
