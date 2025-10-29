@@ -747,18 +747,18 @@ plan:
   - type: dayreading
     day: 26/10
     start:  Pr 29, 17
-    end:  Qo 2, 5
+    end:  Qoh 2, 5
   - type: dayreading
     day: 27/10
-    start:  Qo 2, 6
-    end:  Qo 7, 8
+    start:  Qoh 2, 6
+    end:  Qoh 7, 8
   - type: dayreading
     day: 28/10
-    start:  Qo 7, 9
-    end:  Qo 12, 11
+    start:  Qoh 7, 9
+    end:  Qoh 12, 11
   - type: dayreading
     day: 29/10
-    start:  Qo 12, 12
+    start:  Qoh 12, 12
     end:  Ct 7, 7
   - type: dayreading
     day: 30/10
