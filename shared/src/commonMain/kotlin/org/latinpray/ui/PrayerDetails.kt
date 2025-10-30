@@ -297,6 +297,7 @@ fun getPrayerNameForNow(file: String): String {
             val builder = Cron.parseAndBuild(parts[1]) {
                 it.firstDayOfWeek = WeekDays.Sunday
             }
+            // Cron parse successful...
             return parts[0]
         }    catch(wexp: WrongCronExpression) {
 //            print("cron exp: ${parts[1]}")
