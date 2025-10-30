@@ -48,6 +48,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.withSaveLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -55,10 +59,6 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.withSaveLayer
 import com.mikepenz.markdown.annotator.annotatorSettings
 import com.mikepenz.markdown.annotator.buildMarkdownAnnotatedString
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
@@ -72,6 +72,12 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownPadding
+import com.ucasoft.kcron.Cron
+import com.ucasoft.kcron.core.common.WeekDays
+import com.ucasoft.kcron.core.exceptions.WrongCronExpression
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
 import org.jetbrains.compose.resources.stringResource
 import org.latinpray.data.BibleBasicContent
 import org.latinpray.data.BibleContent
@@ -86,6 +92,7 @@ import org.latinpray.getPlatform
 import org.latinpray.shared.Res
 import org.latinpray.shared.notes
 import org.latinpray.util.DisplayLang
+import kotlin.time.ExperimentalTime
 
 const val INDENT = "%"
 const val TRANSLATION = "!"
@@ -198,6 +205,11 @@ fun preparePrayer(
                 t = true
                 file = file.substring(1)
             }
+            if (isPrayerForNow(file)) {
+                file = getPrayerNameForNow(file)
+            } else {
+                return@forEachIndexed
+            }
             var subprayer: Content? = prayers.find { p -> p.name == file }
             if (subprayer == null) {
                 // Maybe Bible content is embedded
@@ -252,6 +264,48 @@ fun preparePrayer(
     }
 
     return result
+}
+
+@OptIn(ExperimentalTime::class)
+fun isPrayerForNow(file: String): Boolean {
+    //println("isPrayerForNow: $file")
+    val parts = file.split(" ", limit = 2)
+    //println("parts: ${parts}")
+    if (parts.size == 2) {
+        try {
+            //print("cron exp: ${parts[1]}")
+            val builder = Cron.parseAndBuild(parts[1]) {
+                it.firstDayOfWeek = WeekDays.Sunday
+            }
+            return builder.nextRun?.date == kotlin.time.Clock.System.todayIn(TimeZone.currentSystemDefault())
+                    && builder.nextRun?.time?.hour == kotlin.time.Clock.System.now()
+                .toLocalDateTime(TimeZone.currentSystemDefault()).hour
+        }    catch(wexp: WrongCronExpression) {
+//            print("cron exp: ${parts[1]}")
+//            println("Wrong cron expression: ${wexp.message}")
+        } catch (e: Exception) {
+            println("Error adding date ${parts[1]} to prayer ${file}, ${e.message}")
+        }
+    }
+    return true
+}
+
+fun getPrayerNameForNow(file: String): String {
+    val parts = file.split(" ", limit = 2)
+    if (parts.size == 2) {
+        try {
+            val builder = Cron.parseAndBuild(parts[1]) {
+                it.firstDayOfWeek = WeekDays.Sunday
+            }
+            return parts[0]
+        }    catch(wexp: WrongCronExpression) {
+//            print("cron exp: ${parts[1]}")
+//            println("Wrong cron expression: ${wexp.message}")
+        } catch (e: Exception) {
+            println("Error adding date ${parts[1]} to prayer ${file}, ${e.message}")
+        }
+    }
+    return file
 }
 
 val customParagraphComponent: MarkdownComponent = {
@@ -405,8 +459,7 @@ fun ContentDetails(
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp)
-                        ,
+                    .padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 12.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Column(
@@ -439,7 +492,8 @@ fun ContentDetails(
                         var bibleContent =
                             contentItem.content.langs[config.firstBible] as? BibleBasicContent
                         if (bibleContent == null) {
-                            bibleContent = contentItem.content.langs[config.secondBible] as? BibleBasicContent
+                            bibleContent =
+                                contentItem.content.langs[config.secondBible] as? BibleBasicContent
                         }
                         if (bibleContent != null) {
                             subtitle = bibleContent.subtitle
@@ -473,9 +527,9 @@ fun ContentDetails(
                         h3 = MaterialTheme.typography.titleSmall,
                         //link = MaterialTheme.typography.labelMedium
                     ),
-                    modifier = Modifier.fillMaxSize().padding(horizontal = margins, vertical = 4.dp)
-                        //.background(color = MaterialTheme.colorScheme.background)
-                    ,
+                    modifier = Modifier.fillMaxSize()
+                        .padding(horizontal = margins, vertical = 4.dp),
+                    //.background(color = MaterialTheme.colorScheme.background)
                     //.verticalScroll(scrollState),
                     components = markdownComponents(
                         paragraph = customParagraphComponent,

@@ -1,0 +1,26 @@
+title: Modlitwy uzdrowienia i wyzwolenia
+lang: pl
+language: Polski
+dates:
+  - "* * 6,7,12,13,18,19 * * * *"
+tags:
+  - Nowenna
+lines:
+  - "@6am * * 6-7 * * * *"
+  - "@noon * * 12-13 * * * *"
+  - "@6pm * * 18-19 * * * *"
+  - ^^^
+  - "@@angelusdomini"
+  - ^^^
+  - "@@auxiliumchristianorum"
+  - ^^^
+  - "@@confiteor * * 12-13 * * * *"
+  - "@@actuscontritionis * * 18-19 * * * *"
+  - ^^^
+  - "@@lectionemissae"
+  - ^^^
+  - "@@symbolumniceanum * * 18-19 * * * *"
+  - ^^^
+  - "@@psalm_90 * * 18-19 * * * *"
+  - ^^^
+  - "@@psalm_129 * * 18-19 * * * *"

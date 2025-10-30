@@ -4,17 +4,4 @@ language: Español
 tags:
   - Salmos
 lines:
-  -
-  - 95:1  ¡Cantad a Yahvé un nuevo canto, canta a Yahvé, tierra entera,
-  - 95:2  cantad a Yahvé, bendecid su nombre! Anunciad su salvación día a día,
-  - 95:3  contad su gloria a las naciones, sus maravillas a todos los pueblos.
-  - 95:4  Pues grande es Yahvé y digno de alabanza, más temible que todos los dioses.
-  - 95:5  Pues nada son los dioses paganos. Pero Yahvé hizo los cielos;
-  - 95:6  gloria y majestad están ante él, poder y esplendor en su santuario.
-  - 95:7  Tributad a Yahvé, familias de los pueblos, tributad a Yahvé gloria y poder,
-  - 95:8  tributad a Yahvé la gloria de su nombre. Traed ofrendas, entrad en sus atrios,
-  - 95:9  postraos ante Yahvé en el atrio sagrado, ¡tiemble ante su rostro toda la tierra!
-  - "95:10  Decid a los gentiles: «¡Yahvé es rey!» El orbe está seguro, no vacila; él gobierna a los pueblos rectamente."
-  - 95:11  ¡Alégrense los cielos, goce la tierra, retumbe el mar y cuanto encierra;
-  - 95:12  exulte el campo y cuanto hay en él, griten de gozo los árboles del bosque,
-  - 95:13  delante de Yahvé, que ya viene, viene, sí, a juzgar la tierra! Juzgará al mundo con justicia, a los pueblos con su lealtad.
+  - "@Ps 95,1 - Ps 95,13"

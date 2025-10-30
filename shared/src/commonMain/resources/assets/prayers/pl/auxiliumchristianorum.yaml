@@ -1,0 +1,29 @@
+title: Auxilium Christianorum
+lang: pl
+language: Polski
+tags:
+  - Nowenna
+lines:
+  - "@auxiliumchristianorum_init"
+  - ^^^
+  - "@@sanctemichael"
+  - ^^^
+  - "@@angeledei"
+  - ^^^
+  - "@@paternoster"
+  - ^^^
+  - "@@avemaria"
+  - ^^^
+  - "@@gloriapatri"
+  - ^^^
+  - "@@litpretiosissimisanguisdomininostriiesu"
+  - ^^^
+  - "@@auxiliumchristianorum_dominica * * * * * SUN *"
+  - "@@auxiliumchristianorum_lunae * * * * * MON *"
+  - "@@auxiliumchristianorum_martis * * * * * TUE *"
+  - "@@auxiliumchristianorum_mercurii * * * * * WED *"
+  - "@@auxiliumchristianorum_lovis * * * * * THU *"
+  - "@@auxiliumchristianorum_veneris * * * * * FRI *"
+  - "@@auxiliumchristianorum_saturni * * * * * SAT *"
+  - ^^^
+  - "@@auxiliumchristianorum_finis"
