@@ -21,6 +21,12 @@ lines:
   - ^^^
   - "@@symbolumniceanum * * 18-19 * * * *"
   - ^^^
-  - "@@psalm_90 * * 18-19 * * * *"
+  - "@@psalmi_129 * * 18-19 * * * *"
   - ^^^
-  - "@@psalm_129 * * 18-19 * * * *"
+  - "@@psalmi_90 * * 18-19 * * * *"
+  - ^^^
+  - "@@vinculasimplex"
+  - ^^^
+  - "@@appropriatiodisappropriatio"
+  - ^^^
+  - "@@antesumnum"

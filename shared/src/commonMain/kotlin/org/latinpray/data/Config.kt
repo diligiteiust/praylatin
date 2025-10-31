@@ -75,7 +75,8 @@ data class Config(
 
     @Transient
     val substitutions = mutableMapOf(
-        "patrons" to "my saint patrons..."
+        "patrons" to "my saint patrons...",
+        "demons" to "\\\\_\\\\_\\\\_\\\\_\\\\_\\\\_"
     )
 
     @Transient
