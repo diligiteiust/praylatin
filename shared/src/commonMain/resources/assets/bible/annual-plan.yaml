@@ -1083,66 +1083,66 @@ plan:
   - type: dayreading
     day: 18/01
     start:  Za 13, 7
-    end:  1 Ma 1, 19
+    end:  1 Mac 1, 19
   - type: dayreading
     day: 19/01
-    start:  1 Ma 1, 20
-    end:  1 Ma 2, 51
+    start:  1 Mac 1, 20
+    end:  1 Mac 2, 51
   - type: dayreading
     day: 20/01
-    start:  1 Ma 2, 52
-    end:  1 Ma 4, 19
+    start:  1 Mac 2, 52
+    end:  1 Mac 4, 19
   - type: dayreading
     day: 21/01
-    start:  1 Ma 4, 20
-    end:  1 Ma 5, 56
+    start:  1 Mac 4, 20
+    end:  1 Mac 5, 56
   - type: dayreading
     day: 22/01
-    start:  1 Ma 5, 57
-    end:  1 Ma 7, 23
+    start:  1 Mac 5, 57
+    end:  1 Mac 7, 23
   - type: dayreading
     day: 23/01
-    start:  1 Ma 7, 24
-    end:  1 Ma 9, 39
+    start:  1 Mac 7, 24
+    end:  1 Mac 9, 39
   - type: dayreading
     day: 24/01
-    start:  1 Ma 9, 40
-    end:  1 Ma 10, 64
+    start:  1 Mac 9, 40
+    end:  1 Mac 10, 64
   - type: dayreading
     day: 25/01
-    start:  1 Ma 10, 65
-    end:  1 Ma 11, 73
+    start:  1 Mac 10, 65
+    end:  1 Mac 11, 73
   - type: dayreading
     day: 26/01
-    start:  1 Ma 11, 74
-    end:  1 Ma 13, 43
+    start:  1 Mac 11, 74
+    end:  1 Mac 13, 43
   - type: dayreading
     day: 27/01
-    start:  1 Ma 13, 44
-    end:  1 Ma 15, 38
+    start:  1 Mac 13, 44
+    end:  1 Mac 15, 38
   - type: dayreading
     day: 28/01
-    start:  1 Ma 15, 39
-    end:  2 Ma 3, 3
+    start:  1 Mac 15, 39
+    end:  2 Mac 3, 3
   - type: dayreading
     day: 29/01
-    start:  2 Ma 3, 4
-    end:  2 Ma 5, 11
+    start:  2 Mac 3, 4
+    end:  2 Mac 5, 11
   - type: dayreading
     day: 30/01
-    start:  2 Ma 5, 12
-    end:  2 Ma 8, 9
+    start:  2 Mac 5, 12
+    end:  2 Mac 8, 9
   - type: dayreading
     day: 31/01
-    start:  2 Ma 8, 10
-    end:  2 Ma 11, 4
+    start:  2 Mac 8, 10
+    end:  2 Mac 11, 4
   - type: dayreading
     day: 01/02
-    start:  2 Ma 11, 5
-    end:  2 Ma 13, 18
+    start:  2 Mac 11, 5
+    end:  2 Mac 13, 18
   - type: dayreading
     day: 02/02
-    start:  2 Ma 13, 19
+    start:  2 Mac 13, 19
     end:  Mt 1, 4
   - type: dayreading
     day: 03/02
@@ -1263,42 +1263,42 @@ plan:
   - type: dayreading
     day: 04/03
     start:  Lc 24, 5
-    end:  Jo 1, 49
+    end:  J 1, 49
   - type: dayreading
     day: 05/03
-    start:  Jo 1, 50
-    end:  Jo 4, 36
+    start:  J 1, 50
+    end:  J 4, 36
   - type: dayreading
     day: 06/03
-    start:  Jo 4, 37
-    end:  Jo 6, 33
+    start:  J 4, 37
+    end:  J 6, 33
   - type: dayreading
     day: 07/03
-    start:  Jo 6, 34
-    end:  Jo 8, 6
+    start:  J 6, 34
+    end:  J 8, 6
   - type: dayreading
     day: 08/03
-    start:  Jo 8, 7
-    end:  Jo 10, 4
+    start:  J 8, 7
+    end:  J 10, 4
   - type: dayreading
     day: 09/03
-    start:  Jo 10, 5
-    end:  Jo 12, 3
+    start:  J 10, 5
+    end:  J 12, 3
   - type: dayreading
     day: 10/03
-    start:  Jo 12, 4
-    end:  Jo 14, 13
+    start:  J 12, 4
+    end:  J 14, 13
   - type: dayreading
     day: 11/03
-    start:  Jo 14, 14
-    end:  Jo 17, 20
+    start:  J 14, 14
+    end:  J 17, 20
   - type: dayreading
     day: 12/03
-    start:  Jo 17, 21
-    end:  Jo 20, 10
+    start:  J 17, 21
+    end:  J 20, 10
   - type: dayreading
     day: 13/03
-    start:  Jo 20, 11
+    start:  J 20, 11
     end:  Ac 2, 26
   - type: dayreading
     day: 14/03

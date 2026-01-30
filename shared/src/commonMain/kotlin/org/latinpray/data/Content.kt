@@ -57,7 +57,6 @@ abstract class Content(
 //    @Transient
 //    val lock = reentrantLock()
 
-    @OptIn(ExperimentalTime::class)
     fun prayedToday(): Boolean {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
         //println("name: $name, today: $today, lastRecorded: ${nums.lastRecorded}")
