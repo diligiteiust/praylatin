@@ -34,7 +34,7 @@ val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
 
 fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
     val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
-    //println("Yaml content: $assetsFile")
+    // println("Yaml content: $assetsFile")
     val allsubs = pattern.findAll(yamlContent)
     for (sub in allsubs) {
         val token = sub.value.substring(1)
@@ -97,10 +97,13 @@ suspend fun prayersList(scope: CoroutineScope, initialPrayers: MutableList<Praye
         val prs = listAssetsInDirectory("assets/prayers/$lang/")
         var i = 1
         prs.forEach { pr ->
-            //println("Loading prayer $pr for lang: $lang")
-            val name = pr.removeSuffix(".yaml")
+            // println("Loading prayer $pr for lang: $lang")
+            var name = pr.removeSuffix(".yaml")
+            if (pr.endsWith(".yml")) {
+                name = pr.removeSuffix(".yml")
+            }
             val basicPrayer = readPrayerFromAssets("assets/prayers/$lang/$pr", config)
-            //println("Loaded prayer ${basicPrayer.title}")
+            // println("Loaded prayer ${basicPrayer.title}")
             //println("Notes: ${basicPrayer.notes}")
             var prayer = prayers[name]
             if (prayer == null) {

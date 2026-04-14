@@ -1,5 +1,5 @@
 [versions]
-agpVer = "8.13.2"
+agpVer = "9.1.1"
 firebaseBom = "34.7.0"
 kotlinVer = "2.3.0"
 composeVer = "1.10.0"

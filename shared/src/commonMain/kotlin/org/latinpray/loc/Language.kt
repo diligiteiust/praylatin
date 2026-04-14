@@ -36,6 +36,7 @@ fun getLanguage(isoFormat : String) : Language {
         Language.Spanish.isoFormat -> Language.Spanish
         Language.Latin.isoFormat -> Language.Latin
         Language.Polish.isoFormat -> Language.Polish
+        Language.French.isoFormat -> Language.French
         else -> Language.Unknown
     }
 }

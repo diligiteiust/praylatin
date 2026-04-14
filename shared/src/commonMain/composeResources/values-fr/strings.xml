@@ -1,0 +1,54 @@
+<!--
+  ~ This program is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU Affero General Public License as published by
+  ~  the Free Software Foundation, version 3 of the License.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU Affero General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU Affero General Public License
+  ~  along with this program. Look for COPYING file in the top folder.
+  ~  If not, see http://www.gnu.org/licenses/.
+  -->
+
+<resources>
+    <string name="prayers_screen_title">Prières</string>
+    <string name="prayer_details_screen_title">Prière</string>
+    <string name="settings_screen_title">Configuration</string>
+    <string name="about_screen_title">À notre sujet</string>
+    <string name="help_screen_title">Aide/Contribution</string>
+    <string name="settings_ui_lang">Langue de l’application</string>
+    <string name="settings_prayer_lang">Langue de la prière</string>
+    <string name="settings_second_lang">Langue seconde</string>
+    <string name="settings_prefer_translation">Préférer la traduction</string>
+    <string name="settings_grouping">Regroupement</string>
+    <string name="settings_substitutions">Substitutions</string>
+    <string name="off_option">Désactivé</string>
+    <string name="on_option">Activé</string>
+    <string name="daily_prayers">Prières quotidiennes</string>
+    <string name="favorite_prayers">Favoris</string>
+    <string name="shared_prayer_lists">Prières partagées</string>
+    <string name="show_numbers">Montrer les numéros</string>
+    <string name="intentions_title">Intentions de prière</string>
+    <string name="intention_text">Intention</string>
+    <string name="intention_days">Nombre de jours</string>
+    <string name="intention_active">Actif</string>
+    <string name="intention_add">Ajouter une intention</string>
+    <string name="reset_shared_data">Rétablir les données partagées</string>
+    <string name="today_and_now">Aujourd’hui</string>
+    <string name="notes">Notes</string>
+    <string name="added_to_daily">Ajouté aux prières quotidiennes</string>
+    <string name="removed_from_daily">Retiré des prières quotidiennes</string>
+    <string name="added_to_favorites">Prière ajoutée aux favoris</string>
+    <string name="removed_from_favorites">Prière retirée des favoris</string>
+    <string name="today_list">Liste d’aujourd’hui</string>
+    <string name="bible_settings_menu">Bible</string>
+    <string name="bible_chapter">Chapitre</string>
+    <string name="bible_settings_title">Options bibliques</string>
+    <string name="bible_readingplan_setting">Plan de lecture de la Bible</string>
+    <string name="first_bible_setting">Première Bible</string>
+    <string name="second_bible_setting">Deuxième Bible</string>
+    <string name="settings_ui_colors">Couleurs</string>
+</resources>

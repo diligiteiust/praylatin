@@ -20,6 +20,11 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
+import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -27,18 +32,13 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlin.time.Clock
 import org.latinpray.createSettings
 import org.latinpray.io.biblesList
 import org.latinpray.loc.Language
 import org.latinpray.util.PrayerTime
 import org.latinpray.util.calcPrayerTime
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import kotlinx.atomicfu.locks.reentrantLock
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 const val FIRSTBIBLE_DEF = "English - Douay-Rheims Bible"
 const val SECONDBIBLE_DEF = "Latina - Biblia Sacra Vulgata"
@@ -70,7 +70,8 @@ data class Config(
             Language.English.isoFormat to Language.English.name,
             Language.Polish.isoFormat to Language.Polish.name,
             Language.Latin.isoFormat to Language.Latin.name,
-            Language.Spanish.isoFormat to Language.Spanish.name
+            Language.Spanish.isoFormat to Language.Spanish.name,
+            Language.French.isoFormat to Language.French.name
         )
 
     @Transient
@@ -689,7 +690,10 @@ data class Config(
             }
         }
 
-        putToSharedPrefs(content.name + PRAYER_NUM_KEY.name, "$prayer_curr_date,$totalNum,$inrowNum")
+        putToSharedPrefs(
+            content.name + PRAYER_NUM_KEY.name,
+            "$prayer_curr_date,$totalNum,$inrowNum"
+        )
         //println("Saving content ${content.name} nums: $prayer_curr_date,$totalNum,$inrowNum")
 
         if (currentIntention != null) {

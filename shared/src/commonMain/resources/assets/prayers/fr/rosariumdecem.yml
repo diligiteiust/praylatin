@@ -1,0 +1,20 @@
+title: Dizaine du chapelet
+lang: fr
+language: français
+tags:
+  - Rosaire
+  - Bienheureuse Vierge Marie
+links:
+  - type: youtube
+    title: Gregorian Chant Rosary in Latin
+    url: https://www.youtube.com/watch?v=ZjA4mlNfqtk
+lines:
+  - "@paternoster"
+  - ^^^
+  - __10x__
+  - "@avemaria"
+  - ^^^
+  - "@gloriapatri"
+  - ^^^
+  - "> Facultatif:"
+  - "@domineiesu"

@@ -165,11 +165,12 @@ fun preparePrayer(
     }
     // If preferred translation is enabled, we try to find content with translation
     // instead of the standard content
-    //println ("firstLang: ${firstLang}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${prayer.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
+    //println ("firstLang: ${langCont1}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${content.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
     if ((dispayLang == DisplayLang.BOTH) && config.preferTranslation && content.langs[lang2 + TRANSLATION_TRAIL] != null) {
         langCont2 = content.langs[lang2 + TRANSLATION_TRAIL]
-        //println("Using translation for prayer: ${prayer.name} - ${lang2?.title}")
+        println("Using translation for prayer: ${content.name} - ${langCont2?.title}")
     }
+    //println ("secondLang: ${langCont2}")
 
     var result = ""
     var prayerStart = true
