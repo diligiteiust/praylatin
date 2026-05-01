@@ -18,15 +18,20 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
+//    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.plugin.compose)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    id("org.jetbrains.kotlinx.atomicfu") version "0.29.0"
+    alias(libs.plugins.kotlinx.atomicfu)
+//    id("org.jetbrains.kotlinx.atomicfu") version "0.32.1"
 }
 
 kotlin {
-    androidTarget {
+    android {
+        namespace = "org.latinpray"
+        compileSdk = 36
+        minSdk = 35
         compilations.all {
             compileTaskProvider.configure {
                 compilerOptions {
@@ -35,7 +40,7 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -51,14 +56,15 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
-            implementation(compose.ui)
-            implementation(compose.material)
-            implementation(compose.material3)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.materialIconsExtended)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
+//            implementation(compose.ui)
+//            implementation(compose.material)
+//            implementation(compose.material3)
+//            implementation(compose.runtime)
+//            implementation(compose.foundation)
+//            implementation(compose.materialIconsExtended)
+//            @OptIn(ExperimentalComposeLibrary::class)
+//            implementation(compose.components.resources)
+            implementation(libs.kotlinx.atomicfu)
             implementation(libs.jb.androidx.navigation.compose)
             implementation(libs.kaml)
             implementation(libs.kotlin.serialization.json)
@@ -82,6 +88,17 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+        sourceSets {
+            androidMain {
+                resources.srcDirs(
+                    "src/androidMain/res",
+                    "src/commonMain/resources/res",
+                    "src/commonMain/composeResources",
+                    "src/commonMain/resources/assets"
+                )
+                //assets.srcDirs("src/commonMain/resources/assets")
+            }
+        }
         named { it.lowercase().startsWith("ios") }.configureEach {
             languageSettings {
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
@@ -96,32 +113,33 @@ compose.resources {
     generateResClass = auto
 }
 
-android {
-    namespace = "org.latinpray"
-    compileSdk = 36
-    defaultConfig {
-        minSdk = 35
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    sourceSets["main"].apply {
-        res.srcDirs(
-            "src/androidMain/res",
-            "src/commonMain/resources/res",
-            "src/commonMain/composeResources"
-        )
-        // 3..
-        assets.srcDirs("src/commonMain/resources/assets")
-    }
-}
+//android {
+//    namespace = "org.latinpray"
+//    compileSdk = 36
+//    defaultConfig {
+//        minSdk = 35
+//    }
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_11
+//        targetCompatibility = JavaVersion.VERSION_11
+//    }
+//    sourceSets["main"].apply {
+//        res.srcDirs(
+//            "src/androidMain/res",
+//            "src/commonMain/resources/res",
+//            "src/commonMain/composeResources"
+//        )
+//        // 3..
+//        assets.srcDirs("src/commonMain/resources/assets")
+//    }
+//}
+
 dependencies {
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.jb.androidx.navigation.compose)
-    implementation(libs.kaml)
-    implementation(libs.kotlin.serialization.json)
-    //implementation(libs.kotlin.serialization.yaml)
-    implementation(libs.squareup.okio)
-    implementation(libs.kotlin.stdlib)
+//    implementation(libs.androidx.compose.ui)
+//    implementation(libs.jb.androidx.navigation.compose)
+//    implementation(libs.kaml)
+//    implementation(libs.kotlin.serialization.json)
+//    //implementation(libs.kotlin.serialization.yaml)
+//    implementation(libs.squareup.okio)
+//    implementation(libs.kotlin.stdlib)
 }

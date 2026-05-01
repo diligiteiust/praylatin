@@ -1,11 +1,11 @@
 [versions]
-agpVer = "9.1.1"
-firebaseBom = "34.7.0"
-kotlinVer = "2.3.0"
-composeVer = "1.10.0"
+agpVer = "9.2.0-rc01"
+firebaseBom = "34.12.0"
+kotlinVer = "2.3.20"
+composeVer = "1.10.6"
 #composeMaterial3Ver = "1.3.1"
-androidxActivityComposeVer = "1.12.2"
-kotlinComposeVer = "1.9.3"
+androidxActivityComposeVer = "1.13.0"
+kotlinComposeVer = "1.10.3"
 #material3AdaptiveVer = "1.0.0"
 #material3AdaptiveNavigationSuiteVer = "1.3.1"
 #androidxNavigationComposeVer = "2.8.4"
@@ -13,19 +13,20 @@ kotlinComposeVer = "1.9.3"
 #composeAnimationVer = "1.7.5"
 #androidCoreVer = "1.15.0"
 #lifecycleRuntimeKtxVer = "2.8.7"
-jbNavigationComposeVer = "2.9.1"
+jbNavigationComposeVer = "2.9.2"
 kamlVer = "0.104.0"
-kotlinSerialJsonVer = "1.9.0"
+kotlinSerialJsonVer = "1.11.0"
 #kotlinSerialYamlVer = "1.5.1"
-okioVer = "3.16.4"
-kotlinStdLibVer = "2.2.21"
-androidxDatastoreVer = "1.2.0"
-markdownVer="0.39.0"
+okioVer = "3.17.0"
+kotlinStdLibVer = "2.3.20"
+androidxDatastoreVer = "1.2.1"
+markdownVer="0.40.2"
 purchases-kmp = "2.1.3+17.6.0"
 google-services = "4.4.4"
 settingsVer = "1.4.0-SNAPSHOT"
 kcronVer = "0.31.7"
-atomicfuVer="0.29.0"
+atomicfuVer="0.32.1"
+andKotMLibVer="9.1.1"
 
 [libraries]
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -85,11 +86,13 @@ purchases-result = { module = "com.revenuecat.purchases:purchases-kmp-result", v
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settingsVer" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "settingsVer" }
 
-kotlinx-atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomicfuVer" }
+#kotlinx-atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomicfuVer" }
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfuVer" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVer" }
-android-library = { id = "com.android.library", version.ref = "agpVer" }
+#android-library = { id = "com.android.library", version.ref = "agpVer" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "andKotMLibVer" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVer" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinVer" }
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVer" }
@@ -98,4 +101,4 @@ kotlin-compose = { id = "org.jetbrains.compose", version.ref = "kotlinComposeVer
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVer" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVer" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
-
+kotlinx-atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicfuVer" }
