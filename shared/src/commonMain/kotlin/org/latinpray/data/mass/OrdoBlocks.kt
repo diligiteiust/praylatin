@@ -2,7 +2,6 @@ package org.latinpray.data.mass
 
 internal object OrdoBlocks {
     val postEpiphany: List<List<String>> = listOf(
-        emptyList(),
         listOf("tempora:Epi1-0:2:w"),
         listOf("tempora:Epi1-1:4:w"),
         listOf("tempora:Epi1-2:4:w"),
@@ -47,7 +46,6 @@ internal object OrdoBlocks {
         listOf("tempora:Epi6-6:4:g"),
     )
     val preLentToPentecost: List<List<String>> = listOf(
-        emptyList(),
         listOf("tempora:Quadp1-0:2:v"),
         listOf("tempora:Quadp1-1:4:v"),
         listOf("tempora:Quadp1-2:4:v"),
@@ -330,14 +328,12 @@ internal object OrdoBlocks {
         listOf("tempora:Pent23-6:4:g"),
     )
     val emberSeptember: List<List<String>> = listOf(
-        emptyList(),
         listOf("tempora:093-3:2:v"),
         emptyList(),
         listOf("tempora:093-5:2:v"),
         listOf("tempora:093-6:2:v"),
     )
     val week24Pentecost: List<List<String>> = listOf(
-        emptyList(),
         listOf("tempora:Pent24-0:2:g"),
         listOf("tempora:Pent24-1:4:g"),
         listOf("tempora:Pent24-2:4:g"),
@@ -347,7 +343,6 @@ internal object OrdoBlocks {
         listOf("tempora:Pent24-6:4:g"),
     )
     val advent: List<List<String>> = listOf(
-        emptyList(),
         listOf("tempora:Adv1-0:1:v"),
         listOf("tempora:Adv1-1:3:v"),
         listOf("tempora:Adv1-2:3:v"),

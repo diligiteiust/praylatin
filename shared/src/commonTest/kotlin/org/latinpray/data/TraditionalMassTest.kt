@@ -17,7 +17,7 @@ class TraditionalMassTest {
     @Test
     fun sunday16Aug2026IsTwelfthAfterPentecostPlusJoachim() {
         val day = LiturgicalOrdo.forDay(LocalDate(2026, 8, 16))
-        assertTrue(day.mass.id.contains("Pent12"), "mass=${day.mass.id}")
+        assertEquals("tempora:Pent12-0:2:g", day.mass.id)
         assertTrue(day.saint?.id?.contains("08-16") == true, "saint=${day.saint?.id}")
     }
 
