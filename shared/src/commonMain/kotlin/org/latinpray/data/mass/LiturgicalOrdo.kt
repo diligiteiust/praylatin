@@ -99,13 +99,23 @@ private fun sanctiFor(date: LocalDate): List<Observance> {
     return OrdoIds.sancti.filter { it.startsWith("sancti:$key") }.map { Observance(it, date) }
 }
 
+data class DayOrdo(
+    val mass: Observance,
+    val saint: Observance? = null,
+) {
+    fun items(): List<Observance> =
+        listOfNotNull(mass, saint?.takeIf { it.id != mass.id })
+}
+
 /**
  * 1962 ordo: temporal blocks + sanctoral + occurrence/transfer.
  * Calendar construction follows Missale Meum / Divinum Officium (MIT).
  */
 object LiturgicalOrdo {
 
-    fun celebration(date: LocalDate): Observance {
+    fun celebration(date: LocalDate): Observance = forDay(date).mass
+
+    fun forDay(date: LocalDate): DayOrdo {
         val year = date.year
         val easter = easterDate(year)
         val sept = easter.plusDays(-63)
@@ -134,40 +144,48 @@ object LiturgicalOrdo {
         }
 
         val tempora = map[date].orEmpty()
-        val sancti = sanctiFor(date)
-        var observances = (tempora + sancti).toMutableList()
-
-        // Leap-year Matthias / Feb 27
+        val sancti = sanctiFor(date).toMutableList()
         val leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
         if (leap && date.month.number == 2 && date.day == 24) {
-            observances = observances.filterNot { it.id.startsWith("sancti:02-24") }.toMutableList()
+            sancti.removeAll { it.id.startsWith("sancti:02-24") }
         }
         if (leap && date.month.number == 2 && date.day == 25) {
-            observances += Observance("sancti:02-24:2:r", date)
+            sancti += Observance("sancti:02-24:2:r", date)
         }
         if (leap && date.month.number == 2 && date.day == 27) {
-            observances = observances.filterNot { it.id.startsWith("sancti:02-27") }.toMutableList()
+            sancti.removeAll { it.id.startsWith("sancti:02-27") }
         }
         if (leap && date.month.number == 2 && date.day == 28) {
-            observances += Observance("sancti:02-27:3:w", date)
+            sancti += Observance("sancti:02-27:3:w", date)
         }
-
-        // All Souls on Sunday → Monday
         if (date.month.number == 11 && date.day == 2 && date.dayOfWeek == DayOfWeek.SUNDAY) {
-            observances = observances.filterNot { it.id.startsWith("sancti:11-02") }.toMutableList()
+            sancti.removeAll { it.id.startsWith("sancti:11-02") }
         }
         if (date.month.number == 11 && date.day == 3) {
             val nov2 = LocalDate(year, 11, 2)
             if (nov2.dayOfWeek == DayOfWeek.SUNDAY) {
-                observances += Observance("sancti:11-02m1:1:b", date)
+                sancti += Observance("sancti:11-02m1:1:b", date)
             }
         }
 
-        // Christmas vigil beats Advent 4 on Sunday
+        val observances = (tempora + sancti).toMutableList()
+        val mass = pickMass(date, observances, tempora, map, advent, easter)
+        val saint = sancti.filter { it.rank <= 3 }.minByOrNull { it.rank }
+            ?.takeIf { it.id != mass.id }
+        return DayOrdo(mass, saint)
+    }
+
+    private fun pickMass(
+        date: LocalDate,
+        observances: List<Observance>,
+        tempora: List<Observance>,
+        map: Map<LocalDate, List<Observance>>,
+        advent: LocalDate,
+        easter: LocalDate,
+    ): Observance {
         if (date.month.number == 12 && date.day == 24) {
             return Observance("sancti:12-24:1:v", date)
         }
-        // Immaculate Conception preferred to Advent Sunday
         if (date.month.number == 12 && date.day == 8) {
             return Observance("sancti:12-08:1:w", date)
         }
@@ -184,26 +202,29 @@ object LiturgicalOrdo {
         )
         observances.firstOrNull { it.id in holyWeekAsh }?.let { return it }
 
+        val sundayMass = tempora.firstOrNull { it.isTempora && (it.rank <= 2 || it.id.contains("-0")) }
+            ?: sundayOfWeek(date, map)
+
+        // Sundays: the Mass of the Sunday, not the occurring saint.
+        if (date.dayOfWeek == DayOfWeek.SUNDAY) {
+            sundayMass?.let { return it }
+        }
+
         val firstClass = observances.filter { it.rank == 1 }
         if (firstClass.size > 1) {
-            val preferred = firstClass.minBy { precedence(it) }
-            return preferred
+            return firstClass.minBy { precedence(it) }
         }
         if (firstClass.size == 1) return firstClass.first()
 
-        val lent = observances.filter { it.id.contains(":Quad") && !it.id.contains("Quadp1") && !it.id.contains("Quadp2") && it.id.startsWith("tempora:") }
+        val lent = observances.filter {
+            it.id.contains(":Quad") && !it.id.contains("Quadp1") &&
+                !it.id.contains("Quadp2") && it.id.startsWith("tempora:")
+        }
         val sanctiObs = observances.filter { it.isSancti }
         if (lent.isNotEmpty()) {
             val L = lent.minBy { it.rank }
             val S = sanctiObs.minByOrNull { it.rank }
             return if (S != null && S.rank < L.rank) S else L
-        }
-
-        if (date.dayOfWeek == DayOfWeek.SUNDAY) {
-            val sun = observances.firstOrNull { it.isTempora && it.rank <= 2 }
-            val feast2 = sanctiObs.firstOrNull { it.rank == 2 }
-            if (sun != null) return sun
-            if (feast2 != null) return feast2
         }
 
         val emberOrAdv = observances.firstOrNull {
@@ -225,7 +246,8 @@ object LiturgicalOrdo {
         }
 
         return observances.minWithOrNull(compareBy<Observance> { it.rank }.thenBy { if (it.isSancti) 0 else 1 })
-            ?: Observance(sundayOfWeek(date, map)?.id ?: "tempora:Pent24-0:2:g", date)
+            ?: sundayMass
+            ?: Observance("tempora:Pent24-0:2:g", date)
     }
 
     private fun saturdayBmv(date: LocalDate, advent: LocalDate, easter: LocalDate): Observance {

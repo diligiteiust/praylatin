@@ -108,7 +108,7 @@ fun getGrouppedContent(config: Config, prayers: MutableList<Prayer>, readingPlan
             gp.add(todayAndNowStr)
             runBlocking {
                 try {
-                    DailyReadingTR.massForToday(config)?.let {
+                    DailyReadingTR.readingsForToday(config).forEach {
                         gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
                     }
                 } catch (e: Exception) {

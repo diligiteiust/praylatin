@@ -333,92 +333,128 @@ object DailyReadingTR {
     private var cachedUiLang: String? = null
     private var cachedFirst: String? = null
     private var cachedSecond: String? = null
-    private var cachedContent: BibleContent? = null
+    private var cachedReadings: List<BibleContent> = emptyList()
 
     @OptIn(ExperimentalTime::class)
-    suspend fun massForToday(config: Config): BibleContent? {
+    suspend fun readingsForToday(config: Config): List<BibleContent> {
         lock.withLock {
             val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-            if (cachedContent != null &&
+            if (cachedReadings.isNotEmpty() &&
                 cachedDate == today &&
                 cachedUiLang == config.uiLang &&
                 cachedFirst == config.firstBible &&
                 cachedSecond == config.secondBible
             ) {
-                return cachedContent
+                return cachedReadings
             }
             cachedDate = today
             cachedUiLang = config.uiLang
             cachedFirst = config.firstBible
             cachedSecond = config.secondBible
-            val obs = try {
-                LiturgicalOrdo.celebration(today)
+            val day = try {
+                LiturgicalOrdo.forDay(today)
             } catch (e: Exception) {
                 println("Ordo failed: ${e.message}")
                 null
             }
-            val proper = try {
-                if (obs != null) MassPropers.get(obs.id) ?: MassPropers.sundayOf(obs.id) else null
-            } catch (e: Exception) {
-                println("Mass propers lookup failed: ${e.message}")
-                null
-            }
+            val out = mutableListOf<BibleContent>()
             val fallback = TraditionalMassLectionary.massFor(today)
-            var title = fallback.titleFor(config.uiLang)
-            var ranges = fallback.ranges()
-            var name = "mass-${fallback.id}"
-            if (proper != null && proper.ranges().isNotEmpty()) {
-                title = proper.title
-                ranges = proper.ranges()
-                name = "mass-${proper.id}"
+            if (day != null) {
+                loadObservance(config, day.mass, fallback)?.let { out.add(it) }
+                day.saint?.let { s ->
+                    loadObservance(config, s, null)?.let { out.add(it) }
+                }
             }
-            val content = BibleContent(
-                id = 3,
-                name = name,
-                langs = mutableMapOf(),
+            if (out.isEmpty()) {
+                loadFallback(config, fallback)?.let { out.add(it) }
+            }
+            cachedReadings = out
+            return cachedReadings
+        }
+    }
+
+    suspend fun massForToday(config: Config): BibleContent? =
+        readingsForToday(config).firstOrNull()
+
+    private fun loadObservance(
+        config: Config,
+        obs: org.latinpray.data.mass.Observance,
+        fallback: TraditionalMass?,
+    ): BibleContent? {
+        val proper = try {
+            MassPropers.get(obs.id) ?: MassPropers.sundayOf(obs.id)
+        } catch (e: Exception) {
+            println("Mass propers lookup failed ${obs.id}: ${e.message}")
+            null
+        }
+        val title: String
+        val ranges: List<ReadingRange>
+        val name: String
+        if (proper != null && proper.ranges().isNotEmpty()) {
+            title = proper.title
+            ranges = proper.ranges()
+            name = "mass-${proper.id}"
+        } else if (fallback != null) {
+            title = fallback.titleFor(config.uiLang)
+            ranges = fallback.ranges()
+            name = "mass-${fallback.id}"
+        } else {
+            return null
+        }
+        return tryLoad(config, name, title, ranges, fallback)
+    }
+
+    private fun loadFallback(config: Config, fallback: TraditionalMass): BibleContent? =
+        tryLoad(config, "mass-${fallback.id}", fallback.titleFor(config.uiLang), fallback.ranges(), null)
+
+    private fun tryLoad(
+        config: Config,
+        name: String,
+        title: String,
+        ranges: List<ReadingRange>,
+        fallback: TraditionalMass?,
+    ): BibleContent? {
+        val content = BibleContent(id = 3, name = name, langs = mutableMapOf())
+        return try {
+            loadBibleContent(
+                config = config,
+                ranges = ranges,
+                content = content,
+                title = title,
+                addTitle = true,
+                addSubtitle = true,
             )
-            try {
+            if (content.langs.isEmpty() && fallback != null) {
                 loadBibleContent(
                     config = config,
-                    ranges = ranges,
+                    ranges = fallback.ranges(),
                     content = content,
-                    title = title,
+                    title = fallback.titleFor(config.uiLang),
                     addTitle = true,
                     addSubtitle = true,
                 )
-                if (content.langs.isEmpty() && ranges !== fallback.ranges()) {
-                    loadBibleContent(
-                        config = config,
-                        ranges = fallback.ranges(),
-                        content = content,
-                        title = fallback.titleFor(config.uiLang),
-                        addTitle = true,
-                        addSubtitle = true,
-                    )
-                    name = "mass-${fallback.id}"
-                }
-                content.nums = config.loadContentNums(content)
-                cachedContent = if (content.langs.isNotEmpty()) content else null
-            } catch (e: Exception) {
-                println("Error loading traditional Mass readings $name: ${e.message}")
-                try {
-                    val retry = BibleContent(id = 3, name = "mass-${fallback.id}", langs = mutableMapOf())
-                    loadBibleContent(
-                        config = config,
-                        ranges = fallback.ranges(),
-                        content = retry,
-                        title = fallback.titleFor(config.uiLang),
-                        addTitle = true,
-                        addSubtitle = true,
-                    )
-                    retry.nums = config.loadContentNums(retry)
-                    cachedContent = if (retry.langs.isNotEmpty()) retry else null
-                } catch (e2: Exception) {
-                    println("Fallback Mass readings failed: ${e2.message}")
-                    cachedContent = null
-                }
             }
-            return cachedContent
+            content.nums = config.loadContentNums(content)
+            if (content.langs.isNotEmpty()) content else null
+        } catch (e: Exception) {
+            println("Error loading Mass $name: ${e.message}")
+            if (fallback == null) return null
+            try {
+                val retry = BibleContent(id = 3, name = "mass-${fallback.id}", langs = mutableMapOf())
+                loadBibleContent(
+                    config = config,
+                    ranges = fallback.ranges(),
+                    content = retry,
+                    title = fallback.titleFor(config.uiLang),
+                    addTitle = true,
+                    addSubtitle = true,
+                )
+                retry.nums = config.loadContentNums(retry)
+                if (retry.langs.isNotEmpty()) retry else null
+            } catch (e2: Exception) {
+                println("Fallback Mass failed: ${e2.message}")
+                null
+            }
         }
     }
 }
