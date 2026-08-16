@@ -179,7 +179,15 @@ fun Main() {
     val todayAndNowStr = stringResource(Res.string.today_and_now)
 
 
-    var groupedContent by remember (prayers, currentHour, lang) { mutableStateOf(getGrouppedContent(defConfig, prayers, readingPlan, currentHour, todayAndNowStr, favoritePrayersStr, dailyPrayersStr)) }
+    var bibleRev by remember { mutableStateOf(0) }
+    var groupedContent by remember (prayers, currentHour, lang, bibleRev) {
+        mutableStateOf(
+            getGrouppedContent(
+                defConfig, prayers, readingPlan, currentHour,
+                todayAndNowStr, favoritePrayersStr, dailyPrayersStr
+            )
+        )
+    }
 
     AppTheme(
         uiFontFactor = uiFontFactor * fontScale,
@@ -285,6 +293,11 @@ fun Main() {
                                 title = stringResource(Res.string.bible_settings_title),
                                 config = defConfig,
                                 goBack = {
+                                    bibleRev += 1
+                                    groupedContent = getGrouppedContent(
+                                        defConfig, prayers, readingPlan, currentHour,
+                                        todayAndNowStr, favoritePrayersStr, dailyPrayersStr
+                                    )
                                     if (reloadPrayersFlag) {
                                         reloadPrayersFlag = false
                                         scope.launch {

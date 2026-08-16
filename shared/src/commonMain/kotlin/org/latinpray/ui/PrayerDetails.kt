@@ -426,7 +426,7 @@ fun ContentDetails(
     val contentColor = MaterialTheme.colorScheme.onBackground
 
     //println("PrayerDetails - before key(changed) prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
-    key(changed) {
+    key(changed, displayLang, config.firstBible, config.secondBible) {
         val content =
             preparePrayer(displayLang, contentItem.content, config, prayers, notesRes = notesRes)
         //println("PrayerDetails - after preparePrayer for  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")

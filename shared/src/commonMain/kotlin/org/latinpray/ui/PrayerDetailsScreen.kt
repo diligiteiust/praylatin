@@ -324,7 +324,6 @@ fun PrayerDetailsScreen(
     var prayer: Prayer? by remember { mutableStateOf(null) }
     prayer = contentItem.content as? Prayer
     val (fraction) = remember { mutableStateOf(0.25f) }
-    var firstLang by remember { mutableStateOf(true) }
     var displayLang by remember { mutableStateOf(DisplayLang.BOTH) }
     var daily by remember { mutableStateOf(config.dailyPrayers.contains(contentItem.content.name)) }
     var favorite by remember { mutableStateOf(config.favorites.contains(contentItem.content.name)) }
@@ -438,10 +437,8 @@ fun PrayerDetailsScreen(
                         )
                     }
                 }
-                IconToggleButton(
-                    checked = firstLang,
-                    onCheckedChange = {
-                        firstLang = it
+                IconButton(
+                    onClick = {
                         displayLang = displayLang.next()
                     }
                 ) {
