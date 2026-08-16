@@ -105,7 +105,6 @@ const val EMBEDDED_INDENT = "\t\t\t\t\t\t"
 const val EMPTY_LINE = "^^^"
 const val QUOTE = ">"
 val MULTI_REGEX = Regex("[0-9]+x")
-var MAX_LEN = 15
 
 @Composable
 fun dpToPx(dp: Dp): Float {
@@ -163,45 +162,32 @@ fun preparePrayer(
     } else {
         langCont2 = if (dispayLang != DisplayLang.FIRST) content.langs[lang2] else null
     }
-    // If preferred translation is enabled, we try to find content with translation
-    // instead of the standard content
-    //println ("firstLang: ${langCont1}, config.preferTranslation: ${config.preferTranslation}, prayer.langs[config.secondLang + TRANSLATION_TRAIL]: ${content.langs[config.secondLang + TRANSLATION_TRAIL]?.lang}")
     if ((dispayLang == DisplayLang.BOTH) && config.preferTranslation && content.langs[lang2 + TRANSLATION_TRAIL] != null) {
         langCont2 = content.langs[lang2 + TRANSLATION_TRAIL]
-        println("Using translation for prayer: ${content.name} - ${langCont2?.title}")
     }
-    //println ("secondLang: ${langCont2}")
 
-    var result = ""
+    val result = StringBuilder()
     var prayerStart = true
 
     langCont1?.lines?.forEachIndexed { i, it ->
-        // Display prayer title at the very beginning
         if (prayerStart && title) {
-            result += "## " + langCont1.title + "\n\n"
+            result.append("## ").append(langCont1.title).append("\n\n")
             if (langCont2?.title != null) {
-                result += "### " + langCont2.title + "\n\n"
+                result.append("### ").append(langCont2.title).append("\n\n")
             }
-            result += EMPTY_LINE + "\n\n"
+            result.append(EMPTY_LINE).append("\n\n")
             prayerStart = false
         }
 
         if (it != null && it.trim().startsWith(EMBEDDED)) {
-            // If the first line starts from embedded content
-            // `list` mode is turned on. No indentation for embedded content.
             if (i == 0) {
                 list = true
             }
             var file = it.trim().substring(1)
-            // If the line contains only embedded content mark, skip the line
-            // It is used to enable `list` mode for lists which do not start
-            // with embedded content
             if (file.isEmpty()) {
                 return@forEachIndexed
             }
             var t = false
-            // Double embedded mark means title = true
-            // and no indentation for embedded content
             if (file.startsWith(EMBEDDED)) {
                 t = true
                 file = file.substring(1)
@@ -213,24 +199,21 @@ fun preparePrayer(
             }
             var subprayer: Content? = prayers.find { p -> p.name == file }
             if (subprayer == null) {
-                // Maybe Bible content is embedded
                 subprayer = loadBibleContent(file, config)
-                //t = true
-//                if (subprayer != null) {
-//                    prayers.add(subprayer)
-//                }
             }
-            result += if (subprayer != null) {
-                preparePrayer(
-                    dispayLang, subprayer, config, prayers,
-                    indent + (if (list || t) "" else INDENT), false, list, t, notesRes
-                )
-            } else {
-                "$indent *$it* not found\n\n"
-            }
+            result.append(
+                if (subprayer != null) {
+                    preparePrayer(
+                        dispayLang, subprayer, config, prayers,
+                        indent + (if (list || t) "" else INDENT), false, list, t, notesRes
+                    )
+                } else {
+                    "$indent *$it* not found\n\n"
+                }
+            )
             return@forEachIndexed
         }
-        result += indent + "" + (it ?: "") + "\n\n"
+        result.append(indent).append(it ?: "").append("\n\n")
         if (langCont2?.lines != null
             && langCont2.lines.size > i
             && langCont2.lines[i]?.isNotEmpty() == true
@@ -243,7 +226,7 @@ fun preparePrayer(
             }
             val nline = MULTI_REGEX.replace(line ?: "", "")
             if (nline.trim().isEmpty()) return@forEachIndexed
-            result += TRANSLATION + indent + line + "\n\n"
+            result.append(TRANSLATION).append(indent).append(line).append("\n\n")
         }
     }
 
@@ -253,18 +236,18 @@ fun preparePrayer(
                 if (link is Link.Youtube) {
                     val url_title = link.title ?: "Listen on YouTube"
                     val yt_link = "[$url_title](${link.url})"
-                    result += EMPTY_LINE + "\n\n$yt_link\n\n"
+                    result.append(EMPTY_LINE).append("\n\n").append(yt_link).append("\n\n")
                 }
             }
         }
         if (langCont2?.notes != null && langCont2.notes!!.isNotEmpty()) {
-            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + langCont2.notes
+            result.append(EMPTY_LINE).append("\n\n__").append(notesRes).append(":__\n\n").append(langCont2.notes)
         } else if (langCont2 == null && langCont1?.notes != null && langCont1.notes!!.isNotEmpty()) {
-            result += EMPTY_LINE + "\n\n__" + notesRes + ":__\n\n" + langCont1.notes
+            result.append(EMPTY_LINE).append("\n\n__").append(notesRes).append(":__\n\n").append(langCont1.notes)
         }
     }
 
-    return result
+    return result.toString()
 }
 
 @OptIn(ExperimentalTime::class)
@@ -436,6 +419,7 @@ fun ContentDetails(
     intenTotalNum = intention?.totalNum ?: 0
     intenInrowNum = intention?.inrowNum ?: 0
     var savedScrollPosition by remember { mutableStateOf(0) }
+    var titleMaxLen by remember { mutableStateOf(15) }
     //println("PrayerDetails, $intenTotalNum, $intenInrowNum")
     //var currentPrayer by remember { mutableStateOf( prayer) }
     val notesRes = stringResource(Res.string.notes)
@@ -512,7 +496,7 @@ fun ContentDetails(
             }
             BoxWithConstraints(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 val margins = maxWidth * 0.04f
-                MAX_LEN = ((dpToPx(maxWidth) / textWidth) / 2.3).toInt()
+                titleMaxLen = ((dpToPx(maxWidth) / textWidth) / 2.3).toInt()
                 //println("Preparing markdown for:  prayer: ${prayer.name}, currentPrayer: ${currentPrayer.name}")
                 Markdown(
                     content = content,
@@ -587,7 +571,7 @@ fun ContentDetails(
                                     displayLang,
                                     prevItem.content,
                                     config,
-                                    MAX_LEN
+                                    titleMaxLen
                                 ),
                                 color = navColor
                             )
@@ -615,7 +599,7 @@ fun ContentDetails(
                                     displayLang,
                                     nextItem.content,
                                     config,
-                                    MAX_LEN
+                                    titleMaxLen
                                 ),
                                 color = navColor
                             )

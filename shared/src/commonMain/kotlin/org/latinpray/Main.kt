@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +35,6 @@ import com.revenuecat.purchases.kmp.Purchases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
@@ -86,15 +86,10 @@ fun loadLocalizedContent(file: String, lang: String): String {
 }
 
 suspend fun reloadPrayers(scope: CoroutineScope, config: Config): MutableList<Prayer> {
-    println("Reloading prayers...")
-    val result = prayersList(scope, mutableListOf<Prayer>(), config).sortedBy { prayer ->
+    return prayersList(scope, mutableListOf(), config).sortedBy { prayer ->
         prayer.langs[config.prayerLang]?.title
     }.toMutableList()
-    return result
 }
-
-val mutex = Mutex()
-var initialized = false
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalTime::class)
 @Composable
@@ -105,9 +100,9 @@ fun Main() {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
 
-    val defConfig: Config = readConfigFromAssets("assets/config.yaml")
-    //println("Loaded config from yaml")
-    //var prayers by remember { mutableStateOf(samplePrayers.toMutableList()) }
+    val defConfig = remember {
+        readConfigFromAssets("assets/config.yaml").also { it.loadConfigProps() }
+    }
     var prayers by remember { mutableStateOf(mutableListOf<Prayer>()) }
     var reloadPrayersFlag by remember { mutableStateOf(false) }
     var readingPlan: ReadingPlan? by remember { mutableStateOf(null) }
@@ -119,9 +114,6 @@ fun Main() {
     var uiTheme by remember { mutableStateOf(defConfig.uiTheme) }
     var allPrayerLangs by remember { mutableStateOf(defConfig.allPrayerLangs) }
 
-    //defConfig = readConfigFromAssets("assets/config.yaml")
-    defConfig.loadConfigProps()
-    //println("Loaded config from datastore ${defConfig.prayerLang}")
     if (lang != defConfig.uiLang) {
         lang = defConfig.uiLang
         getPlatform().changeLang(lang)
@@ -132,51 +124,31 @@ fun Main() {
     val headlineFontFactor = if (getPlatform().isTablet()) TABLET_HEADLINE_FONT_FACTOR else 1.0f
     val contentFontFactor = if (getPlatform().isTablet()) TABLET_CONTENT_FONT_FACTOR else 1.0f
 
-    if (!initialized) {
-        initialized = true
+    LaunchedEffect(Unit) {
         defConfig.prayersChangedCallback = {
             scope.launch {
-                //println("Prayers changed")
                 prayers = reloadPrayers(scope, defConfig)
-                //currentPrayer = prayers.first()
             }
         }
-        scope.launch {
-            helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
-            aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
-            privacy = readFileFromAssets("assets/privacy.md")
-            terms = readFileFromAssets("assets/terms.md")
-            prayers = prayersList(scope, prayers, defConfig).sortedBy { prayer ->
-                prayer.langs[defConfig.prayerLang]?.title
-            }.toMutableList()
-            //println("Loaded ${prayers.size} prayers")
-            allPrayerLangs = defConfig.allPrayerLangs
-
-            //readingPlan = readBibleReadingPlan("assets/bible/annual-plan.yaml", defConfig)
-            readingPlan = loadContent("assets/bible/annual-plan.yaml")
-            //println("Loaded reading plan: ${readingPlan?.name}")
-            //println("Loaded reading plan")
-            //currentPrayer = prayers.first()
-            //if (getPlatform().isIOS) {
-            Purchases.sharedInstance.getOfferings(
-                onError = { error ->
-                    // An error occurred
-                    println("Error: $error")
-                    //Text(text = "Error: $error")
-                },
-                onSuccess = { offerings ->
-                    offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let { it ->
-                        offers = it
-                        println("Offers: $offers")
-                        offers!!.forEach { offer ->
-                            println("Offer title: ${offer.storeProduct.title}, description: ${offer.storeProduct.id}, price: ${offer.storeProduct.price.formatted}")
-                        }
-                        // Display packages for sale
-                    }
+        helpContent = loadLocalizedContent("assets/help.md", defConfig.uiLang)
+        aboutContent = loadLocalizedContent("assets/about.md", defConfig.uiLang)
+        privacy = readFileFromAssets("assets/privacy.md")
+        terms = readFileFromAssets("assets/terms.md")
+        prayers = prayersList(scope, prayers, defConfig).sortedBy { prayer ->
+            prayer.langs[defConfig.prayerLang]?.title
+        }.toMutableList()
+        allPrayerLangs = defConfig.allPrayerLangs
+        readingPlan = loadContent("assets/bible/annual-plan.yaml")
+        Purchases.sharedInstance.getOfferings(
+            onError = { error ->
+                println("Error: $error")
+            },
+            onSuccess = { offerings ->
+                offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let {
+                    offers = it
                 }
-            )
-            //}
-        }
+            }
+        )
     }
 
     var currentHour by remember {
@@ -184,14 +156,12 @@ fun Main() {
             Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).hour
         )
     }
-    scope.launch {
+    LaunchedEffect(Unit) {
         while (true) {
             delay(untilNextFullHour("Prayers List"))
             val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            //println("Checking time: ${now.hour}, previous: ${currentHour}")
             if (now.hour != currentHour) {
                 currentHour = now.hour
-                //println("New time: ${currentHour}")
             }
         }
     }

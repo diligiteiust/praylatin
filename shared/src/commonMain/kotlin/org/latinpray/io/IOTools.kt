@@ -32,22 +32,23 @@ import org.latinpray.loc.getLanguage
 
 val pattern = Regex("\\$[a-zA-Z0-9]+\\b")
 
+val yamlParser = Yaml(
+    configuration = Yaml.default.configuration.copy(
+        strictMode = false,
+        polymorphismStyle = PolymorphismStyle.Property
+    )
+)
+
 fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
     val yamlContent = defaultAssetFileProvider.get(assetsFile).buffer().readUtf8()
-    // println("Yaml content: $assetsFile")
     val allsubs = pattern.findAll(yamlContent)
     for (sub in allsubs) {
         val token = sub.value.substring(1)
-        //println("Found substitution: ${token}")
         if (!config.substitutions.containsKey(token)) {
             config.addSubstitution(token, "")
         }
     }
-    val yaml = Yaml(configuration = Yaml.default.configuration.copy(
-        strictMode = false,
-        polymorphismStyle = PolymorphismStyle.Property
-    ))
-    val prayer = yaml.decodeFromString<BasicPrayer>(yamlContent)
+    val prayer = yamlParser.decodeFromString<BasicPrayer>(yamlContent)
     for (sub in allsubs) {
         val token = sub.value.substring(1)
         val substitution = config.substitutions[token] ?: ""
@@ -60,14 +61,8 @@ fun readPrayerFromAssets(assetsFile: String, config: Config): BasicPrayer {
 }
 
 inline fun <reified T> loadContent(path: String): T {
-    //println("Loading content from: $path")
     val yamlContent = defaultAssetFileProvider.get(path).buffer().readUtf8()
-    val yaml = Yaml(configuration = Yaml.default.configuration.copy(
-        strictMode = false,
-        polymorphismStyle = PolymorphismStyle.Property
-    ))
-    val content: T = yaml.decodeFromString<T>(yamlContent)
-    return content
+    return yamlParser.decodeFromString<T>(yamlContent)
 }
 
 fun readFileFromAssets(assetsFile: String): String {

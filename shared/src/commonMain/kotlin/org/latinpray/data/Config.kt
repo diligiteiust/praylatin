@@ -274,15 +274,12 @@ data class Config(
     fun externalModification() {
         //println("External modification")
         if (lock.tryLock()) {
-            println("External modification")
             try {
                 loadConfigProps()
                 prayersChangedCallback()
             } finally {
                 lock.unlock()
             }
-        } else {
-            println("External modification locked")
         }
     }
 
@@ -553,20 +550,14 @@ data class Config(
     }
 
     fun saveSubstitutions() {
-        var subst = ""
         substitutions.forEach { (k, v) ->
-            subst += "$k,"
             putToSharedPrefs(k, v)
         }
-        setPref(SUBS_PROP_KEY.name, subst)
+        setPref(SUBS_PROP_KEY.name, substitutions.keys.joinToString(","))
     }
 
     fun saveDailyPrayers() {
-        var daily = ""
-        dailyPrayers.forEach {
-            daily += "$it,"
-        }
-        setPref(DAILY_PROP_KEY.name, daily)
+        setPref(DAILY_PROP_KEY.name, dailyPrayers.joinToString(","))
     }
 
     fun addDailyPrayer(prayer: String) {
@@ -585,11 +576,7 @@ data class Config(
     }
 
     fun saveFavorites() {
-        var favs = ""
-        favorites.forEach {
-            favs += "$it,"
-        }
-        setPref(FAVORITES_PROP_KEY.name, favs)
+        setPref(FAVORITES_PROP_KEY.name, favorites.joinToString(","))
     }
 
     fun addFavorite(prayer: String) {
