@@ -24,6 +24,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.number
+import org.latinpray.data.mass.LiturgicalOrdo
+import org.latinpray.data.mass.MassPropers
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -349,25 +351,39 @@ object DailyReadingTR {
             cachedUiLang = config.uiLang
             cachedFirst = config.firstBible
             cachedSecond = config.secondBible
-            val mass = TraditionalMassLectionary.massFor(today)
+            val obs = LiturgicalOrdo.celebration(today)
+            val proper = MassPropers.get(obs.id) ?: MassPropers.sundayOf(obs.id)
+            val title: String
+            val ranges: List<ReadingRange>
+            val name: String
+            if (proper != null && proper.ranges().isNotEmpty()) {
+                title = proper.title
+                ranges = proper.ranges()
+                name = "mass-${proper.id}"
+            } else {
+                val mass = TraditionalMassLectionary.massFor(today)
+                title = mass.titleFor(config.uiLang)
+                ranges = mass.ranges()
+                name = "mass-${mass.id}"
+            }
             val content = BibleContent(
                 id = 3,
-                name = "mass-${mass.id}",
+                name = name,
                 langs = mutableMapOf(),
             )
             try {
                 loadBibleContent(
                     config = config,
-                    ranges = mass.ranges(),
+                    ranges = ranges,
                     content = content,
-                    title = mass.titleFor(config.uiLang),
+                    title = title,
                     addTitle = true,
                     addSubtitle = true,
                 )
                 content.nums = config.loadContentNums(content)
                 cachedContent = content
             } catch (e: Exception) {
-                println("Error loading traditional Mass readings ${mass.id}: ${e.message}")
+                println("Error loading traditional Mass readings $name: ${e.message}")
                 cachedContent = null
             }
             return cachedContent

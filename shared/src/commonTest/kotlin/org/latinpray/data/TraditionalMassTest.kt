@@ -1,8 +1,10 @@
 package org.latinpray.data
 
 import kotlinx.datetime.LocalDate
+import org.latinpray.data.mass.LiturgicalOrdo
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TraditionalMassTest {
     @Test
@@ -13,12 +15,13 @@ class TraditionalMassTest {
     }
 
     @Test
-    fun knownDays2026() {
-        assertEquals("easter", TraditionalMassLectionary.massFor(LocalDate(2026, 4, 5)).id)
-        assertEquals("ash-wednesday", TraditionalMassLectionary.massFor(LocalDate(2026, 2, 18)).id)
-        assertEquals("advent-1", TraditionalMassLectionary.massFor(LocalDate(2026, 11, 29)).id)
-        assertEquals("christmas", TraditionalMassLectionary.massFor(LocalDate(2026, 12, 25)).id)
-        assertEquals("assumption", TraditionalMassLectionary.massFor(LocalDate(2026, 8, 15)).id)
-        assertEquals("pentecost-12", TraditionalMassLectionary.massFor(LocalDate(2026, 8, 16)).id)
+    fun ordoKnownDays2026() {
+        assertTrue(LiturgicalOrdo.celebration(LocalDate(2026, 4, 5)).id.startsWith("tempora:Pasc0-0"))
+        assertTrue(LiturgicalOrdo.celebration(LocalDate(2026, 2, 18)).id.contains("Quadp3-3"))
+        assertTrue(LiturgicalOrdo.celebration(LocalDate(2026, 11, 29)).id.contains("Adv1-0"))
+        assertTrue(LiturgicalOrdo.celebration(LocalDate(2026, 12, 25)).id.contains("12-25"))
+        assertTrue(LiturgicalOrdo.celebration(LocalDate(2026, 8, 15)).id.contains("08-15"))
+        assertTrue(LiturgicalOrdo.celebration(LocalDate(2026, 8, 16)).id.contains("Pent12-0"))
+        assertTrue(LiturgicalOrdo.celebration(LocalDate(2026, 12, 8)).id.contains("12-08"))
     }
 }
