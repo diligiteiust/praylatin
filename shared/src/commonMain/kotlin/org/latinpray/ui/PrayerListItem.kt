@@ -52,7 +52,21 @@ data class ContentItem(
     val tag: String?,
     var prevContent: ContentItem? = null,
     var nextContent: ContentItem? = null,
-)
+) {
+    // prev/next form a doubly-linked list. Generated equals() walked it forever.
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ContentItem) return false
+        return content.name == other.content.name && tag == other.tag && darker == other.darker
+    }
+
+    override fun hashCode(): Int {
+        var result = content.name.hashCode()
+        result = 31 * result + (tag?.hashCode() ?: 0)
+        result = 31 * result + darker.hashCode()
+        return result
+    }
+}
 
 @OptIn(ExperimentalTime::class)
 @Composable
