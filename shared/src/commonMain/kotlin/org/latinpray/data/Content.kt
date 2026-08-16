@@ -106,8 +106,11 @@ fun getGrouppedContent(config: Config, prayers: MutableList<Prayer>, readingPlan
         tags.remove(HIDE_TAG)
         if (config.todayAndNow) {
             gp.add(todayAndNowStr)
-            if (config.biblePlan) {
-                runBlocking {
+            runBlocking {
+                DailyReadingTR.massForToday(config)?.let {
+                    gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
+                }
+                if (config.biblePlan) {
                     val bible = readingPlan?.bibleForToday(config)
                     bible?.let {
                         gp.add(ContentItem(it, it.prayedToday(), todayAndNowStr))
