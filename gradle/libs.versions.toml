@@ -1,9 +1,10 @@
 [versions]
-agpVer = "9.2.0-rc01"
+agpVer = "9.2.1"
 firebaseBom = "34.12.0"
-kotlinVer = "2.3.20"
-composeVer = "1.10.6"
-#composeMaterial3Ver = "1.3.1"
+kotlinVer = "2.3.21"
+composeVer = "1.11.0"
+composeMaterial3Ver = "1.9.0"
+composeMultiplatformVer = "1.10.3"
 androidxActivityComposeVer = "1.13.0"
 kotlinComposeVer = "1.10.3"
 #material3AdaptiveVer = "1.0.0"
@@ -18,7 +19,7 @@ kamlVer = "0.104.0"
 kotlinSerialJsonVer = "1.11.0"
 #kotlinSerialYamlVer = "1.5.1"
 okioVer = "3.17.0"
-kotlinStdLibVer = "2.3.20"
+kotlinStdLibVer = "2.3.21"
 androidxDatastoreVer = "1.2.1"
 markdownVer="0.40.2"
 purchases-kmp = "2.1.3+17.6.0"
@@ -45,6 +46,8 @@ kcron-common = { module = "com.ucasoft.kcron:kcron-common", version.ref = "kcron
 #androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3Ver" }
 #androidx-compose-material3-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "material3AdaptiveVer" }
 #androidx-compose-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3AdaptiveNavigationSuiteVer" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMaterial3Ver" }
+compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatformVer" }
 
 androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "composeVer" }
 #androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "composeVer" }

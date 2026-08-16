@@ -32,6 +32,7 @@ kotlin {
         namespace = "org.latinpray"
         compileSdk = 36
         minSdk = 35
+        androidResources.enable = true
         compilations.all {
             compileTaskProvider.configure {
                 compilerOptions {
@@ -84,6 +85,8 @@ kotlin {
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.kcron.common)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
