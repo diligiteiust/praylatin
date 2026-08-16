@@ -23,7 +23,6 @@ plugins {
     alias(libs.plugins.kotlin.plugin.compose)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotlinx.atomicfu)
 //    id("org.jetbrains.kotlinx.atomicfu") version "0.32.1"
 }
 
@@ -43,7 +42,6 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -87,20 +85,11 @@ kotlin {
             implementation(libs.kcron.common)
             implementation(libs.compose.material3)
             implementation(libs.compose.resources)
+            implementation(compose.material)
+            implementation(compose.materialIconsExtended)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-        }
-        sourceSets {
-            androidMain {
-                resources.srcDirs(
-                    "src/androidMain/res",
-                    "src/commonMain/resources/res",
-                    "src/commonMain/composeResources",
-                    "src/commonMain/resources/assets"
-                )
-                //assets.srcDirs("src/commonMain/resources/assets")
-            }
         }
         named { it.lowercase().startsWith("ios") }.configureEach {
             languageSettings {

@@ -19,10 +19,9 @@ import com.revenuecat.purchases.kmp.LogLevel
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.configure
 import com.russhwolf.settings.Settings
-import com.russhwolf.settings.NSUbiquitousKeyValueStoreSettings
+import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.ObservableSettings
 import platform.Foundation.NSBundle
-import platform.Foundation.NSUbiquitousKeyValueStore
 import platform.Foundation.NSUserDefaults
 import platform.UIKit.UIDevice
 import platform.UIKit.UIUserInterfaceIdiomPad
@@ -58,6 +57,6 @@ actual fun getPlatformPriv(): Platform = IOSPlatform()
 actual fun sharedPrefsSupported(): Boolean = true
 
 actual fun createSettings(): ObservableSettings {
-    val delegate: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.defaultStore
-    return NSUbiquitousKeyValueStoreSettings(delegate)
+    // iCloud NSUbiquitousKeyValueStoreSettings is not in multiplatform-settings 1.3.0 (1.4-SNAPSHOT only).
+    return NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
 }

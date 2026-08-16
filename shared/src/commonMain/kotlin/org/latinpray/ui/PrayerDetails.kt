@@ -372,6 +372,7 @@ val customParagraphComponent: MarkdownComponent = {
 
     MarkdownText(
         styledText,
+        it.node,
     )
 }
 
