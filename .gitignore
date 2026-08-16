@@ -14,3 +14,4 @@ xcuserdata
 /gradle.properties-e
 /androidApp/debug/
 /androidApp/release/
+gradle/gradle-daemon-jvm.properties
